@@ -4,7 +4,7 @@ import { getTopSameDomainWindow } from '../../util/dom';
 import * as DomAccessorWrappers from '../dom-accessor-wrappers';
 import * as Element from './element';
 import * as EventSandbox from '../event/event';
-import * as IFrameSandbox from '../iframe';
+import IFrameSandbox from '../iframe';
 import * as Listeners from '../event/listeners';
 import * as MessageSandbox from '../message';
 import NativeMethods from '../native-methods';

@@ -1,7 +1,7 @@
 import * as DOM from '../../util/dom';
 import { stopPropagation } from '../../util/event';
 import * as HiddenInfo from '../upload/hidden-info';
-import { iframeAddedToDom, overrideIframe } from '../iframe';
+import IFrameSandbox from '../iframe';
 import * as InfoManager from '../upload/info-manager';
 import NativeMethods from '../native-methods';
 import DomProcessor from '../../dom-processor/dom-processor';
@@ -319,7 +319,7 @@ function onIFrameAddedToDOM (iframe) {
             iframe: iframe
         });
 
-        iframeAddedToDom(iframe);
+        IFrameSandbox.iframeAddedToDom(iframe);
     }
 }
 
@@ -367,7 +367,7 @@ export function override (el) {
     }
 
     if (isIframe && !DOM.isCrossDomainIframe(el, true))
-        overrideIframe(el);
+        IFrameSandbox.overrideIframe(el);
 
     if ('insertAdjacentHTML' in el)
         el.insertAdjacentHTML = overridedInsertAdjacentHTML;

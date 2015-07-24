@@ -4,16 +4,30 @@ var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
 var SharedConst   = Hammerhead.get('../shared/const');
 var UrlUtil       = Hammerhead.get('./util/url');
 
+var handler = function (e) {
+    if (e.iframe.id.indexOf('test') !== -1) {
+        e.iframe.contentWindow.eval.call(e.iframe.contentWindow, [
+            'Hammerhead.get(\'./settings\').set({',
+            '    REFERER : "http://localhost/ownerToken!jobUid/https://example.com",',
+            '    JOB_OWNER_TOKEN : "ownerToken",',
+            '    SERVICE_MSG_URL : "/service-msg/100",',
+            '    JOB_UID : "jobUid"',
+            '});',
+            'Hammerhead.init();'
+        ].join(''));
+    }
+};
+
 QUnit.testStart = function () {
     // 'window.open' method uses in the QUnit
     window.open       = NativeMethods.windowOpen;
     window.setTimeout = NativeMethods.setTimeout;
-    IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, initIFrameTestHandler);
+    IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, handler);
     IFrameSandbox.off(IFrameSandbox.IFRAME_READY_TO_INIT, IFrameSandbox.iframeReadyToInitHandler);
 };
 
 QUnit.testDone = function () {
-    IFrameSandbox.off(IFrameSandbox.IFRAME_READY_TO_INIT, initIFrameTestHandler);
+    IFrameSandbox.off(IFrameSandbox.IFRAME_READY_TO_INIT, handler);
 };
 
 test('event should not raise before iframe is appended to DOM', function () {
@@ -52,6 +66,27 @@ test('document.write', function () {
     ok(iframe.contentWindow.tempTestValue);
 
     iframe.parentNode.removeChild(iframe);
+});
+
+//B239643 - The test on the http://kinopoisk.ru page doesn\'t continue after the first step
+asyncTest('ready to init event', function () {
+    var $container               = $('<div><iframe id="test1"></iframe></div>').appendTo('body');
+    var iframeLoadingEventRaised = false;
+
+    var onIframeLoading = function () {
+        iframeLoadingEventRaised = true;
+    };
+
+    //iframe loading waiting
+    window.setTimeout(function () {
+        IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, onIframeLoading);
+
+        var dummy = $container[0].innerHTML;
+
+        ok(!iframeLoadingEventRaised);
+        $container.remove();
+        start();
+    }, 100);
 });
 
 // NOTE: This test must be last (IE11 hack)
@@ -120,25 +155,4 @@ asyncTest('element.setAttribute', function () {
             $(iFrame).remove();
         }).appendTo(iFrameBody);
     }).appendTo('body');
-});
-
-//B239643 - The test on the http://kinopoisk.ru page doesn\'t continue after the first step
-asyncTest('ready to init event', function () {
-    var $container               = $('<div><iframe id="test1"></iframe></div>').appendTo('body');
-    var iframeLoadingEventRaised = false;
-
-    var onIframeLoading = function () {
-        iframeLoadingEventRaised = true;
-    };
-
-    //iframe loading waiting
-    window.setTimeout(function () {
-        IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, onIframeLoading);
-
-        var dummy = $container[0].innerHTML;
-
-        ok(!iframeLoadingEventRaised);
-        $container.remove();
-        start();
-    }, 100);
 });
