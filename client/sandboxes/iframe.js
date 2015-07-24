@@ -7,16 +7,21 @@ import ServiceCommands from '../../shared/service-msg-cmd';
 import Transport from '../transport';
 import UrlUtil from '../util/url';
 
+const IFRAME_READY_TO_INIT          = 'iframeReadyToInit';
+const IFRAME_READY_TO_INIT_INTERNAL = 'iframeReadyToInitInternal';
+const IFRAME_DOCUMENT_CREATED       = 'iframeDocumentCreated';
+const IFRAME_DOCUMENT_RECREATED     = 'iframeDocumentRecreated';
+
 const IFRAME_WINDOW_INITED = 'hh_iwi_5d9138e9';
 
 var eventEmitter = new Service.EventEmitter();
 var IFrameSandbox = {};
 
 // For iframes without src only!
-IFrameSandbox.IFRAME_READY_TO_INIT          = 'iframeReadyToInit';
-IFrameSandbox.IFRAME_READY_TO_INIT_INTERNAL = 'iframeReadyToInitInternal';
-IFrameSandbox.IFRAME_DOCUMENT_CREATED       = 'iframeDocumentCreated';
-IFrameSandbox.IFRAME_DOCUMENT_RECREATED     = 'iframeDocumentRecreated';
+IFrameSandbox.IFRAME_READY_TO_INIT          = IFRAME_READY_TO_INIT;
+IFrameSandbox.IFRAME_READY_TO_INIT_INTERNAL = IFRAME_READY_TO_INIT_INTERNAL;
+IFrameSandbox.IFRAME_DOCUMENT_CREATED       = IFRAME_DOCUMENT_CREATED;
+IFrameSandbox.IFRAME_DOCUMENT_RECREATED     = IFRAME_DOCUMENT_RECREATED;
 
 IFrameSandbox.on  = eventEmitter.on.bind(eventEmitter);
 IFrameSandbox.off = eventEmitter.off.bind(eventEmitter);

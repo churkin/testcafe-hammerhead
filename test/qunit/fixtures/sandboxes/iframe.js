@@ -4,30 +4,16 @@ var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
 var SharedConst   = Hammerhead.get('../shared/const');
 var UrlUtil       = Hammerhead.get('./util/url');
 
-var handler = function (e) {
-    if (e.iframe.id.indexOf('test') !== -1) {
-        e.iframe.contentWindow.eval.call(e.iframe.contentWindow, [
-            'Hammerhead.get(\'./settings\').set({',
-            '    REFERER : "http://localhost/ownerToken!jobUid/https://example.com",',
-            '    JOB_OWNER_TOKEN : "ownerToken",',
-            '    SERVICE_MSG_URL : "/service-msg/100",',
-            '    JOB_UID : "jobUid"',
-            '});',
-            'Hammerhead.init();'
-        ].join(''));
-    }
-};
-
 QUnit.testStart = function () {
     // 'window.open' method uses in the QUnit
     window.open       = NativeMethods.windowOpen;
     window.setTimeout = NativeMethods.setTimeout;
-    IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, handler);
+    IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, initIFrameTestHandler);
     IFrameSandbox.off(IFrameSandbox.IFRAME_READY_TO_INIT, IFrameSandbox.iframeReadyToInitHandler);
 };
 
 QUnit.testDone = function () {
-    IFrameSandbox.off(IFrameSandbox.IFRAME_READY_TO_INIT, handler);
+    IFrameSandbox.off(IFrameSandbox.IFRAME_READY_TO_INIT, initIFrameTestHandler);
 };
 
 test('event should not raise before iframe is appended to DOM', function () {
