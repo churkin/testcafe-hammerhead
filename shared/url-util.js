@@ -3,21 +3,22 @@ import { trim } from './util';
 var UrlUtil = {};
 
 //Const
-var PROTOCOL_RE        = /(^(\w+?\:))/;
-var LEADING_SLASHES_RE = /^(\/\/)/;
-var HOST_RE            = /^(.*?)(\/|%|\?|;|#|$)/;
-var PORT_RE            = /:([0-9]*)$/;
-var QUERY_AND_HASH_RE  = /(\?.+|#[^#]*)$/;
+const PROTOCOL_RE        = /(^(\w+?\:))/;
+const LEADING_SLASHES_RE = /^(\/\/)/;
+const HOST_RE            = /^(.*?)(\/|%|\?|;|#|$)/;
+const PORT_RE            = /:([0-9]*)$/;
+const QUERY_AND_HASH_RE  = /(\?.+|#[^#]*)$/;
 
-var URL_UTIL_PROTOCOL_IS_NOT_SUPPORTED = 'CLIENT_URL_UTIL_PROTOCOL_IS_NOT_SUPPORTED';
+const URL_UTIL_PROTOCOL_IS_NOT_SUPPORTED  = 'CLIENT_URL_UTIL_PROTOCOL_IS_NOT_SUPPORTED';
+const REQUEST_DESCRIPTOR_VALUES_SEPARATOR = '!';
 
-UrlUtil.URL_UTIL_PROTOCOL_IS_NOT_SUPPORTED = URL_UTIL_PROTOCOL_IS_NOT_SUPPORTED;
+const IFRAME = 'iframe';
+const SCRIPT = 'script';
 
-UrlUtil.REQUEST_DESCRIPTOR_QUERY_KEY        = '7929ba6d39aa4465';
-UrlUtil.REQUEST_DESCRIPTOR_VALUES_SEPARATOR = '!';
-
-UrlUtil.IFRAME = 'iframe';
-UrlUtil.SCRIPT = 'script';
+UrlUtil.URL_UTIL_PROTOCOL_IS_NOT_SUPPORTED  = URL_UTIL_PROTOCOL_IS_NOT_SUPPORTED;
+UrlUtil.REQUEST_DESCRIPTOR_VALUES_SEPARATOR = REQUEST_DESCRIPTOR_VALUES_SEPARATOR;
+UrlUtil.IFRAME                              = IFRAME;
+UrlUtil.SCRIPT                              = SCRIPT;
 
 function validateOriginUrl (url) {
     if (!/^https?:/.test(url)) {
@@ -78,7 +79,7 @@ UrlUtil.getProxyUrl = function (url, proxyHostname, proxyPort, jobUid, jobOwnerT
     if (resourceType)
         params.push(resourceType);
 
-    params = params.join(UrlUtil.REQUEST_DESCRIPTOR_VALUES_SEPARATOR);
+    params = params.join(REQUEST_DESCRIPTOR_VALUES_SEPARATOR);
 
     return 'http://' + proxyHostname + ':' + proxyPort + '/' + params + '/' + url;
 };
@@ -104,7 +105,7 @@ UrlUtil.parseProxyUrl = function (proxyUrl) {
     if (!match)
         return null;
 
-    var params = match[1].split(UrlUtil.REQUEST_DESCRIPTOR_VALUES_SEPARATOR);
+    var params = match[1].split(REQUEST_DESCRIPTOR_VALUES_SEPARATOR);
 
     // NOTE: we should have at least job uid and owner token
     if (params.length < 2)
@@ -232,50 +233,6 @@ UrlUtil.prepareUrl = function (url) {
     // NOTE: Remove unnecessary slashes form the begin of the url.
     // For example, "//////google.com" url is equal to "//google.com"
     return url.replace(/^\/+(\/\/.*$)/, '$1');
-};
-
-UrlUtil.parseQueryString = function (search) {
-    var queryStr    = search.substr(1);
-    var queryParsed = {};
-
-    if (queryStr || search === '?') {
-        queryStr.split('&').forEach(function (paramStr) {
-            var paramParsed = paramStr.split('=');
-            var key         = paramParsed.shift();
-            var value       = paramParsed.length ? paramParsed.join('=') : null;
-
-            if (key === UrlUtil.REQUEST_DESCRIPTOR_QUERY_KEY)
-                value = decodeURIComponent(value);
-
-            if (!queryParsed.hasOwnProperty(key))
-                queryParsed[key] = value;
-            else if (queryParsed[key] instanceof Array)
-                queryParsed[key].push(value);
-            else
-                queryParsed[key] = [queryParsed[key], value];
-        });
-    }
-
-    return queryParsed;
-};
-
-UrlUtil.formatQuery = function (query) {
-    var params = [];
-
-    Object.keys(query).forEach(function (key) {
-        var value = query[key];
-
-        if (key === UrlUtil.REQUEST_DESCRIPTOR_QUERY_KEY)
-            value = encodeURIComponent(value);
-
-        if (!value instanceof Array)
-            value = [value];
-
-        for (var i = 0; i < value.length; i++)
-            params.push(key + (value[i] === null ? '' : '=' + value[i]));
-    });
-
-    return params.length ? '?' + params.join('&') : '';
 };
 
 export default UrlUtil;

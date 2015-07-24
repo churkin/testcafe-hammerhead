@@ -438,10 +438,10 @@ asyncTest('form.submit', function () {
 
     notEqual(form.submit, NativeMethods.formSubmit);
 
-    form.action = url + '/?' + UrlUtil.REQUEST_DESCRIPTOR_QUERY_KEY + '=value';
+    form.action = url + '/?key=value';
 
     form.addEventListener('submit', function (event) {
-        strictEqual(this[UrlUtil.REQUEST_DESCRIPTOR_QUERY_KEY], this[this.length - 1]);
+        strictEqual(this['key'], this[this.length - 1]);
         event.preventDefault();
         start();
     }, false);

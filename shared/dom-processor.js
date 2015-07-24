@@ -1,7 +1,7 @@
 import UrlUtil from './url-util';
 import JSProcessor from './js-processor';
 import SharedConst from './const';
-import SharedUtil from './util';
+import { trim } from './util';
 
 const CSS_URL_PROPERTY_VALUE_PATTERN = /(url\s*\(\s*)(?:(')([^\s']*)(')|(")([^\s"]*)(")|([^\s\)]*))(\s*\))|(@import\s+)(?:(')([^\s']*)(')|(")([^\s"]*)("))/g;
 
@@ -23,8 +23,9 @@ const BOM_REGEX = new RegExp(
     '\\x84\\x31\\x95\\x33)'
 );
 
-const CDATA_REG_EX     = /^(\s)*\/\/<!\[CDATA\[([\s\S]*)\/\/\]\]>(\s)*$/;
-const EMPTY_URL_REG_EX = /^(\w+:)?\/\/\:0/;// Ignore '//:0/' url (http://www.myntra.com/)
+const CDATA_REG_EX = /^(\s)*\/\/<!\[CDATA\[([\s\S]*)\/\/\]\]>(\s)*$/;
+// Ignore '//:0/' url (http://www.myntra.com/)
+const EMPTY_URL_REG_EX                   = /^(\w+:)?\/\/\:0/;
 const HTML_COMMENT_POSTFIX_REG_EX        = /(\/\/[^\n]*|\n\s*)-->[^\n]*([\n\s]*)?$/;
 const HTML_COMMENT_PREFIX_REG_EX         = /^(\s)*<!--[^\n]*\n/;
 const HTML_COMMENT_SIMPLE_POSTFIX_REG_EX = /-->\s*$/;
@@ -75,7 +76,7 @@ export default class DomProcessor {
         this.URL_ATTRS                  = URL_ATTRS;
         this.HTML_PROCESSING_REQUIRED   = HTML_PROCESSING_REQUIRED;
 
-        this.EVENTS                     = this.strategy.EVENTS;
+        this.EVENTS = this.strategy.EVENTS;
 
         this.elementProcessorPatterns = this._createProcessorPatterns(this.strategy);
     }
@@ -257,7 +258,7 @@ export default class DomProcessor {
         var lines = manifest.split('\n');
 
         for (var i = 0; i < lines.length; i++) {
-            var line = SharedUtil.trim(lines[i]);
+            var line = trim(lines[i]);
 
             if (line && line !== 'CACHE MANIFEST' && line !== 'NETWORK:' && line !== 'FALLBACK:' &&
                 line !== 'CACHE:' && line[0] !== '#' && line !== '*') {

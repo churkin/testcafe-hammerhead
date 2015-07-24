@@ -7,7 +7,6 @@ var UrlUtil = {};
 
 //URL processing funcs
 UrlUtil.DOCUMENT_URL_RESOLVER               = 'doc_url_resolver_8ff20d5e';
-UrlUtil.REQUEST_DESCRIPTOR_QUERY_KEY        = SharedUrlUtil.REQUEST_DESCRIPTOR_QUERY_KEY;
 UrlUtil.REQUEST_DESCRIPTOR_VALUES_SEPARATOR = SharedUrlUtil.REQUEST_DESCRIPTOR_VALUES_SEPARATOR;
 
 UrlUtil.IFRAME = SharedUrlUtil.IFRAME;
