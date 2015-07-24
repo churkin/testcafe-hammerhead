@@ -1,32 +1,32 @@
-import JSParsingTools from './js-parsing-tools';
+import { parse, generate } from './js-parsing-tools';
 
 var JSProcessor = {};
 
 // Const
-JSProcessor.GET_LOCATION_METH_NAME   = '__get$Loc';
-JSProcessor.SET_LOCATION_METH_NAME   = '__set$Loc';
-JSProcessor.SET_PROPERTY_METH_NAME   = '__set$';
-JSProcessor.GET_PROPERTY_METH_NAME   = '__get$';
-JSProcessor.CALL_METHOD_METH_NAME    = '__call$';
-JSProcessor.PROCESS_SCRIPT_METH_NAME = '__proc$Script';
+const HTML_COMMENT_REG_EXP = /(^|\n)\s*<!--[.\r]*(\n|$)/g;
 
-JSProcessor.FOR_IN_TEMP_VAR_NAME       = '__set$temp';
-JSProcessor.DOCUMENT_WRITE_BEGIN_PARAM = '__begin$';
-JSProcessor.DOCUMENT_WRITE_END_PARAM   = '__end$';
+const GET_LOCATION_METH_NAME   = '__get$Loc';
+const SET_LOCATION_METH_NAME   = '__set$Loc';
+const SET_PROPERTY_METH_NAME   = '__set$';
+const GET_PROPERTY_METH_NAME   = '__get$';
+const CALL_METHOD_METH_NAME    = '__call$';
+const PROCESS_SCRIPT_METH_NAME = '__proc$Script';
 
-var HTML_COMMENT_REG_EXP = /(^|\n)\s*<!--[.\r]*(\n|$)/g;
+const FOR_IN_TEMP_VAR_NAME       = '__set$temp';
+const DOCUMENT_WRITE_BEGIN_PARAM = '__begin$';
+const DOCUMENT_WRITE_END_PARAM   = '__end$';
 
-JSProcessor.MOCK_ACCESSORS = [
+const MOCK_ACCESSORS = [
     'var __w$undef_ = typeof window === "undefined",\r\n',
-    JSProcessor.GET_LOCATION_METH_NAME, '=__w$undef_?function(l){return l}:window.', JSProcessor.GET_LOCATION_METH_NAME, ',\r\n',
-    JSProcessor.SET_LOCATION_METH_NAME, '=__w$undef_?function(l,v){return l = v}:window.', JSProcessor.SET_LOCATION_METH_NAME, ',\r\n',
-    JSProcessor.SET_PROPERTY_METH_NAME, '=__w$undef_?function(o,p,v){return o[p] = v}:window.', JSProcessor.SET_PROPERTY_METH_NAME, ',\r\n',
-    JSProcessor.GET_PROPERTY_METH_NAME, '=__w$undef_?function(o,p){return o[p]}:window.', JSProcessor.GET_PROPERTY_METH_NAME, ',\r\n',
-    JSProcessor.CALL_METHOD_METH_NAME, '=__w$undef_?function(o,p,a){return o[p].apply(o,a)}:window.', JSProcessor.CALL_METHOD_METH_NAME, ',\r\n',
-    JSProcessor.PROCESS_SCRIPT_METH_NAME, '=__w$undef_?function(s){return s}:window.', JSProcessor.PROCESS_SCRIPT_METH_NAME, ';\r\n'
+    GET_LOCATION_METH_NAME, '=__w$undef_?function(l){return l}:window.', GET_LOCATION_METH_NAME, ',\r\n',
+    SET_LOCATION_METH_NAME, '=__w$undef_?function(l,v){return l = v}:window.', SET_LOCATION_METH_NAME, ',\r\n',
+    SET_PROPERTY_METH_NAME, '=__w$undef_?function(o,p,v){return o[p] = v}:window.', SET_PROPERTY_METH_NAME, ',\r\n',
+    GET_PROPERTY_METH_NAME, '=__w$undef_?function(o,p){return o[p]}:window.', GET_PROPERTY_METH_NAME, ',\r\n',
+    CALL_METHOD_METH_NAME, '=__w$undef_?function(o,p,a){return o[p].apply(o,a)}:window.', CALL_METHOD_METH_NAME, ',\r\n',
+    PROCESS_SCRIPT_METH_NAME, '=__w$undef_?function(s){return s}:window.', PROCESS_SCRIPT_METH_NAME, ';\r\n'
 ].join('');
 
-var SYNTAX = {
+const SYNTAX = {
     AssignmentExpression:  'AssignmentExpression',
     ArrayExpression:       'ArrayExpression',
     BlockStatement:        'BlockStatement',
@@ -69,6 +69,18 @@ var SYNTAX = {
     WithStatement:         'WithStatement'
 };
 
+JSProcessor.GET_LOCATION_METH_NAME   = GET_LOCATION_METH_NAME;
+JSProcessor.SET_LOCATION_METH_NAME   = SET_LOCATION_METH_NAME;
+JSProcessor.SET_PROPERTY_METH_NAME   = SET_PROPERTY_METH_NAME;
+JSProcessor.GET_PROPERTY_METH_NAME   = GET_PROPERTY_METH_NAME;
+JSProcessor.CALL_METHOD_METH_NAME    = CALL_METHOD_METH_NAME;
+JSProcessor.PROCESS_SCRIPT_METH_NAME = PROCESS_SCRIPT_METH_NAME;
+
+JSProcessor.DOCUMENT_WRITE_BEGIN_PARAM = DOCUMENT_WRITE_BEGIN_PARAM;
+JSProcessor.DOCUMENT_WRITE_END_PARAM   = DOCUMENT_WRITE_END_PARAM;
+
+JSProcessor.MOCK_ACCESSORS = MOCK_ACCESSORS;
+
 var codegenOpts = {
     format: {
         quotes:     'double',
@@ -101,12 +113,12 @@ JSProcessor.isObject = function (code) {
 
 JSProcessor.isScriptProcessed = function (code) {
     return new RegExp([
-        JSProcessor.GET_LOCATION_METH_NAME,
-        JSProcessor.SET_LOCATION_METH_NAME,
-        JSProcessor.SET_PROPERTY_METH_NAME,
-        JSProcessor.GET_PROPERTY_METH_NAME,
-        JSProcessor.CALL_METHOD_METH_NAME,
-        JSProcessor.PROCESS_SCRIPT_METH_NAME
+        GET_LOCATION_METH_NAME,
+        SET_LOCATION_METH_NAME,
+        SET_PROPERTY_METH_NAME,
+        GET_PROPERTY_METH_NAME,
+        CALL_METHOD_METH_NAME,
+        PROCESS_SCRIPT_METH_NAME
     ].join('|').replace(/\$/, '\\$')).test(code);
 };
 
@@ -194,14 +206,14 @@ JSProcessor.process = function (code, beautify) {
     var ast    = null;
 
     try {
-        ast = JSParsingTools.parse(isObject && !isJSON ? '(' + result + ')' : 'function temp(){\n' + result +
-                                                                              '\n}');
+        ast = parse(isObject && !isJSON ? '(' + result + ')' : 'function temp(){\n' + result +
+                                                               '\n}');
     }
     catch (e) {
         try {
             /*eslint-disable indent*/
             if (isObject && !isJSON) {
-                ast      = JSParsingTools.parse('function temp(){\n' + result + '\n}');
+                ast      = parse('function temp(){\n' + result + '\n}');
                 isObject = false;
             }
             else
@@ -220,7 +232,7 @@ JSProcessor.process = function (code, beautify) {
 
     codegenOpts.format.compact = !beautify;
 
-    result = JSParsingTools.generate(ast, codegenOpts);
+    result = generate(ast, codegenOpts);
 
     if (isObject && !isJSON)
         result = result.replace(/^\(|\);\s*$/g, '');
@@ -367,7 +379,7 @@ var modifiers = [
 
                 // Already  modified: __getGlobalProperty('location', location)
                 if (parent.type === SYNTAX.CallExpression &&
-                    parent.callee.name === JSProcessor.GET_LOCATION_METH_NAME)
+                    parent.callee.name === GET_LOCATION_METH_NAME)
                     return false;
 
                 return true;
@@ -567,6 +579,7 @@ function modify (ast, parent, key) {
                 var needToModify = modifiers[i].modifier(ast, parent, key);
 
                 modified = true;
+
                 if (needToModify)
                     modified = modify(parent[key], parent, key) || modified;
             }
@@ -598,7 +611,7 @@ function getProcessScriptMethAst (args) {
 
         callee: {
             type: SYNTAX.Identifier,
-            name: JSProcessor.PROCESS_SCRIPT_METH_NAME
+            name: PROCESS_SCRIPT_METH_NAME
         },
 
         arguments: [
@@ -613,7 +626,7 @@ function getGetLocationMethAst () {
 
         callee: {
             type: SYNTAX.Identifier,
-            name: JSProcessor.GET_LOCATION_METH_NAME
+            name: GET_LOCATION_METH_NAME
         },
 
         arguments: [
@@ -654,7 +667,7 @@ function getSetLocationMethAst (value) {
 
                                     callee: {
                                         type: SYNTAX.Identifier,
-                                        name: JSProcessor.SET_LOCATION_METH_NAME
+                                        name: SET_LOCATION_METH_NAME
                                     },
 
                                     arguments: [
@@ -707,7 +720,7 @@ function getSetMethAst (propertyName, obj, value) {
 
         callee: {
             type: SYNTAX.Identifier,
-            name: JSProcessor.SET_PROPERTY_METH_NAME
+            name: SET_PROPERTY_METH_NAME
         },
 
         arguments: [
@@ -727,7 +740,7 @@ function getCallMethodMthAst (owner, meth, args) {
 
         callee: {
             type: SYNTAX.Identifier,
-            name: JSProcessor.CALL_METHOD_METH_NAME
+            name: CALL_METHOD_METH_NAME
         },
 
         arguments: [
@@ -747,7 +760,7 @@ function getGetMethAst (propertyName, owner) {
 
         callee: {
             type: SYNTAX.Identifier,
-            name: JSProcessor.GET_PROPERTY_METH_NAME
+            name: GET_PROPERTY_METH_NAME
         },
 
         arguments: [
@@ -766,7 +779,7 @@ function getGetComputedMethAst (property, owner) {
 
         callee: {
             type: SYNTAX.Identifier,
-            name: JSProcessor.GET_PROPERTY_METH_NAME
+            name: GET_PROPERTY_METH_NAME
         },
 
         arguments: [
@@ -782,7 +795,7 @@ function getSetComputedMethAst (property, owner, value) {
 
         callee: {
             type: SYNTAX.Identifier,
-            name: JSProcessor.SET_PROPERTY_METH_NAME
+            name: SET_PROPERTY_METH_NAME
         },
 
         arguments: [
@@ -819,19 +832,11 @@ function getDocumentWriteArgAst (arg) {
 function getDocumentWriteStatementIndices (statements) {
     var indices = [];
 
-    var isExpressionStatement = function (statement) {
-        return statement.type === SYNTAX.ExpressionStatement;
-    };
-    var isCallStatement       = function (statement) {
-        return statement.expression.type === SYNTAX.CallExpression;
-    };
-    var isMember              = function (statement) {
-        return statement.expression.callee.type === SYNTAX.MemberExpression;
-    };
-    var isDocumentWrite       = function (statement) {
-        return statement.expression.callee.property.name === 'write' ||
-               statement.expression.callee.property.name === 'writeln';
-    };
+    var isExpressionStatement = (statement) => statement.type === SYNTAX.ExpressionStatement;
+    var isCallStatement       = (statement) => statement.expression.type === SYNTAX.CallExpression;
+    var isMember              = (statement) => statement.expression.callee.type === SYNTAX.MemberExpression;
+    var isDocumentWrite       = (statement) => statement.expression.callee.property.name === 'write' ||
+                                               statement.expression.callee.property.name === 'writeln';
 
     for (var i = 0; i < statements.length; i++) {
         var statement = statements[i];
@@ -863,7 +868,7 @@ function forin (astNode) {
     // for(obj[i++] in src) --> for(__set$temp in src) { __set$(obj, i++, __set$temp); }
     var tempVarAst = {
         type: SYNTAX.Identifier,
-        name: JSProcessor.FOR_IN_TEMP_VAR_NAME
+        name: FOR_IN_TEMP_VAR_NAME
     };
 
     astNode.body.body.unshift({
@@ -913,9 +918,9 @@ function documentWrite (astNode) {
 
     // { ... [obj].write([html]); ... [obj].writeln([html]); ... } -->
     // { ... [obj].write([html], __begin$); ... [obj].writeln([html], __end$); ... }
-    astNode.body[indices[0]].expression.arguments.push(getDocumentWriteArgAst(JSProcessor.DOCUMENT_WRITE_BEGIN_PARAM));
+    astNode.body[indices[0]].expression.arguments.push(getDocumentWriteArgAst(DOCUMENT_WRITE_BEGIN_PARAM));
     astNode.body[indices[indices.length -
-                         1]].expression.arguments.push(getDocumentWriteArgAst(JSProcessor.DOCUMENT_WRITE_END_PARAM));
+                         1]].expression.arguments.push(getDocumentWriteArgAst(DOCUMENT_WRITE_END_PARAM));
 
     return false;
 }
