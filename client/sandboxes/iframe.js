@@ -4,6 +4,7 @@ import NativeMethods from './native-methods';
 import SharedConst from '../../shared/const';
 import * as Service from '../util/service';
 import ServiceCommands from '../../shared/service-msg-cmd';
+import Settings from '../settings';
 import Transport from '../transport';
 import UrlUtil from '../util/url';
 
@@ -38,7 +39,12 @@ IFrameSandbox.isWindowInited = function (window) {
 
 IFrameSandbox.iframeReadyToInitHandler = function (e) {
     // Get and evaluate iframe task script
-    Transport.syncServiceMsg({ cmd: ServiceCommands.GET_IFRAME_TASK_SCRIPT }, function (iFrameTaskScript) {
+    var msg = {
+        cmd:     ServiceCommands.GET_IFRAME_TASK_SCRIPT,
+        referer: Settings.get().REFERER || window.location.toString()
+    };
+
+    Transport.syncServiceMsg(msg, function (iFrameTaskScript) {
         e.iframe.contentWindow.eval.apply(e.iframe.contentWindow, [iFrameTaskScript]);
     });
 };
