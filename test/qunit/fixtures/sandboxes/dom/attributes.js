@@ -145,7 +145,7 @@ asyncTest('iframe html src', function () {
     iframe.onload = function () {
         if (this.contentDocument.getElementById('test')) {
             ok(this.contentDocument.getElementById('test'));
-            equal(this.contentDocument.getElementById('test').getAttribute('data-attr'), '123');
+            strictEqual(this.contentDocument.getElementById('test').getAttribute('data-attr'), '123');
             document.body.removeChild(this);
 
             start();
@@ -158,30 +158,38 @@ asyncTest('iframe html src', function () {
 test('iframe javascript src', function () {
     var testData = [
         {
-            src:      "<img src=\\'http://google.com\\'/>" +
-                      "<div attr1=\"\\'\\'\" attr2=\\'\"\"\\'></div>",
+            src: "<img src=\\'http://google.com\\'/>" +
+                 "<div attr1=\"\\'\\'\" attr2=\\'\"\"\\'></div>",
+
             expected: ["<div attr1=\"\\'\\'\" attr2=\"&quot;&quot;\"></div>",
                 "<div attr2=\\'\"\"\\' attr1=\"\\'\\'\"></div>"
             ],
-            quote:    '\''
+
+            quote: '\''
         },
         {
-            src:      "<img src='http://google.com'/>" +
-                      "<div attr1=\\\"''\\\" attr2='\\\"\\\"'></div>",
+            src: "<img src='http://google.com'/>" +
+                 "<div attr1=\\\"''\\\" attr2='\\\"\\\"'></div>",
+
             expected: ["<div attr1=\\\"''\\\" attr2=\\\"&quot;&quot;\\\"></div>",
                 "<div attr2='\\\"\\\"' attr1=\\\"''\\\"></div>"
             ],
-            quote:    '"'
+
+            quote: '"'
         },
         {
-            src:      "<script> t[i] = \\'\\\\'\\\\'\\'; j = \"\\\"\\\"\"; <\/script>",
+            src: "<script> t[i] = \\'\\\\'\\\\'\\'; j = \"\\\"\\\"\"; <\/script>",
+
             expected: ["__set$(t,i,\\'\\\\'\\\\'\\');j=\"\\\"\\\"\""],
-            quote:    '\''
+
+            quote: '\''
         },
         {
-            src:      "<script> t[i] = \'\\\'\\\'\'; j = \\\"\\\\\"\\\\\"\\\"; <\/script>",
+            src: "<script> t[i] = \'\\\'\\\'\'; j = \\\"\\\\\"\\\\\"\\\"; <\/script>",
+
             expected: ["__set$(t,i,'\\\'\\\'');j=\\\"\\\\\"\\\\\"\\\";"],
-            quote:    '"'
+
+            quote: '"'
         }
     ];
 
@@ -372,15 +380,15 @@ test('element.innerHTML', function () {
     Settings.get().JOB_UID         = 'job';
     Settings.get().JOB_OWNER_TOKEN = 'token';
 
-    var $container   = $('<div>'),
-        checkElement = function (el, attr, resourceType) {
-            var storedAttr     = DomProcessor.getStoredAttrName(attr);
-            var exprectedValue = 'http://' + location.host + '/token!job' + resourceType +
-                                 '/https://example.com/Images/1.png';
+    var $container   = $('<div>');
+    var checkElement = function (el, attr, resourceType) {
+        var storedAttr     = DomProcessor.getStoredAttrName(attr);
+        var exprectedValue = 'http://' + location.host + '/token!job' + resourceType +
+                             '/https://example.com/Images/1.png';
 
-            strictEqual(NativeMethods.getAttribute.call(el, storedAttr), '/Images/1.png', 'original url stored');
-            strictEqual(NativeMethods.getAttribute.call(el, attr), exprectedValue);
-        };
+        strictEqual(NativeMethods.getAttribute.call(el, storedAttr), '/Images/1.png', 'original url stored');
+        strictEqual(NativeMethods.getAttribute.call(el, attr), exprectedValue);
+    };
 
     var html = ' <A iD = " fakeId1 " hRef = "/Images/1.png" attr="test" ></A>' +
                ' <form iD="fakeId3 " action="/Images/1.png"    attr="test" ></form>' +
@@ -422,9 +430,11 @@ test('setAttribute as function', function () {
     try {
         a.setAttribute('href', function () { /* */
         });
-    } catch (e) {
+    }
+    catch (e) {
         error = true;
-    } finally {
+    }
+    finally {
         ok(!error);
     }
 });

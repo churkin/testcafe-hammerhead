@@ -40,7 +40,7 @@ test('hover marker', function () {
 test('shadow ui elements', function () {
     var uiElem = document.createElement('div');
 
-    uiElem.id = "uiElem";
+    uiElem.id = 'uiElem';
 
     ShadowUI.addClass(uiElem, 'ui-elem-class');
 
@@ -85,14 +85,15 @@ test('script', function () {
 test('attributes', function () {
     var html =
             // <script type="script/x-kendo-template" id="inboxItem">
-            "<h3 class=\"time\">#: Time#</h3><h3>#: From #</h3>\n" +
-            "<a class=\"reply\"\n" +
-            "data-role=\"button\"\n" +
-            "data-rel=\"actionsheet\"\n" +
-            "href=\"\\\\#inboxActions\"\n" +
-            "data-actionsheet-context=\"#:ID#\">Reply</a>\n" +
-            "<h2>#: Subject#</h2>\n" +
-            "<p>#: Text#</p>";
+            '<h3 class="time">#: Time#</h3><h3>#: From #</h3>\n' +
+            '<a class="reply"\n' +
+            'data-role="button"\n' +
+            'data-rel="actionsheet"\n' +
+            'href="\\\\#inboxActions"\n' +
+            'data-actionsheet-context="#:ID#">Reply</a>\n' +
+            '<h2>#: Subject#</h2>\n' +
+            '<p>#: Text#</p>';
+
     // </script\>
 
     strictEqual(Html.cleanUpHtml(html).replace(/\s/g, ''), html.replace(/\s/g, ''));
@@ -170,7 +171,7 @@ test('text node', function () {
 test('script inner html', function () {
     var html = Html.processHtml('var v = a && b;', 'script');
 
-    equal(html.replace(/\s/g, ''), (DomProcessor.SCRIPT_HEADER + 'var v = a && b;').replace(/\s/g, ''));
+    strictEqual(html.replace(/\s/g, ''), (DomProcessor.SCRIPT_HEADER + 'var v = a && b;').replace(/\s/g, ''));
 });
 
 test('html fragment', function () {

@@ -1,7 +1,8 @@
 {
   "rules": {
     "no-eval": 0,
-    "max-nested-callbacks": 0
+    "max-nested-callbacks": 0,
+    "no-script-url": 0
   },
   "globals": {
     /* QUnit variables */
@@ -10,15 +11,28 @@
     "notOk": true,
     "strictEqual": true,
     "notEqual": true,
+    "deepEqual": true,
     "test": true,
     "asyncTest": true,
     "throws": true,
     "eval": true,
     "expect": true,
     "start": true,
+
     "async": true,
     "$": true,
+
     "MouseEvent": true,
+    "window": true,
+    "location": true,
+    "document": true,
+    "Image": true,
+    "Element": true,
+    "navigator": true,
+    "XMLHttpRequest": true,
+    //"isIFrameWithoutSrc": true,
+    //"XMLHttpRequest": true,
+    //"initHammerheadClient": true,
 
     /* For more details on global variables see custom-setup.js file */
     "callMethod": true,

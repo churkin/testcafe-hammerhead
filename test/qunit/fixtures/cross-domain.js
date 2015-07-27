@@ -12,7 +12,7 @@ asyncTest('cross domain messaging between windows', function () {
     var checkResult = function () {
         if (result === 4) {
             iframe.parentNode.removeChild(iframe);
-            eval(DomProcessor.processScript("window.onmessage = null;"));
+            eval(DomProcessor.processScript('window.onmessage = null;'));
             start();
         }
     };
@@ -21,12 +21,12 @@ asyncTest('cross domain messaging between windows', function () {
         if (e.origin.indexOf('target_url') === -1)
             return;
 
-        if (parseInt(e.data))
+        if (parseInt(e.data, 10))
             result++;
 
         checkResult();
     };
 
-    eval(DomProcessor.processScript("window.onmessage = onMessageHandler;"));
+    eval(DomProcessor.processScript('window.onmessage = onMessageHandler;'));
 });
 

@@ -1,6 +1,5 @@
 var Browser       = Hammerhead.get('./util/browser');
 var DomProcessor  = Hammerhead.get('./dom-processor/dom-processor');
-var JSProcessor   = Hammerhead.get('../shared/js-processor');
 var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
 var UrlUtil       = Hammerhead.get('./util/url');
 
@@ -25,20 +24,20 @@ test('window.Image', function () {
     strictEqual(NativeMethods.getAttribute.call(img, 'src'), UrlUtil.resolveUrlAsOrigin('data/image.png'));
     strictEqual(NativeMethods.getAttribute.call(img, DomProcessor.getStoredAttrName('src')), 'data/image.png');
 
-    var nativeImageConstr = NativeMethods.Image;
+    var NativeImage = NativeMethods.Image;
 
-    strictEqual((new Image()).outerHTML, new nativeImageConstr().outerHTML);
-    strictEqual((new Image(15)).outerHTML, new nativeImageConstr(15).outerHTML);
-    strictEqual((new Image(15, 15)).outerHTML, new nativeImageConstr(15, 15).outerHTML);
-    strictEqual((new Image(undefined)).outerHTML, new nativeImageConstr(undefined).outerHTML);
-    strictEqual((new Image(undefined, undefined)).outerHTML, new nativeImageConstr(undefined, undefined).outerHTML);
+    strictEqual((new Image()).outerHTML, new NativeImage().outerHTML);
+    strictEqual((new Image(15)).outerHTML, new NativeImage(15).outerHTML);
+    strictEqual((new Image(15, 15)).outerHTML, new NativeImage(15, 15).outerHTML);
+    strictEqual((new Image(void 0)).outerHTML, new NativeImage(void 0).outerHTML);
+    strictEqual((new Image(void 0, void 0)).outerHTML, new NativeImage(void 0, void 0).outerHTML);
 });
 
 //T259367 - The TestCafe recorder cannot load jsTree bound via Ajax
 if (!Browser.isIE || Browser.isIE11) {
     asyncTest('window.Blob', function () {
         var script = ['self.onmessage = function() { var t = {};', '__set$(t, "blobTest", true); postMessage(t.blobTest); };'];
-        var blob   = new window.Blob(script, { type: "texT/javascript" });
+        var blob   = new window.Blob(script, { type: 'texT/javascript' });
         var url    = window.URL.createObjectURL(blob);
         var worker = new window.Worker(url);
 
@@ -61,9 +60,11 @@ if (navigator.registerProtocolHandler) {
 
             try {
                 navigator.registerProtocolHandler('web+testprotocol', url, 'Title');
-            } catch (e) {
+            }
+            catch (e) {
                 exception = true;
-            } finally {
+            }
+            finally {
                 strictEqual(result, exception, description);
             }
         };
@@ -73,9 +74,9 @@ if (navigator.registerProtocolHandler) {
         };
 
         testUrl('https://example.com:233/?url=%s', false, 'Origin url');
-        testUrl('http://example.com:233/?url=%s', Browser.isMozilla ? false : true, 'Another protocol');
+        testUrl('http://example.com:233/?url=%s', !Browser.isMozilla, 'Another protocol');
         testUrl('https://xample.com:233/?url=%s', true, 'Another hostname');
-        testUrl('https://example.com:934/?url=%s', Browser.isMozilla ? false : true, 'Another port');
+        testUrl('https://example.com:934/?url=%s', !Browser.isMozilla, 'Another port');
         testUrl('https://subdomain.example.com:233/?url=%s', false, 'Sub domain');
 
         UrlUtil.OriginLocation.get = savedGetOriginLocation;

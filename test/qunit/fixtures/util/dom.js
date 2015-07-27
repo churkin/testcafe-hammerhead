@@ -59,22 +59,28 @@ test('isDomElement', function () {
     ok(!DOM.isDomElement(null));
 
     //T184805
-    for (var p = Element.prototype; !!p;) {
+    var p = Element.prototype;
+
+    /* eslint-disable no-extra-parens */
+    do {
         ok(!DOM.isDomElement(p));
-        p = Object.getPrototypeOf(p);
-    }
+    } while ((p = Object.getPrototypeOf(p)));
+    /* eslint-enable no-extra-parens */
 });
 
 asyncTest('isDomElement for iframe Element.prototype chain', function () {
     var iframe = document.createElement('iframe');
 
-    iframe.id = 'test4';
+    iframe.id  = 'test4';
     iframe.src = '';
     iframe.addEventListener('load', function () {
-        for (var p = this.contentWindow.Element.prototype; !!p;) {
+        var p = this.contentWindow.Element.prototype;
+
+        /* eslint-disable no-extra-parens */
+        do {
             ok(!DOM.isDomElement(p));
-            p = Object.getPrototypeOf(p);
-        }
+        } while ((p = Object.getPrototypeOf(p)));
+        /* eslint-enable no-extra-parens */
 
         this.parentNode.removeChild(this);
         start();
@@ -141,7 +147,7 @@ test('closest element', function () {
     var iframe = document.createElement('iframe');
 
     iframe.id = 'test5';
-    iframe = document.body.appendChild(iframe);
+    iframe    = document.body.appendChild(iframe);
 
     var iframeDiv = iframe.contentDocument.createElement('div');
 
@@ -186,7 +192,7 @@ asyncTest('changed location 2', function () {
 
     var iframe = document.createElement('iframe');
 
-    iframe.id = 'test7';
+    iframe.id  = 'test7';
     iframe.src = 'about:blank';
     iframe.addEventListener('load', handler);
     document.body.appendChild(iframe);
@@ -195,7 +201,7 @@ asyncTest('changed location 2', function () {
 asyncTest('crossdomain src', function () {
     var iframe = document.createElement('iframe');
 
-    iframe.id = 'test8';
+    iframe.id  = 'test8';
     iframe.src = 'http://' + location.hostname + ':1336/hammerhead/simple_page.html';
     iframe.addEventListener('load', function () {
         this[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
@@ -211,7 +217,7 @@ asyncTest('crossdomain src', function () {
 asyncTest('samedomain src', function () {
     var iframe = document.createElement('iframe');
 
-    iframe.id = 'test9';
+    iframe.id  = 'test9';
     iframe.src = 'http://' + location.host + '/';
     iframe.addEventListener('load', function () {
         this[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
@@ -241,7 +247,7 @@ asyncTest('without src attribute', function () {
 asyncTest('about:blank', function () {
     var iframe = document.createElement('iframe');
 
-    iframe.id = 'test11';
+    iframe.id  = 'test11';
     iframe.src = 'about:blank';
     iframe.addEventListener('load', function () {
         this[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
@@ -261,7 +267,7 @@ asyncTest('location is changed to cross-domain', function () {
     var iteration = 0;
     var iframe    = document.createElement('iframe');
 
-    iframe.id = 'test12';
+    iframe.id  = 'test12';
     iframe.src = 'http://' + location.host + '/';
     iframe.addEventListener('load', function () {
         if (!iteration) {
@@ -284,7 +290,7 @@ asyncTest('location is changed to cross-domain', function () {
 asyncTest('empty src attribute', function () {
     var iframe = document.createElement('iframe');
 
-    iframe.id = 'test13';
+    iframe.id  = 'test13';
     iframe.src = '';
     iframe.addEventListener('load', function () {
         this[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT] = window;

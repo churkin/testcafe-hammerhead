@@ -3,8 +3,8 @@ var Style = Hammerhead.get('./util/style');
 test('getBordersWidth', function () {
     var $el = $('<div>')
         .css({
-            "border-color": "black",
-            "border-style": "solid"
+            'border-color': 'black',
+            'border-style': 'solid'
         })
         .appendTo('body');
 
@@ -60,7 +60,7 @@ test('getScrollLeft, getScrollTop', function () {
     div.appendChild(innerDiv);
 
     $innerDiv.height($(document).height() * 2);
-    $innerDiv.height($(document).height() * 2)
+    $innerDiv.height($(document).height() * 2);
     $innerDiv.scrollLeft(100);
     $innerDiv.scrollTop(100);
 
@@ -86,8 +86,8 @@ test('setScrollLeft, setScrollTop', function () {
     Style.setScrollLeft(window, 10);
     Style.setScrollTop(window, 20);
 
-    equal(10, $document.scrollLeft());
-    equal(20, $document.scrollTop());
+    strictEqual(10, $document.scrollLeft());
+    strictEqual(20, $document.scrollTop());
 
     $window.scrollLeft($document.width());
     $window.scrollTop($document.height());
@@ -117,7 +117,7 @@ test('getInnerWidth', function () {
 });
 
 test('getOffsetParent', function () {
-    strictEqual(Style.getOffsetParent(null), undefined);
+    strictEqual(Style.getOffsetParent(null), void 0);
     strictEqual(Style.getOffsetParent(window), document.body);
     strictEqual(Style.getOffsetParent(document), document.body);
     strictEqual(Style.getOffsetParent(document.documentElement), document.body);
@@ -174,8 +174,8 @@ test('getOffset', function () {
     strictEqual(offset.left, $offset.left);
     strictEqual(offset.top, $offset.top);
 
-    document.body.style.border            = "10px solid red";
-    document.documentElement.style.border = "15px solid black";
+    document.body.style.border            = '10px solid red';
+    document.documentElement.style.border = '15px solid black';
     offset                                = Style.getOffset($div[0]);
     $offset                               = $div.offset();
     strictEqual(offset.left, $offset.left);

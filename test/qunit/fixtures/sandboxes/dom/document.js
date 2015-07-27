@@ -3,7 +3,6 @@ var DomProcessor  = Hammerhead.get('./dom-processor/dom-processor');
 var IFrameSandbox = Hammerhead.get('./sandboxes/iframe');
 var JSProcessor   = Hammerhead.get('../shared/js-processor');
 var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
-var SharedConst   = Hammerhead.get('../shared/const');
 
 QUnit.testStart = function () {
     // 'window.open' method uses in the QUnit
@@ -38,7 +37,7 @@ if (!Browser.isMozilla) {
     asyncTest('document.write([]) in iframe', function () {
         var iframe = document.createElement('iframe');
 
-        iframe.id = "test04";
+        iframe.id = 'test04';
 
         var loadHandler = function () {
             iframe.removeEventListener('load', loadHandler);
@@ -52,6 +51,7 @@ if (!Browser.isMozilla) {
             iframe.parentNode.removeChild(iframe);
             start();
         };
+
         iframe.addEventListener('load', loadHandler);
         document.body.appendChild(iframe);
     });
@@ -101,14 +101,14 @@ asyncTest('document.write for iframe with empty url', function () {
 
     overrideDomMeth($div[0]);
 
+    var $iframe = $('<iframe id="test3" src="about:blank">"');
+
     var check = function () {
         var document = $iframe[0].contentDocument;
 
         if (document)
             ok(document.write.toString() !== NativeMethods.documentWrite.toString());
     };
-
-    var $iframe = $('<iframe id="test3" src="about:blank">"');
 
     check();
 
@@ -123,11 +123,12 @@ asyncTest('document.write for iframe with empty url', function () {
                 start();
             }
         }, 10);
+
     });
 
     $div[0].appendChild($iframe[0]);
     check();
-    cheked      = true;
+    cheked    = true;
 });
 
 if (!Browser.isMozilla) {
@@ -220,6 +221,7 @@ if (Browser.isMozilla || Browser.isIE11) {
                 start();
             }
         }, 10);
+
     });
 }
 
@@ -227,6 +229,7 @@ if (Browser.isMozilla || Browser.isIE11) {
 test('document.write __begin$, __end$ parameters', function () {
     var result = '';
 
+    /* eslint-disable no-unused-vars */
     var notADocument = {
         write: function () {
             result += Array.prototype.slice.call(arguments).join('');
@@ -236,6 +239,7 @@ test('document.write __begin$, __end$ parameters', function () {
             result += Array.prototype.slice.call(arguments).join('');
         }
     };
+    /* eslint-enable no-unused-vars */
 
     var processedScript = processScript(
         'if (true) {' +

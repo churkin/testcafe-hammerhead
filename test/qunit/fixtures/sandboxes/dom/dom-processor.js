@@ -35,7 +35,7 @@ test('link in iframe', function () {
 
     // HACK: IE
     if (!iframeBody) {
-        $iframe[0].contentDocument.write('<body></body>')
+        $iframe[0].contentDocument.write('<body></body>');
         iframeBody = $iframe[0].contentDocument.body;
     }
 
@@ -56,8 +56,8 @@ asyncTest('a.href in iframe', function () {
     var iframe         = document.createElement('iframe');
     var storedAttrName = DomProcessor.getStoredAttrName('href');
 
-    iframe.id  = "test";
-    iframe.src = "/data/dom-processor/iframe.html";
+    iframe.id  = 'test';
+    iframe.src = '/data/dom-processor/iframe.html';
 
     iframe.addEventListener('load', function () {
         var link = NativeMethods.getElementById.call(this.contentDocument, 'link');
@@ -230,8 +230,8 @@ test('anchor with target attribute', function () {
         return UrlUtil.getProxyUrl(url, null, null, null, null, resourceType);
     });
 
-    equal(NativeMethods.getAttribute.call(anchor, 'href'), proxyUrl);
-    equal(NativeMethods.getAttribute.call(anchor, DomProcessor.getStoredAttrName('href')), url);
+    strictEqual(NativeMethods.getAttribute.call(anchor, 'href'), proxyUrl);
+    strictEqual(NativeMethods.getAttribute.call(anchor, DomProcessor.getStoredAttrName('href')), url);
 });
 
 test('autocomplete attribute', function () {
@@ -265,7 +265,7 @@ test('autocomplete attribute', function () {
 });
 
 test('crossdomain src', function () {
-    var url                   = "http://cross.domain.com/";
+    var url                   = 'http://cross.domain.com/';
     var proxyUrl              = UrlUtil.getProxyUrl(url, location.hostname, 1336, null, null, 'iframe');
     var storedCrossDomainPort = Settings.get().CROSS_DOMAIN_PROXY_PORT;
 

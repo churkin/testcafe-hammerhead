@@ -53,13 +53,15 @@ test('resolveUrlAsOrigin', function () {
 
 //T262593: location.port returns incorrect value null instead empty string (att.com)
 test('location.port returns incorrect value null instead empty string', function () {
+    /* eslint-disable no-undef */
     eval(processScript([
         // code from att.com, iframesrc === https://att.com:null/?IFRAME
         'var port = (document.location.port == "") ? "" : (":" + document.location.port);',
         'var iframesrc = document.location.protocol + "//" + document.location.hostname + port + "/" + "?IFRAME";'
-    ].join('\n')))
+    ].join('\n')));
 
     strictEqual(iframesrc, 'https://example.com/?IFRAME');
+    /* eslint-enable no-undef */
 });
 
 
@@ -143,8 +145,9 @@ test('origin with non http or https protocol', function () {
     var originUrl = 'someProtocol://test.example.com:53/';
 
     try {
-        UrlUtil.getProxyUrl(originUrl, PROXY_HOSTNAME, PROXY_PORT)
-    } catch (err) {
+        UrlUtil.getProxyUrl(originUrl, PROXY_HOSTNAME, PROXY_PORT);
+    }
+    catch (err) {
         strictEqual(err.code, SharedUrlUtil.URL_UTIL_PROTOCOL_IS_NOT_SUPPORTED);
         strictEqual(err.originUrl.toLowerCase(), originUrl.toLowerCase());
     }
@@ -188,8 +191,8 @@ test('undefined or null', function () {
     a.href = null;
     strictEqual(proxyUrl, UrlUtil.getProxyUrl(a.href, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken'), 'null');
 
-    proxyUrl = UrlUtil.getProxyUrl(undefined, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken');
-    a.href   = undefined;
+    proxyUrl = UrlUtil.getProxyUrl(void 0, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken');
+    a.href   = void 0;
     strictEqual(proxyUrl, UrlUtil.getProxyUrl(a.href, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken'), 'undefined');
 });
 
@@ -255,7 +258,7 @@ test('single question mark', function () {
     var url       = 'http://ac-gb.marketgid.com/p/j/2865/11?';
     var proxyUtrl = UrlUtil.getProxyUrl(url, 'hostname', 1111, 'MyUID', 'ownerToken');
 
-    equal(url, UrlUtil.formatUrl(UrlUtil.parseProxyUrl(proxyUtrl).originResourceInfo));
+    strictEqual(url, UrlUtil.formatUrl(UrlUtil.parseProxyUrl(proxyUtrl).originResourceInfo));
 });
 
 module('change proxy url');

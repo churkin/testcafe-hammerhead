@@ -5,7 +5,7 @@ asyncTest('correct pass paremeters into xhr event handlers', function () {
     // NOTE: check XHR is wrapped
     ok(request.hasOwnProperty('addEventListener'));
 
-    request.addEventListener("progress", function (event) {
+    request.addEventListener('progress', function (event) {
         ok(event.target);
     }, true);
 
@@ -14,7 +14,7 @@ asyncTest('correct pass paremeters into xhr event handlers', function () {
         start();
     }, true);
 
-    request.open("GET", '/xhr-large-response', true);
+    request.open('GET', '/xhr-large-response', true);
     request.send(null);
 });
 

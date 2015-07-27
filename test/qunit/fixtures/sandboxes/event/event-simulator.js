@@ -292,6 +292,9 @@ if (Browser.isIE) {
         var mouseoutChecked  = false;
         var mouseoverChecked = false;
 
+        var $divFrom = $('<div>').mouseout(onmouseout).appendTo('body');
+        var $divTo   = $('<div>').mouseover(onmouseover).appendTo('body');
+
         function onmouseout () {
             mouseoutChecked = window.event && window.event.fromElement === $divFrom[0] &&
                               window.event.toElement === $divTo[0];
@@ -301,9 +304,6 @@ if (Browser.isIE) {
             mouseoverChecked = window.event && window.event.fromElement === $divFrom[0] &&
                                window.event.toElement === $divTo[0];
         }
-
-        var $divFrom = $('<div>').mouseout(onmouseout).appendTo('body');
-        var $divTo   = $('<div>').mouseover(onmouseover).appendTo('body');
 
         EventSimulator.mouseout($divFrom[0], { relatedTarget: $divTo[0] });
         EventSimulator.mouseover($divTo[0], { relatedTarget: $divFrom[0] });
