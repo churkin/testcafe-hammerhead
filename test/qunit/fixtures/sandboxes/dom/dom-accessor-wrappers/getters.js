@@ -44,6 +44,7 @@ if (!Browser.isIE || Browser.version > 9) {
 }
 
 test('url', function () {
+    /* eslint-disable no-unused-vars */
     var $scriptWithSrc      = $('<script src="http://some.com/script.js">');
     var $scriptWithEmptySrc = $('<script src="">');
     var $scriptWithoutSrc   = $('<script>');
@@ -55,6 +56,7 @@ test('url', function () {
     strictEqual(eval(processScript('$scriptWithEmptySrc[0].src')), proxyLocation);
     strictEqual(eval(processScript('$scriptWithoutSrc[0].src')), '');
     strictEqual(eval(processScript('$linkWithOnlyHash[0].href')), proxyLocation + '#hash');
+    /* eslint-enable no-unused-vars */
 });
 
 //T123960: Health monitor - change url properties of link not changed stored attribute(xda-developers.com)
@@ -64,12 +66,12 @@ test('stored attribute changing after change url', function () {
     var proxyUrl = UrlUtil.getProxyUrl(url);
 
     setProperty(link, 'href', url);
-    equal(link.href, proxyUrl);
-    equal(getProperty(link, 'href'), UrlUtil.parseProxyUrl(proxyUrl).originUrl);
+    strictEqual(link.href, proxyUrl);
+    strictEqual(getProperty(link, 'href'), UrlUtil.parseProxyUrl(proxyUrl).originUrl);
 
     eval(processScript('link.pathname="newPath"'));
     ok(/newPath$/.test(getProperty(link, 'pathname')));
-    equal(link.href, UrlUtil.getProxyUrl('/newPath?param=value'));
+    strictEqual(link.href, UrlUtil.getProxyUrl('/newPath?param=value'));
     ok(/\/newPath\?param=value$/.test(getProperty(link, 'href')));
 });
 
@@ -100,19 +102,19 @@ asyncTest('document properties', function () {
 
     expect(3);
 
-    equal(getProperty(document, 'activeElement'), document.body);
+    strictEqual(getProperty(document, 'activeElement'), document.body);
 
     $shadowInput[0].focus();
 
     setTimeout(function () {
-        equal(getProperty(document, 'activeElement'), document.body);
+        strictEqual(getProperty(document, 'activeElement'), document.body);
 
         $input[0].focus();
         setTimeout(function () {
             $shadowInput[0].focus();
 
             setTimeout(function () {
-                equal(getProperty(document, 'activeElement'), $input[0]);
+                strictEqual(getProperty(document, 'activeElement'), $input[0]);
 
                 $input.remove();
                 $shadowInput.remove();
@@ -130,31 +132,31 @@ if (Browser.isWebKit) {
         var proxyUrl = UrlUtil.getProxyUrl(url);
 
         eval(processScript('el.style.backgroundImage="url(' + url + ')"'));
-        equal(getProperty(el.style, 'backgroundImage'), 'url(' + url +
+        strictEqual(getProperty(el.style, 'backgroundImage'), 'url(' + url +
                                                         ')', 'backgroundImage');
-        equal(el.style.backgroundImage, 'url(' + proxyUrl + ')', 'backgroundImage');
+        strictEqual(el.style.backgroundImage, 'url(' + proxyUrl + ')', 'backgroundImage');
 
         eval(processScript('el.style.background="url(' + url + ')"'));
-        equal(getProperty(el.style, 'background'), 'url(' + url + ')', 'background');
-        equal(el.style.background, 'url(' + proxyUrl + ')', 'background');
+        strictEqual(getProperty(el.style, 'background'), 'url(' + url + ')', 'background');
+        strictEqual(el.style.background, 'url(' + proxyUrl + ')', 'background');
 
         eval(processScript('el.style.listStyle="url(' + url + ')"'));
-        equal(getProperty(el.style, 'listStyle'), 'url(' + url + ')', 'listStyle');
-        equal(el.style.listStyle, 'url(' + proxyUrl + ')', 'listStyle');
+        strictEqual(getProperty(el.style, 'listStyle'), 'url(' + url + ')', 'listStyle');
+        strictEqual(el.style.listStyle, 'url(' + proxyUrl + ')', 'listStyle');
 
         eval(processScript('el.style.listStyleImage="url(' + url + ')"'));
-        equal(getProperty(el.style, 'listStyleImage'), 'url(' + url +
+        strictEqual(getProperty(el.style, 'listStyleImage'), 'url(' + url +
                                                        ')', 'listStyleImage');
-        equal(el.style.listStyleImage, 'url(' + proxyUrl + ')', 'listStyleImage');
+        strictEqual(el.style.listStyleImage, 'url(' + proxyUrl + ')', 'listStyleImage');
 
         eval(processScript('el.style.cssText="background-image: url(' + url + ')"'));
-        equal(getProperty(el.style, 'cssText'), 'background-image: url(' + url +
+        strictEqual(getProperty(el.style, 'cssText'), 'background-image: url(' + url +
                                                 ');', 'cssText');
-        equal(el.style.cssText, 'background-image: url(' + proxyUrl + ');', 'cssText');
+        strictEqual(el.style.cssText, 'background-image: url(' + proxyUrl + ');', 'cssText');
 
         eval(processScript('el.style.cursor="url(' + url + '), auto"'));
-        equal(getProperty(el.style, 'cursor'), 'url(' + url + '), auto', 'cursor');
-        equal(el.style.cursor, 'url(' + proxyUrl + '), auto', 'cursor');
+        strictEqual(getProperty(el.style, 'cursor'), 'url(' + url + '), auto', 'cursor');
+        strictEqual(el.style.cursor, 'url(' + proxyUrl + '), auto', 'cursor');
     });
 }
 

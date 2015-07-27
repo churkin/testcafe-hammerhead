@@ -20,14 +20,14 @@ QUnit.testDone = function () {
 };
 
 var bindMouseEvent = function (eventType, btn) {
-    var button = btn === undefined ? 0 : btn;
+    var button = typeof btn === 'undefined' ? 0 : btn;
 
     domElement['on' + eventType] = function (e) {
         var ev = e || window.event;
 
         if (ev.button === button)
             raised = true;
-    }
+    };
 };
 
 var bindKeyEvent = function (eventType, keyCode) {
@@ -36,7 +36,7 @@ var bindKeyEvent = function (eventType, keyCode) {
 
         if (ev.keyCode === keyCode)
             raised = true;
-    }
+    };
 };
 
 test('mouse left button click', function () {
@@ -143,7 +143,7 @@ test('event with coords (clientX, clientY)', function () {
     domElement['onmousedown'] = function (e) {
         var ev = e || window.event;
 
-        if (ev.clientX == clientX && ev.clientY == clientY && ev.button == Event.BUTTON.LEFT)
+        if (ev.clientX === clientX && ev.clientY === clientY && ev.button === Event.BUTTON.LEFT)
             raised = true;
     };
     EventSimulator.mousedown(domElement, { clientX: clientX, clientY: clientY });
@@ -153,7 +153,7 @@ test('event with coords (clientX, clientY)', function () {
 test('blur', function () {
     var blured = false;
 
-    domElement['onblur'] = function (e) {
+    domElement['onblur'] = function () {
         blured = true;
     };
     EventSimulator.blur(domElement);
@@ -164,7 +164,7 @@ if (!Browser.isMozilla) {
     test('window.event is not null', function () {
         var ev = null;
 
-        domElement['onclick'] = function (e) {
+        domElement['onclick'] = function () {
             ev = window.event.type;
         };
         EventSimulator.click(domElement);
@@ -180,7 +180,7 @@ if (Browser.hasTouchEvents) {
 
             raised              = true;
             lastTouchIdentifier = touchIdentifier;
-        }
+        };
     };
 
     //T112153 - Click (Touch) events are not raised when using a combination of TestCafé 14.1.1 + KendoUI Mobile + iOS
@@ -232,12 +232,11 @@ if (Browser.isIE) {
 
     test('cancel bubble via the window.event property', function () {
         var $checkBox           = $('<input type="checkbox" />')
-                .click(function () {
-                    window.event.cancelBubble = true;
-                })
-                .appendTo('body'),
-
-            documentClickRaised = false;
+            .click(function () {
+                window.event.cancelBubble = true;
+            })
+            .appendTo('body');
+        var documentClickRaised = false;
 
         document.addEventListener('click', function () {
             documentClickRaised = true;
@@ -292,16 +291,19 @@ if (Browser.isIE) {
     test('B237405 - window.event contains toElement and fromElement properties for mouseout and mouseover events', function () {
         var mouseoutChecked  = false;
         var mouseoverChecked = false;
-        var onmouseout       = function () {
+
+        function onmouseout () {
             mouseoutChecked = window.event && window.event.fromElement === $divFrom[0] &&
                               window.event.toElement === $divTo[0];
-        };
-        var onmouseover      = function () {
+        }
+
+        function onmouseover () {
             mouseoverChecked = window.event && window.event.fromElement === $divFrom[0] &&
                                window.event.toElement === $divTo[0];
-        };
-        var $divFrom         = $('<div>').mouseout(onmouseout).appendTo('body');
-        var $divTo           = $('<div>').mouseover(onmouseover).appendTo('body');
+        }
+
+        var $divFrom = $('<div>').mouseout(onmouseout).appendTo('body');
+        var $divTo   = $('<div>').mouseover(onmouseover).appendTo('body');
 
         EventSimulator.mouseout($divFrom[0], { relatedTarget: $divTo[0] });
         EventSimulator.mouseover($divTo[0], { relatedTarget: $divFrom[0] });

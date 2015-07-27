@@ -151,9 +151,9 @@ test('iframe added to dom event', function () {
     });
 
     firstIframe     = document.createElement('iframe');
-    firstIframe.id  = "test101";
+    firstIframe.id  = 'test101';
     secondIframe    = document.createElement('iframe');
-    secondIframe.id = "test102";
+    secondIframe.id = 'test102';
 
     var container = document.createElement('div');
 
@@ -173,7 +173,7 @@ test('iframe added to dom event', function () {
 asyncTest('body created event', function () {
     var iframe = document.createElement('iframe');
 
-    iframe.src = "/data/dom-sandbox/body-created-event.html";
+    iframe.src = '/data/dom-sandbox/body-created-event.html';
 
     iframe.addEventListener('load', function () {
         ok(this.contentWindow.testOk);

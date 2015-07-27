@@ -44,7 +44,7 @@ test('Is document instance', function () {
     };
 
     setProperty(fakeDoc, 'referrer', 'referrer');
-    equal(fakeDoc.referrer, 'referrer');
+    strictEqual(fakeDoc.referrer, 'referrer');
 
     UrlUtil.getProxyUrl = savedGetProxyUrl;
 });
@@ -60,7 +60,7 @@ test('Is window instance', function () {
     };
 
     setProperty(fakeWin, 'location', 'location');
-    equal(fakeWin.location, 'location');
+    strictEqual(fakeWin.location, 'location');
 
     UrlUtil.getProxyUrl = savedGetProxyUrl;
 });
@@ -76,7 +76,7 @@ test('Is location instance', function () {
     };
 
     setProperty(fakeLocation, 'href', 'href');
-    equal(fakeLocation.href, 'href');
+    strictEqual(fakeLocation.href, 'href');
 
     UrlUtil.getProxyUrl = savedGetProxyUrl;
 });

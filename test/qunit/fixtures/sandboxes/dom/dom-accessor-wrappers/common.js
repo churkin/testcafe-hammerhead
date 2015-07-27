@@ -5,8 +5,8 @@ test('wrapped properties equals with accessors properties', function () {
     var elementPropertyAccessorsKeys = Object.keys(DomAccessorWrappers.elementPropertyAccessors);
     var wrappedProperties            = Object.keys(JSProcessor.wrappedProperties);
 
-    equal(elementPropertyAccessorsKeys.length, wrappedProperties.length);
+    strictEqual(elementPropertyAccessorsKeys.length, wrappedProperties.length);
 
     for (var i = 0; i < wrappedProperties.length; i++)
-        ok(elementPropertyAccessorsKeys.indexOf(wrappedProperties[i]) !== -1, wrappedProperties[i])
+        ok(elementPropertyAccessorsKeys.indexOf(wrappedProperties[i]) !== -1, wrappedProperties[i]);
 });

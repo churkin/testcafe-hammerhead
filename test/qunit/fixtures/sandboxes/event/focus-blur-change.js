@@ -18,20 +18,20 @@ var testTimeoutIds = [];
 
 var enableLogging = false;
 
-var setDoubleTimeout = function (callback, timeout) {
+function setDoubleTimeout (callback, timeout) {
     if (!timeout)
         timeout = 0;
     window.setTimeout(function () {
         window.setTimeout(callback, timeout);
     }, 50);
-};
+}
 
-var logMessage = function (text) {
+function logMessage (text) {
     if (enableLogging)
-        ok(true, (new Date()).getSeconds() + ':' + (new Date()).getMilliseconds().toString() + ' ' + text)
-};
+        ok(true, (new Date()).getSeconds() + ':' + (new Date()).getMilliseconds().toString() + ' ' + text);
+}
 
-var startNext = function () {
+function startNext () {
     while (testTimeoutIds.length)
         clearTimeout(testTimeoutIds.pop());
     FocusBlur.focus($('body')[0], function () {
@@ -40,11 +40,12 @@ var startNext = function () {
             setDoubleTimeout(start, testEndDelay);
         else start();
     });
-};
+}
 
-var getFocusHandler = function () {
+function getFocusHandler () {
     return function (e) {
-        var e       = e || window.event;
+        e = e || window.event;
+
         var element = e.target || e.srcElement;
 
         if (element) {
@@ -55,11 +56,12 @@ var getFocusHandler = function () {
         }
         logMessage(' onfocus called for ' + element.id);
     };
-};
+}
 
-var getBlurHandler = function () {
+function getBlurHandler () {
     return function (e) {
-        var e       = e || window.event;
+        e = e || window.event;
+
         var element = e.target || e.srcElement;
 
         if (element) {
@@ -69,12 +71,13 @@ var getBlurHandler = function () {
                 input2BlurHandlersExecutedAmount++;
         }
         logMessage(' onblur called for ' + element.id);
-    }
-};
+    };
+}
 
-var getChangeHandler = function () {
+function getChangeHandler () {
     return function (e) {
-        var e       = e || window.event;
+        e = e || window.event;
+
         var element = e.target || e.srcElement;
 
         if (element) {
@@ -84,8 +87,8 @@ var getChangeHandler = function () {
                 input2ChangeHandlersExecutedAmount++;
         }
         logMessage(' onchange called for ' + element.id);
-    }
-};
+    };
+}
 
 var onFocus        = getFocusHandler();
 var focusListener  = getFocusHandler();
@@ -97,12 +100,12 @@ var onChange       = getChangeHandler();
 var changeListener = getChangeHandler();
 var changeAttached = getChangeHandler();
 
-var clearExecutedHandlersCounter = function () {
+function clearExecutedHandlersCounter () {
     input1FocusHandlersExecutedAmount = input2FocusHandlersExecutedAmount = input1BlurHandlersExecutedAmount =
         input2BlurHandlersExecutedAmount = input1ChangeHandlersExecutedAmount = input2ChangeHandlersExecutedAmount = 0;
-};
+}
 
-var testFocusing = function (numberOfHandlers, testCanceled, testCallback) {
+function testFocusing (numberOfHandlers, testCanceled, testCallback) {
     var input1FocusedCount = 0;
     var input1BlurredCount = 0;
     var input2FocusedCount = 0;
@@ -121,7 +124,7 @@ var testFocusing = function (numberOfHandlers, testCanceled, testCallback) {
             input2FocusedCount += numberOfHandlers;
         }
 
-        logMessage(' before focusing ' + element.id)
+        logMessage(' before focusing ' + element.id);
         FocusBlur.focus(element, function () {
             logMessage(' focus function callback called for ' + element.id);
             callback();
@@ -197,11 +200,16 @@ var testFocusing = function (numberOfHandlers, testCanceled, testCallback) {
             }
         }
     );
-};
+}
 
-var testChanging = function (numberOfHandlers, testCanceled, testCallback) {
+function testChanging (numberOfHandlers, testCanceled, testCallback) {
     var input1ChangedCount = 0;
     var input2ChangedCount = 0;
+
+    var assertChanging = function () {
+        strictEqual(input1ChangeHandlersExecutedAmount, input1ChangedCount, 'input1ChangeHandlersExecutedAmount checked');
+        strictEqual(input2ChangeHandlersExecutedAmount, input2ChangedCount, 'input2ChangeHandlersExecutedAmount checked');
+    };
 
     var focusAndType = function (element, callback) {
         if (testCanceled())
@@ -211,18 +219,12 @@ var testChanging = function (numberOfHandlers, testCanceled, testCallback) {
             assertChanging();
             if (element === input1)
                 input1ChangedCount += numberOfHandlers;
-            else {
-                if (element === input2)
-                    input2ChangedCount += numberOfHandlers;
-            }
-            element.value = element.value + 'a';
+            else if (element === input2)
+                input2ChangedCount += numberOfHandlers;
+
+            element.value += 'a';
             callback();
         });
-    };
-
-    var assertChanging = function () {
-        strictEqual(input1ChangeHandlersExecutedAmount, input1ChangedCount, 'input1ChangeHandlersExecutedAmount checked');
-        strictEqual(input2ChangeHandlersExecutedAmount, input2ChangedCount, 'input2ChangeHandlersExecutedAmount checked');
     };
 
     async.series({
@@ -257,9 +259,9 @@ var testChanging = function (numberOfHandlers, testCanceled, testCallback) {
             }
         }
     );
-};
+}
 
-var runAsyncTest = function (actions, timeout) {
+function runAsyncTest (actions, timeout) {
     var testCanceled = null;
 
     window.setTimeout(function () {
@@ -275,11 +277,11 @@ var runAsyncTest = function (actions, timeout) {
             startNext();
         }, timeout)
     );
-};
+}
 
-var removeTestElements = function () {
+function removeTestElements () {
     $('.' + TEST_ELEMENT_CLASS).remove();
-};
+}
 
 //tests
 QUnit.testStart = function () {
@@ -305,13 +307,6 @@ asyncTest('without handlers', function () {
 asyncTest('ontype handlers', function () {
     runAsyncTest(
         function (testCanceled) {
-            var bindHandlersAndTest   = function () {
-                input1.onfocus = onFocus;
-                input2.onfocus = onFocus;
-                input1.onblur  = onBlur;
-                input2.onblur  = onBlur;
-                testFocusing(1, testCanceled, unbindHandlersAndTest);
-            };
             var unbindHandlersAndTest = function () {
                 input1.onfocus = null;
                 input2.onfocus = null;
@@ -319,6 +314,15 @@ asyncTest('ontype handlers', function () {
                 input2.onblur  = null;
                 testFocusing(0, testCanceled, startNext);
             };
+
+            var bindHandlersAndTest = function () {
+                input1.onfocus = onFocus;
+                input2.onfocus = onFocus;
+                input1.onblur  = onBlur;
+                input2.onblur  = onBlur;
+                testFocusing(1, testCanceled, unbindHandlersAndTest);
+            };
+
             bindHandlersAndTest();
         },
         2000
@@ -328,16 +332,6 @@ asyncTest('ontype handlers', function () {
 asyncTest('jQuery handlers one per element', function () {
     runAsyncTest(
         function (testCanceled) {
-            var bindHandlersAndTest   = function () {
-                var $input1 = $(input1);
-                var $input2 = $(input2);
-
-                $input1.focus(onFocus);
-                $input2.focus(onFocus);
-                $input1.blur(onBlur);
-                $input2.blur(onBlur);
-                testFocusing(1, testCanceled, unbindHandlersAndTest);
-            };
             var unbindHandlersAndTest = function () {
                 var $input1 = $(input1);
                 var $input2 = $(input2);
@@ -348,6 +342,18 @@ asyncTest('jQuery handlers one per element', function () {
                 $input2.unbind('blur', onBlur);
                 testFocusing(0, testCanceled, startNext);
             };
+
+            var bindHandlersAndTest = function () {
+                var $input1 = $(input1);
+                var $input2 = $(input2);
+
+                $input1.focus(onFocus);
+                $input2.focus(onFocus);
+                $input1.blur(onBlur);
+                $input2.blur(onBlur);
+                testFocusing(1, testCanceled, unbindHandlersAndTest);
+            };
+
             bindHandlersAndTest();
         },
         2000
@@ -357,7 +363,18 @@ asyncTest('jQuery handlers one per element', function () {
 asyncTest('jQuery handlers three per element', function () {
     runAsyncTest(
         function (testCanceled) {
-            var bindHandlersAndTest   = function () {
+            var unbindHandlersAndTest = function () {
+                var $input1 = $(input1);
+                var $input2 = $(input2);
+
+                $input1.unbind('focus', onFocus);
+                $input2.unbind('focus', onFocus);
+                $input1.unbind('blur', onBlur);
+                $input2.unbind('blur', onBlur);
+                testFocusing(0, testCanceled, startNext);
+            };
+
+            var bindHandlersAndTest = function () {
                 var $input1 = $(input1);
                 var $input2 = $(input2);
 
@@ -375,16 +392,7 @@ asyncTest('jQuery handlers three per element', function () {
                 $input2.blur(onBlur);
                 testFocusing(3, testCanceled, unbindHandlersAndTest);
             };
-            var unbindHandlersAndTest = function () {
-                var $input1 = $(input1);
-                var $input2 = $(input2);
 
-                $input1.unbind('focus', onFocus);
-                $input2.unbind('focus', onFocus);
-                $input1.unbind('blur', onBlur);
-                $input2.unbind('blur', onBlur);
-                testFocusing(0, testCanceled, startNext);
-            };
             bindHandlersAndTest();
         },
         2000
@@ -395,13 +403,6 @@ asyncTest('addEventListener one per element', function () {
     runAsyncTest(
         function (testCanceled) {
             if (input1.addEventListener) {
-                var bindHandlersAndTest   = function () {
-                    input1.addEventListener('focus', onFocus, false);
-                    input1.addEventListener('blur', onBlur, false);
-                    input2.addEventListener('focus', onFocus, false);
-                    input2.addEventListener('blur', onBlur, false);
-                    testFocusing(1, testCanceled, unbindHandlersAndTest);
-                };
                 var unbindHandlersAndTest = function () {
                     input1.removeEventListener('focus', onFocus, false);
                     input1.removeEventListener('blur', onBlur, false);
@@ -409,6 +410,15 @@ asyncTest('addEventListener one per element', function () {
                     input2.removeEventListener('blur', onBlur, false);
                     testFocusing(0, testCanceled, startNext);
                 };
+
+                var bindHandlersAndTest = function () {
+                    input1.addEventListener('focus', onFocus, false);
+                    input1.addEventListener('blur', onBlur, false);
+                    input2.addEventListener('focus', onFocus, false);
+                    input2.addEventListener('blur', onBlur, false);
+                    testFocusing(1, testCanceled, unbindHandlersAndTest);
+                };
+
                 bindHandlersAndTest();
             }
             else startNext();
@@ -421,13 +431,6 @@ asyncTest('attachEvent one per element', function () {
     runAsyncTest(
         function (testCanceled) {
             if (input1.attachEvent) {
-                var bindHandlersAndTest   = function () {
-                    input1.attachEvent('onfocus', onFocus);
-                    input1.attachEvent('onblur', onBlur);
-                    input2.attachEvent('onfocus', onFocus);
-                    input2.attachEvent('onblur', onBlur);
-                    testFocusing(1, testCanceled, unbindHandlersAndTest);
-                };
                 var unbindHandlersAndTest = function () {
                     input1.detachEvent('onfocus', onFocus);
                     input1.detachEvent('onblur', onBlur);
@@ -435,6 +438,15 @@ asyncTest('attachEvent one per element', function () {
                     input2.detachEvent('onblur', onBlur);
                     testFocusing(0, testCanceled, startNext);
                 };
+
+                var bindHandlersAndTest = function () {
+                    input1.attachEvent('onfocus', onFocus);
+                    input1.attachEvent('onblur', onBlur);
+                    input2.attachEvent('onfocus', onFocus);
+                    input2.attachEvent('onblur', onBlur);
+                    testFocusing(1, testCanceled, unbindHandlersAndTest);
+                };
+
                 bindHandlersAndTest();
             }
             else {
@@ -449,7 +461,34 @@ asyncTest('attachEvent one per element', function () {
 asyncTest('handlers binded by ontype property, jQuery and addEventListener\\attachEvent together', function () {
     runAsyncTest(
         function (testCanceled) {
-            var bindHandlersAndTest   = function () {
+            var unbindHandlersAndTest = function () {
+                var $input1    = $(input1);
+                var $input2    = $(input2);
+
+                $input1.unbind('focus', onFocus);
+                $input2.unbind('focus', onFocus);
+                $input1.unbind('blur', onBlur);
+                $input2.unbind('blur', onBlur);
+                input1.onfocus = null;
+                input2.onfocus = null;
+                input1.onblur  = null;
+                input2.onblur  = null;
+                if (input1.detachEvent) {
+                    input1.detachEvent('onfocus', focusAttached);
+                    input1.detachEvent('onblur', blurAttached);
+                    input2.detachEvent('onfocus', focusAttached);
+                    input2.detachEvent('onblur', blurAttached);
+                }
+                if (input1.removeEventListener) {
+                    input1.removeEventListener('focus', focusListener, false);
+                    input1.removeEventListener('blur', blurListener, false);
+                    input2.removeEventListener('focus', focusListener, false);
+                    input2.removeEventListener('blur', blurListener, false);
+                }
+                testFocusing(0, testCanceled, startNext);
+            };
+
+            var bindHandlersAndTest = function () {
                 var listenerCount = 0;
                 var $input1       = $(input1);
                 var $input2       = $(input2);
@@ -480,32 +519,7 @@ asyncTest('handlers binded by ontype property, jQuery and addEventListener\\atta
                 }
                 testFocusing(listenerCount, testCanceled, unbindHandlersAndTest);
             };
-            var unbindHandlersAndTest = function () {
-                var $input1    = $(input1);
-                var $input2    = $(input2);
 
-                $input1.unbind('focus', onFocus);
-                $input2.unbind('focus', onFocus);
-                $input1.unbind('blur', onBlur);
-                $input2.unbind('blur', onBlur);
-                input1.onfocus = null;
-                input2.onfocus = null;
-                input1.onblur  = null;
-                input2.onblur  = null;
-                if (input1.detachEvent) {
-                    input1.detachEvent('onfocus', focusAttached);
-                    input1.detachEvent('onblur', blurAttached);
-                    input2.detachEvent('onfocus', focusAttached);
-                    input2.detachEvent('onblur', blurAttached);
-                }
-                if (input1.removeEventListener) {
-                    input1.removeEventListener('focus', focusListener, false);
-                    input1.removeEventListener('blur', blurListener, false);
-                    input2.removeEventListener('focus', focusListener, false);
-                    input2.removeEventListener('blur', blurListener, false);
-                }
-                testFocusing(0, testCanceled, startNext);
-            };
             bindHandlersAndTest();
         },
         2000
@@ -517,16 +531,18 @@ module('change');
 asyncTest('ontype handlers', function () {
     runAsyncTest(
         function (testCanceled) {
-            var bindHandlersAndTest   = function () {
-                input1.onchange = onChange;
-                input2.onchange = onChange;
-                testChanging(1, testCanceled, unbindHandlersAndTest);
-            };
             var unbindHandlersAndTest = function () {
                 input1.onchange = null;
                 input2.onchange = null;
                 testChanging(0, testCanceled, startNext);
             };
+
+            var bindHandlersAndTest = function () {
+                input1.onchange = onChange;
+                input2.onchange = onChange;
+                testChanging(1, testCanceled, unbindHandlersAndTest);
+            };
+
             bindHandlersAndTest();
         },
         2000
@@ -536,7 +552,13 @@ asyncTest('ontype handlers', function () {
 asyncTest('jQuery handlers three per element', function () {
     runAsyncTest(
         function (testCanceled) {
-            var bindHandlersAndTest   = function () {
+            var unbindHandlersAndTest = function () {
+                $(input1).unbind('change', onChange);
+                $(input2).unbind('change', onChange);
+                testChanging(0, testCanceled, startNext);
+            };
+
+            var bindHandlersAndTest = function () {
                 var $input1 = $(input1);
                 var $input2 = $(input2);
 
@@ -548,11 +570,7 @@ asyncTest('jQuery handlers three per element', function () {
                 $input2.change(onChange);
                 testChanging(3, testCanceled, unbindHandlersAndTest);
             };
-            var unbindHandlersAndTest = function () {
-                $(input1).unbind('change', onChange);
-                $(input2).unbind('change', onChange);
-                testChanging(0, testCanceled, startNext);
-            };
+
             bindHandlersAndTest();
         },
         2000
@@ -562,7 +580,26 @@ asyncTest('jQuery handlers three per element', function () {
 asyncTest('handlers binded by ontype property, jQuery and addEventListener\\attachEvent together', function () {
     runAsyncTest(
         function (testCanceled) {
-            var bindHandlersAndTest   = function () {
+            var unbindHandlersAndTest = function () {
+                var $input1     = $(input1);
+                var $input2     = $(input2);
+
+                $input1.unbind('change', onChange);
+                $input2.unbind('change', onChange);
+                input1.onchange = null;
+                input2.onchange = null;
+                if (input1.detachEvent) {
+                    input1.detachEvent('onchange', changeAttached);
+                    input2.detachEvent('onchange', changeAttached);
+                }
+                if (input1.removeEventListener) {
+                    input1.removeEventListener('change', changeListener, false);
+                    input2.removeEventListener('change', changeListener, false);
+                }
+                testChanging(0, testCanceled, startNext);
+            };
+
+            var bindHandlersAndTest = function () {
                 var listenerCount = 0;
                 var $input1       = $(input1);
                 var $input2       = $(input2);
@@ -585,24 +622,7 @@ asyncTest('handlers binded by ontype property, jQuery and addEventListener\\atta
                 }
                 testChanging(listenerCount, testCanceled, unbindHandlersAndTest);
             };
-            var unbindHandlersAndTest = function () {
-                var $input1     = $(input1);
-                var $input2     = $(input2);
 
-                $input1.unbind('change', onChange);
-                $input2.unbind('change', onChange);
-                input1.onchange = null;
-                input2.onchange = null;
-                if (input1.detachEvent) {
-                    input1.detachEvent('onchange', changeAttached);
-                    input2.detachEvent('onchange', changeAttached);
-                }
-                if (input1.removeEventListener) {
-                    input1.removeEventListener('change', changeListener, false);
-                    input2.removeEventListener('change', changeListener, false);
-                }
-                testChanging(0, testCanceled, startNext);
-            };
             bindHandlersAndTest();
         },
         2000
@@ -680,7 +700,7 @@ asyncTest('focus() called by client script when browser window is on background'
             setDoubleTimeout(function () {
                 strictEqual(focusCount, 1);
                 startNext();
-            })
+            });
         },
         2000
     );
@@ -703,7 +723,7 @@ asyncTest('blur() called by client script when browser window is on background',
             setDoubleTimeout(function () {
                 strictEqual(blurCount, 1);
                 startNext();
-            })
+            });
         },
         2000
     );
@@ -724,7 +744,7 @@ asyncTest('focus() must not raise event if element is already focused (B237541)'
                         strictEqual(focusCount, 0);
                         strictEqual(document.activeElement, input2);
                         startNext();
-                    })
+                    });
                 });
             });
         },
@@ -747,7 +767,7 @@ asyncTest('blur() must not raise event if element is already blured', function (
                     notEqual(document.activeElement, input2);
                     startNext();
                 });
-            })
+            });
         },
         2000
     );
@@ -797,7 +817,7 @@ if (window.HTMLInputElement.prototype.setSelectionRange) {
                     strictEqual(document.activeElement === input2, needFocus);
 
                     startNext();
-                })
+                });
             },
             2000
         );
@@ -818,7 +838,7 @@ if (window.HTMLInputElement.prototype.setSelectionRange) {
                         strictEqual(focusCount, 0);
                         strictEqual(document.activeElement, input2);
                         startNext();
-                    })
+                    });
                 });
             },
             2000
@@ -841,8 +861,8 @@ if (window.HTMLInputElement.prototype.createTextRange) {
                     var textRange = input2.createTextRange();
 
                     textRange.collapse(true);
-                    textRange.moveStart("character", 1);
-                    textRange.moveEnd("character", 2);
+                    textRange.moveStart('character', 1);
+                    textRange.moveEnd('character', 2);
                     textRange.select();
                 };
                 EventSimulator.click(input2);
@@ -850,7 +870,7 @@ if (window.HTMLInputElement.prototype.createTextRange) {
                     strictEqual(focusCount, 1);
                     strictEqual(document.activeElement, input2);
                     startNext();
-                })
+                });
             },
             2000
         );
@@ -870,14 +890,14 @@ if (window.HTMLInputElement.prototype.createTextRange) {
                     var textRange = input2.createTextRange();
 
                     textRange.collapse(true);
-                    textRange.moveStart("character", 1);
-                    textRange.moveEnd("character", 2);
+                    textRange.moveStart('character', 1);
+                    textRange.moveEnd('character', 2);
                     textRange.select();
                     setDoubleTimeout(function () {
                         strictEqual(focusCount, 0);
                         strictEqual(document.activeElement, input2);
                         startNext();
-                    })
+                    });
                 });
             },
             2000

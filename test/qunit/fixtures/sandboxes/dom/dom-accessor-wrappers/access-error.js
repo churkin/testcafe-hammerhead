@@ -1,5 +1,5 @@
 test('call method of null or undefined', function () {
-    var obj = undefined;
+    var obj = void 0;
 
     throws(function () {
         callMethod(obj, 'yoyo');
@@ -33,7 +33,7 @@ test('calling not function', function () {
 });
 
 test('reading property of null or undefined', function () {
-    var obj = undefined;
+    var obj = void 0;
 
     throws(function () {
         getProperty(obj, 'yoyo');
@@ -47,7 +47,7 @@ test('reading property of null or undefined', function () {
 });
 
 test('setting property of null or undefined', function () {
-    var obj = undefined;
+    var obj = void 0;
 
     throws(function () {
         setProperty(obj, 'yoyo');

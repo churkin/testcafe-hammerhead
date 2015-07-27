@@ -45,8 +45,8 @@ test('element.insertAdjacentHTML', function () {
 
     el.childNodes[0].insertAdjacentHTML('beforebegin', '<span></span>');
 
-    equal(el.childNodes[0].tagName, 'SPAN');
-    equal(el.childNodes.length, 2);
+    strictEqual(el.childNodes[0].tagName, 'SPAN');
+    strictEqual(el.childNodes.length, 2);
 
     notEqual(el.childNodes[0].insertBefore, NativeMethods.insertBefore);
     notEqual(el.childNodes[0].appendChild, NativeMethods.appendChild);

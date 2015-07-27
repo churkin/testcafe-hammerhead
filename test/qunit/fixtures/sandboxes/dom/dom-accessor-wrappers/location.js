@@ -26,12 +26,12 @@ asyncTest('iframe with empty src', function () {
             hyperlink.setAttribute('href', '/test');
             this.contentDocument.body.appendChild(hyperlink);
 
-            equal(
+            strictEqual(
                 eval(processScript('hyperlink.href')),
                 'https://example.com/test'
             );
 
-            equal(
+            strictEqual(
                 eval(processScript('this.contentDocument.location.href')),
                 'about:blank'
             );
@@ -67,8 +67,8 @@ if (Browser.isWebKit) {
             hyperlink.setAttribute('href', '/test');
             this.contentDocument.body.appendChild(hyperlink);
 
-            equal(eval(processScript('hyperlink.href')), 'https://example.com/test');
-            equal(eval(processScript('this.contentDocument.location.href')), 'about:blank');
+            strictEqual(eval(processScript('hyperlink.href')), 'https://example.com/test');
+            strictEqual(eval(processScript('this.contentDocument.location.href')), 'about:blank');
 
             $iframe.remove();
             start();
@@ -90,14 +90,14 @@ test('iframe', function () {
 
         DomAccessorWrappers.init(windowMock, {});
         windowMock[DomAccessorWrappers.LOCATION_WRAPPER][prop] = value;
-        equal(UrlUtil.getProxyUrl(windowMock.location).resourceType, UrlUtil.Iframe);
+        strictEqual(UrlUtil.getProxyUrl(windowMock.location).resourceType, UrlUtil.Iframe);
     };
 
     var checkFunc = function (func, value) {
         var windowMock = {
             location: {
                 toString: function () {
-                    return UrlUtil.getProxyUrl('http://google.net:90/')
+                    return UrlUtil.getProxyUrl('http://google.net:90/');
                 },
 
                 assign: function (value) {
@@ -114,7 +114,7 @@ test('iframe', function () {
 
         DomAccessorWrappers.init(windowMock, {});
         windowMock[DomAccessorWrappers.LOCATION_WRAPPER][func](value);
-        equal(UrlUtil.getProxyUrl(windowMock.location[func + '_value']).resourceType, UrlUtil.Iframe);
+        strictEqual(UrlUtil.getProxyUrl(windowMock.location[func + '_value']).resourceType, UrlUtil.Iframe);
     };
 
     checkProp('port', 1333);
@@ -145,7 +145,7 @@ asyncTest('cross-domain iframe', function () {
         $iframe.unbind('load', handler);
 
         $iframe.bind('load', function () {
-            equal($iframe[0].contentWindow.location.host, location.host);
+            strictEqual($iframe[0].contentWindow.location.host, location.host);
             Settings.get().CROSS_DOMAIN_PROXY_PORT = storedPort;
             start();
         });
@@ -162,7 +162,7 @@ asyncTest('cross-domain iframe', function () {
 test('get location origin', function () {
     var locWrapper = getLocation(location);
 
-    equal(locWrapper.origin, 'https://example.com');
+    strictEqual(locWrapper.origin, 'https://example.com');
 });
 
 test('create location wrapper before iframe loading', function () {

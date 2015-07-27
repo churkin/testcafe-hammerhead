@@ -20,7 +20,7 @@ var lastHovered = null;
 
 function hoverElement (el) {
     if (lastHovered)
-        dispatchMouseEvent(lastHovered, 'mouseout')
+        dispatchMouseEvent(lastHovered, 'mouseout');
     dispatchMouseEvent(el, 'mouseover');
     lastHovered = el;
 }
@@ -37,17 +37,17 @@ function dispatchMouseEvent (el, type) {
         shiftKey:      false,
         metaKey:       false,
         button:        0,
-        relatedTarget: undefined
+        relatedTarget: void 0
     };
 
     if (document.createEvent) {
-        evt = document.createEvent("MouseEvents");
+        evt = document.createEvent('MouseEvents');
         evt.initMouseEvent(type, e.bubbles, e.cancelable, e.view, e.detail, e.screenX, e.screenY,
             e.clientX, e.clientY, e.ctrlKey, e.altKey, e.shiftKey, e.metaKey, e.button, document.body.parentNode);
     }
     else if (document.createEventObject) {
         evt = document.createEventObject();
-        for (prop in e)
+        for (var prop in e)
             evt[prop] = e[prop];
         evt.button = { 0: 1, 1: 4, 2: 2 }[evt.button] || evt.button;
     }
@@ -96,11 +96,11 @@ if (document.attachEvent) {
         var clickRaisedCount    = 0;
         var docClickRaisedCount = 0;
 
-        $div[0].attachEvent('onmousedown', function (e) {
+        $div[0].attachEvent('onmousedown', function () {
             clickRaisedCount++;
         });
 
-        document.attachEvent('onmousedown', function (e) {
+        document.attachEvent('onmousedown', function () {
             docClickRaisedCount++;
         });
 
@@ -117,7 +117,7 @@ if (document.attachEvent) {
 asyncTest('focus blur in iframe', function () {
     var iframe = document.createElement('iframe');
 
-    iframe.id = "test1";
+    iframe.id = 'test1';
     document.body.appendChild(iframe);
 
     window.setTimeout(function () {
@@ -145,13 +145,13 @@ asyncTest('focus blur in iframe', function () {
 test('document.addEventListener', function () {
     var docClickRaisedCount = 0;
 
-    document.addEventListener('mousedown', function (e) {
+    document.addEventListener('mousedown', function () {
         docClickRaisedCount++;
     });
 
     EventSimulator.mousedown(document);
 
-    equal(docClickRaisedCount, 1);
+    strictEqual(docClickRaisedCount, 1);
 });
 
 //Q532574 - Fire and dispatch events from code, events created by different ways
@@ -293,9 +293,11 @@ asyncTest('window.postMessage', function () {
         try {
             e.stopPropagation();
             ok(true);
-        } catch (e) {
+        }
+        catch (e) {
             ok(false);
-        } finally {
+        }
+        finally {
             start();
         }
     });
@@ -311,7 +313,7 @@ if (!Browser.isIE9) {
         setTimeout(function (msg) {
             strictEqual(msg, str);
             start();
-        }, 10, str)
+        }, 10, str);
     });
 }
 
@@ -335,13 +337,13 @@ asyncTest('special parameters for addEventListener', function () {
         }
     };
 
-    var test = function () {
+    function test () {
         strictEqual(eventObjOrigin.clickCount, 1);
         strictEqual(eventObjWrap.clickCount, 1);
 
         document.body.removeChild(divEl);
         start();
-    };
+    }
 
     Listeners.initElementListening(divEl);
 

@@ -32,7 +32,7 @@ test('innerHtml + script', function () {
     var testPropertyName = 'testProperty';
     var el               = document.createElement('div');
     var body             = document.getElementsByTagName('body')[0];
-    var script           = "<script>window." + testPropertyName + " = true;\<\/script>";
+    var script           = '<script>window.' + testPropertyName + ' = true;\<\/script>';
 
     body.appendChild(el);
     el.innerHTML         = script;

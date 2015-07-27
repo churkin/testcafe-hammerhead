@@ -62,8 +62,6 @@ $(document).ready(function () {
 
     var dispatchPointerEvent = function (el, type) {
         var pointEvent = Browser.isIE11 ? document.createEvent('PointerEvent') : document.createEvent('MSPointerEvent');
-        var eventType  = Browser.isIE11 ? 'pointer' + type : 'MSPointer' + type.substring(0, 1).toUpperCase() +
-                                                             type.substring(1);
 
         pointEvent.initPointerEvent(type, true, true, window, 0, 0,
             0, 0, 0, false, false, false, false, 0, null, 0, 0, 0, 0, 0.5, 0, 0, 0, 1, 'mouse', Date.now(), true);
@@ -158,7 +156,7 @@ $(document).ready(function () {
         var event = 'focus';
 
         var stopPropagation = function (e, dispatched, preventEvent, cancelHandlers, stopPropagation) {
-            equal(e.type, event);
+            strictEqual(e.type, event);
             stopPropagation();
         };
 
@@ -435,7 +433,7 @@ $(document).ready(function () {
         $body.on('click', clickHandler);
 
         dispatchEvent(document.body, event);
-        equal(clickHandlerCounter, 6);
+        strictEqual(clickHandlerCounter, 6);
 
         document.body.removeEventListener(event, clickHandler, true);
         document.body.removeEventListener(event, clickHandler, false);
