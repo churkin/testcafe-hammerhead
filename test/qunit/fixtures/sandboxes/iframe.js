@@ -54,6 +54,27 @@ test('document.write', function () {
     iframe.parentNode.removeChild(iframe);
 });
 
+//B239643 - The test on the http://kinopoisk.ru page doesn\'t continue after the first step
+asyncTest('ready to init event', function () {
+    var $container               = $('<div><iframe id="test1"></iframe></div>').appendTo('body');
+    var iframeLoadingEventRaised = false;
+
+    var onIframeLoading = function () {
+        iframeLoadingEventRaised = true;
+    };
+
+    //iframe loading waiting
+    window.setTimeout(function () {
+        IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, onIframeLoading);
+
+        var dummy = $container[0].innerHTML;
+
+        ok(!iframeLoadingEventRaised);
+        $container.remove();
+        start();
+    }, 100);
+});
+
 // NOTE: This test must be last (IE11 hack)
 asyncTest('element.setAttribute', function () {
     var src = Browser.isMozilla ? ' src="javascript:&quot;<html><body></body></html>&quot;"' : '';
@@ -120,25 +141,4 @@ asyncTest('element.setAttribute', function () {
             $(iFrame).remove();
         }).appendTo(iFrameBody);
     }).appendTo('body');
-});
-
-//B239643 - The test on the http://kinopoisk.ru page doesn\'t continue after the first step
-asyncTest('ready to init event', function () {
-    var $container               = $('<div><iframe id="test1"></iframe></div>').appendTo('body');
-    var iframeLoadingEventRaised = false;
-
-    var onIframeLoading = function () {
-        iframeLoadingEventRaised = true;
-    };
-
-    //iframe loading waiting
-    window.setTimeout(function () {
-        IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, onIframeLoading);
-
-        var dummy = $container[0].innerHTML;
-
-        ok(!iframeLoadingEventRaised);
-        $container.remove();
-        start();
-    }, 100);
 });

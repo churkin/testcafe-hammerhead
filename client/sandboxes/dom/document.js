@@ -1,5 +1,5 @@
 import { isMozilla, isIE } from '../../util/browser';
-import { isIframeInitialized, isWindowInited } from '../iframe';
+import IFrameSandbox from '../iframe';
 import JSProcessor from '../../../shared/js-processor';
 import NativeMethods from '../native-methods';
 import * as Html from '../../util/html';
@@ -19,7 +19,7 @@ export var off = eventEmitter.off.bind(eventEmitter);
 function isUninitializedIframeWithoutSrc (window) {
     try {
         return window !== window.top && isIframeWithoutSrc(window.frameElement) &&
-               !isIframeInitialized(window.frameElement);
+               !IFrameSandbox.isIframeInitialized(window.frameElement);
     }
     catch (e) {
         return false;
@@ -119,7 +119,7 @@ export function override (window, document, overrideNewElement) {
         // IE10 and IE9 rise "load" event only when document.close meth called.
         // We should restore overrided document.open and document.write meths before Hammerhead injection
         // if window not initialized
-        if (isIE && !isWindowInited(window))
+        if (isIE && !IFrameSandbox.isWindowInited(window))
             NativeMethods.restoreNativeDocumentMeth(document);
 
         var result = NativeMethods.documentClose.call(document);

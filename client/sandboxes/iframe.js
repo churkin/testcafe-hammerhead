@@ -7,41 +7,47 @@ import ServiceCommands from '../../shared/service-msg-cmd';
 import Transport from '../transport';
 import UrlUtil from '../util/url';
 
-// For iframes without src only!
-export const IFRAME_READY_TO_INIT          = 'iframeReadyToInit';
-export const IFRAME_READY_TO_INIT_INTERNAL = 'iframeReadyToInitInternal';
-export const IFRAME_DOCUMENT_CREATED       = 'iframeDocumentCreated';
-export const IFRAME_DOCUMENT_RECREATED     = 'iframeDocumentRecreated';
+const IFRAME_READY_TO_INIT          = 'iframeReadyToInit';
+const IFRAME_READY_TO_INIT_INTERNAL = 'iframeReadyToInitInternal';
+const IFRAME_DOCUMENT_CREATED       = 'iframeDocumentCreated';
+const IFRAME_DOCUMENT_RECREATED     = 'iframeDocumentRecreated';
 
 const IFRAME_WINDOW_INITED = 'hh_iwi_5d9138e9';
 
 var eventEmitter = new Service.EventEmitter();
+var IFrameSandbox = {};
 
-export var on  = eventEmitter.on.bind(eventEmitter);
-export var off = eventEmitter.off.bind(eventEmitter);
+// For iframes without src only!
+IFrameSandbox.IFRAME_READY_TO_INIT          = IFRAME_READY_TO_INIT;
+IFrameSandbox.IFRAME_READY_TO_INIT_INTERNAL = IFRAME_READY_TO_INIT_INTERNAL;
+IFrameSandbox.IFRAME_DOCUMENT_CREATED       = IFRAME_DOCUMENT_CREATED;
+IFrameSandbox.IFRAME_DOCUMENT_RECREATED     = IFRAME_DOCUMENT_RECREATED;
 
-export function isIframeInitialized (iframe) {
+IFrameSandbox.on  = eventEmitter.on.bind(eventEmitter);
+IFrameSandbox.off = eventEmitter.off.bind(eventEmitter);
+
+IFrameSandbox.isIframeInitialized = function (iframe) {
     var isFFIframeUninitialized = Browser.isMozilla && iframe.contentWindow.document.readyState === 'uninitialized';
 
     return !isFFIframeUninitialized && !!iframe.contentDocument.documentElement;
-}
+};
 
-export function isWindowInited (window) {
+IFrameSandbox.isWindowInited = function (window) {
     return window[IFRAME_WINDOW_INITED];
-}
+};
 
-export function iframeReadyToInitHandler (e) {
+IFrameSandbox.iframeReadyToInitHandler = function (e) {
     // Get and evaluate iframe task script
     Transport.syncServiceMsg({ cmd: ServiceCommands.GET_IFRAME_TASK_SCRIPT }, function (iFrameTaskScript) {
         e.iframe.contentWindow.eval.apply(e.iframe.contentWindow, [iFrameTaskScript]);
     });
-}
+};
 
-eventEmitter.on(IFRAME_READY_TO_INIT, iframeReadyToInitHandler);
+eventEmitter.on(IFrameSandbox.IFRAME_READY_TO_INIT, IFrameSandbox.iframeReadyToInitHandler);
 
 function raiseReadyToInitEvent (iframe) {
     if (UrlUtil.isIframeWithoutSrc(iframe)) {
-        var iframeInitialized       = isIframeInitialized(iframe);
+        var iframeInitialized       = IFrameSandbox.isIframeInitialized(iframe);
         var iframeWindowInitialized = iframe.contentWindow[IFRAME_WINDOW_INITED];
 
         if (iframeInitialized && !iframeWindowInitialized) {
@@ -49,12 +55,12 @@ function raiseReadyToInitEvent (iframe) {
             iframe.contentWindow[IFRAME_WINDOW_INITED] = true;
 
             // Rise this internal event to eval Hammerhead code script
-            eventEmitter.emit(IFRAME_READY_TO_INIT_INTERNAL, {
+            eventEmitter.emit(IFrameSandbox.IFRAME_READY_TO_INIT_INTERNAL, {
                 iframe: iframe
             });
 
             // Rise this event to eval "task" script and to call Hammerhead initialization method after
-            eventEmitter.emit(IFRAME_READY_TO_INIT, {
+            eventEmitter.emit(IFrameSandbox.IFRAME_READY_TO_INIT, {
                 iframe: iframe
             });
 
@@ -65,7 +71,7 @@ function raiseReadyToInitEvent (iframe) {
             // override document.write method, without Hammerhead initializing. This method can be called
             // before iframe fully loading, we are obliged to override it now
             if (iframe.contentDocument.write.toString() === NativeMethods.documentWrite.toString()) {
-                eventEmitter.emit(IFRAME_DOCUMENT_CREATED, {
+                eventEmitter.emit(IFrameSandbox.IFRAME_DOCUMENT_CREATED, {
                     iframe: iframe
                 });
             }
@@ -85,7 +91,7 @@ function raiseReadyToInitEvent (iframe) {
 
 }
 
-export function iframeAddedToDom (el) {
+IFrameSandbox.iframeAddedToDom = function (el) {
     if (!DOM.isShadowUIElement(el)) {
         raiseReadyToInitEvent(el);
 
@@ -95,13 +101,13 @@ export function iframeAddedToDom (el) {
             });
         }
     }
-}
+};
 
-export function onIframeBeganToRun (iframe) {
+IFrameSandbox.onIframeBeganToRun = function (iframe) {
     raiseReadyToInitEvent(iframe);
-}
+};
 
-export function overrideIframe (el) {
+IFrameSandbox.overrideIframe = function (el) {
     if (DOM.isShadowUIElement(el))
         return;
 
@@ -146,4 +152,6 @@ export function overrideIframe (el) {
             raiseReadyToInitEvent(el);
         });
     }
-}
+};
+
+export default IFrameSandbox;

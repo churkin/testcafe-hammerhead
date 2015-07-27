@@ -21,6 +21,7 @@
                 'Settings.set({',
                 '    REFERER : "http://localhost/ownerToken!jobUid/https://example.com",',
                 '    JOB_OWNER_TOKEN : "ownerToken",',
+                '    SERVICE_MSG_URL : "/service-msg/100",',
                 '    JOB_UID : "jobUid"',
                 '});',
                 'Hammerhead.init();'
