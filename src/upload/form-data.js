@@ -1,6 +1,6 @@
 import FormDataEntry from './form-data-entry';
 import * as bufferUtils from '../utils/buffer';
-import SHARED_CONST from '../const';
+import Const from '../const';
 
 // Const
 const BOUNDARY_RE = /;\s*boundary=([^;]*)/i;
@@ -58,13 +58,13 @@ export default class FormData {
     }
 
     expandUploads () {
-        var uploadsEntry = this.getEntriesByName(SHARED_CONST.UPLOAD_SANDBOX_HIDDEN_INPUT_NAME)[0];
+        var uploadsEntry = this.getEntriesByName(Const.UPLOAD_SANDBOX_HIDDEN_INPUT_NAME)[0];
 
         if (uploadsEntry) {
             var body  = Buffer.concat(uploadsEntry.body).toString();
             var files = JSON.parse(body);
 
-            this._removeEntry(SHARED_CONST.UPLOAD_SANDBOX_HIDDEN_INPUT_NAME);
+            this._removeEntry(Const.UPLOAD_SANDBOX_HIDDEN_INPUT_NAME);
             files.forEach((fileInfo) => this._injectFileInfo(fileInfo));
         }
     }

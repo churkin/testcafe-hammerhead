@@ -5,7 +5,7 @@ var FocusBlur      = Hammerhead.get('./sandboxes/event/focus-blur');
 var IFrameSandbox  = Hammerhead.get('./sandboxes/iframe');
 var Listeners      = Hammerhead.get('./sandboxes/event/listeners');
 var NativeMethods  = Hammerhead.get('./sandboxes/native-methods');
-var SharedConst    = Hammerhead.get('../shared/const');
+var Const          = Hammerhead.get('../const');
 
 QUnit.testStart = function () {
     IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, initIFrameTestHandler);
@@ -61,7 +61,7 @@ function dispatchMouseEvent (el, type) {
 }
 
 function isHovered (el) {
-    return el.getAttribute(SharedConst.HOVER_PSEUDO_CLASS_ATTR) === '';
+    return el.getAttribute(Const.HOVER_PSEUDO_CLASS_ATTR) === '';
 }
 
 if (!Browser.hasTouchEvents) {

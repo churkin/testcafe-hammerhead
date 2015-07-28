@@ -2,7 +2,7 @@ var Browser       = Hammerhead.get('./util/browser');
 var DomProcessor  = Hammerhead.get('./dom-processor/dom-processor');
 var IFrameSandbox = Hammerhead.get('./sandboxes/iframe');
 var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
-var SharedConst   = Hammerhead.get('../shared/const');
+var Const         = Hammerhead.get('../const');
 var UrlUtil       = Hammerhead.get('./util/url');
 
 QUnit.testStart = function () {
@@ -144,7 +144,7 @@ test('element.getAttributeNS, element.setAttributeNS', function () {
 
     var el = document.createElementNS('xlink', elTagName);
 
-    strictEqual(el[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT], window);
+    strictEqual(el[Const.DOM_SANDBOX_PROCESSED_CONTEXT], window);
 
     el.setAttributeNS('xlink', attr, 'image.png');
     strictEqual(NativeMethods.getAttributeNS.call(el, 'xlink', attr), 'replaced');

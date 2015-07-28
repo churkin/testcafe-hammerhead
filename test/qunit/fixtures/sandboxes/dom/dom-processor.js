@@ -1,10 +1,10 @@
 var Html          = Hammerhead.get('./util/html');
 var DomProcessor  = Hammerhead.get('./dom-processor/dom-processor');
 var Settings      = Hammerhead.get('./settings');
-var SharedConst   = Hammerhead.get('../shared/const');
+var Const         = Hammerhead.get('../const');
 var IFrameSandbox = Hammerhead.get('./sandboxes/iframe');
 var UrlUtil       = Hammerhead.get('./util/url');
-var NativeMethods  = Hammerhead.get('./sandboxes/native-methods');
+var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
 
 
 QUnit.testStart = function () {
@@ -288,7 +288,7 @@ test('stylesheet', function () {
         strictEqual(DomProcessor.processStylesheet(css, urlReplacer), expected);
     };
 
-    check('a:hover {}', 'a[' + SharedConst.HOVER_PSEUDO_CLASS_ATTR + '] {}');
+    check('a:hover {}', 'a[' + Const.HOVER_PSEUDO_CLASS_ATTR + '] {}');
     check('div { background-image: url(""); }', 'div { background-image: url(""); }');
     check('div { background-image: url(\'\'); }', 'div { background-image: url(\'\'); }');
     check('div { background-image: url(); }', 'div { background-image: url(); }');
@@ -309,7 +309,7 @@ test('clean up stylesheet', function () {
         strictEqual(DomProcessor.cleanUpStylesheet(css, UrlUtil.parseProxyUrl, UrlUtil.formatUrl), expected);
     };
 
-    check('a[' + SharedConst.HOVER_PSEUDO_CLASS_ATTR + '] {}', 'a:hover {}');
+    check('a[' + Const.HOVER_PSEUDO_CLASS_ATTR + '] {}', 'a:hover {}');
     check('div { background-image: url(""); }', 'div { background-image: url(""); }');
     check('div { background-image: url(\'\'); }', 'div { background-image: url(\'\'); }');
     check('div { background-image: url(); }', 'div { background-image: url(); }');
@@ -326,8 +326,8 @@ test('stylesheet after innerHTML', function () {
     var div   = $('<div>').appendTo('body')[0];
     var style = $('<style>')[0];
     var check = function (cssText) {
-        strictEqual(cssText.indexOf(SharedConst.IS_STYLESHEET_PROCESSED_COMMENT), 0);
-        strictEqual(cssText.indexOf(SharedConst.IS_STYLESHEET_PROCESSED_COMMENT, 1), -1);
+        strictEqual(cssText.indexOf(Const.IS_STYLESHEET_PROCESSED_COMMENT), 0);
+        strictEqual(cssText.indexOf(Const.IS_STYLESHEET_PROCESSED_COMMENT, 1), -1);
         strictEqual(cssText.replace(/^[\s\S]+url\(([\s\S]+)\)[\s\S]+$/, '$1'), UrlUtil.getProxyUrl('http://test.ru'));
     };
 

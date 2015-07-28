@@ -1,7 +1,7 @@
 var Browser       = Hammerhead.get('./util/browser');
 var IFrameSandbox = Hammerhead.get('./sandboxes/iframe');
 var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
-var SharedConst   = Hammerhead.get('../shared/const');
+var Const         = Hammerhead.get('../const');
 var UrlUtil       = Hammerhead.get('./util/url');
 
 QUnit.testStart = function () {
@@ -92,8 +92,8 @@ asyncTest('element.setAttribute', function () {
         var storedMeth    = iframeSandbox.isIframeInitialized;
 
         iframeSandbox.isIframeInitialized = function (iframe) {
-            iframe.contentWindow[SharedConst.DOM_SANDBOX_OVERRIDE_DOM_METHOD_NAME] =
-                iframe.contentWindow[SharedConst.DOM_SANDBOX_OVERRIDE_DOM_METHOD_NAME] || function () {
+            iframe.contentWindow[Const.DOM_SANDBOX_OVERRIDE_DOM_METHOD_NAME] =
+                iframe.contentWindow[Const.DOM_SANDBOX_OVERRIDE_DOM_METHOD_NAME] || function () {
                 };
 
             return storedMeth.call(iframeSandbox, iframe);

@@ -1,5 +1,5 @@
 var Settings      = Hammerhead.get('./settings');
-var SharedUrlUtil = Hammerhead.get('../shared/url-util');
+var SharedUrlUtil = Hammerhead.get('../utils/url');
 var UrlUtil       = Hammerhead.get('./util/url');
 
 var PROXY_PORT     = 1337;

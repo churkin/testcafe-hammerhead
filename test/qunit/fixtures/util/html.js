@@ -3,8 +3,8 @@ var Html          = Hammerhead.get('./util/html');
 var IFrameSandbox = Hammerhead.get('./sandboxes/iframe');
 var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
 var ShadowUI      = Hammerhead.get('./sandboxes/shadow-ui');
-var SharedConst   = Hammerhead.get('../shared/const');
-var SharedUrlUtil = Hammerhead.get('../shared/url-util');
+var Const         = Hammerhead.get('../const');
+var SharedUrlUtil = Hammerhead.get('../utils/url');
 var UrlUtil       = Hammerhead.get('./util/url');
 
 QUnit.testStart = function () {
@@ -26,8 +26,8 @@ test('hover marker', function () {
     };
 
     var html = '<a href="http://domain.com"></a>' +
-               '<div ' + SharedConst.HOVER_PSEUDO_CLASS_ATTR + '></div>' +
-               '<div ' + SharedConst.HOVER_PSEUDO_CLASS_ATTR + '=""></div>';
+               '<div ' + Const.HOVER_PSEUDO_CLASS_ATTR + '></div>' +
+               '<div ' + Const.HOVER_PSEUDO_CLASS_ATTR + '=""></div>';
 
     var expexted     = '<a href="http://domain.com"></a><div></div><div></div>';
     var pocessedHtml = Html.processHtml(html);
@@ -202,7 +202,7 @@ test('html fragment', function () {
 });
 
 test('text nodes', function () {
-    var hoverAttr = SharedConst.HOVER_PSEUDO_CLASS_ATTR;
+    var hoverAttr = Const.HOVER_PSEUDO_CLASS_ATTR;
 
     var check = function (html) {
         var processedHtml = Html.cleanUpHtml('<div ' + hoverAttr + '="">' + html + '</div>');

@@ -7,8 +7,8 @@
     });
 
     var UrlUtil     = Hammerhead.get('./util/url');
-    var JSProcessor = Hammerhead.get('../shared/js-processor');
-    var SharedConst = Hammerhead.get('../shared/const');
+    var JSProcessor = Hammerhead.get('../processing/js-processor');
+    var Const = Hammerhead.get('../const');
 
     UrlUtil.OriginLocation.get = function () {
         return 'https://example.com';
@@ -31,9 +31,9 @@
 
     Hammerhead.init();
 
-    window.overrideDomMeth = window[SharedConst.DOM_SANDBOX_OVERRIDE_DOM_METHOD_NAME];
+    window.overrideDomMeth = window[Const.DOM_SANDBOX_OVERRIDE_DOM_METHOD_NAME];
 
-    window[SharedConst.DOM_SANDBOX_OVERRIDE_DOM_METHOD_NAME] = function (el) {
+    window[Const.DOM_SANDBOX_OVERRIDE_DOM_METHOD_NAME] = function (el) {
         if (el)
             window.overrideDomMeth(el);
     };

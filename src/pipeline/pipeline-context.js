@@ -1,4 +1,4 @@
-import SHARED_CONST from '../const';
+import Const from '../const';
 import * as urlUtils from '../url-util';
 import * as contentUtils from '../utils/content';
 
@@ -48,7 +48,7 @@ export default class PipelineContext {
 
         var acceptHeader = req.headers['accept'];
 
-        this.isXhr  = !!req.headers[SHARED_CONST.XHR_REQUEST_MARKER_HEADER];
+        this.isXhr  = !!req.headers[Const.XHR_REQUEST_MARKER_HEADER];
         this.isPage = !this.isXhr && acceptHeader && contentUtils.isPage(acceptHeader);
     }
 
@@ -94,7 +94,7 @@ export default class PipelineContext {
     _initRequestNatureInfo () {
         var acceptHeader = this.req.headers['accept'];
 
-        this.isXhr    = !!this.req.headers[SHARED_CONST.XHR_REQUEST_MARKER_HEADER];
+        this.isXhr    = !!this.req.headers[Const.XHR_REQUEST_MARKER_HEADER];
         this.isPage   = !this.isXhr && acceptHeader && contentUtils.isPage(acceptHeader);
         this.isIFrame = this.dest.resourceType === urlUtils.IFRAME;
     }

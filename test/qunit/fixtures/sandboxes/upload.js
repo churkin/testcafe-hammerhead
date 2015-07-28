@@ -1,5 +1,5 @@
 var Browser       = Hammerhead.get('./util/browser');
-var CMD           = Hammerhead.get('../shared/service-msg-cmd');
+var CMD           = Hammerhead.get('../service-msg-cmd');
 var HiddenInfo    = Hammerhead.get('./sandboxes/upload/hidden-info');
 var InfoManager   = Hammerhead.get('./sandboxes/upload/info-manager');
 var NativeMethods = Hammerhead.get('./sandboxes/native-methods');

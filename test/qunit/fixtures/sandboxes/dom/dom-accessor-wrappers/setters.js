@@ -3,9 +3,9 @@ var DomProcessor          = Hammerhead.get('./dom-processor/dom-processor');
 var ElementEditingWatcher = Hammerhead.get('./sandboxes/event/element-editing-watcher');
 var EventSimulator        = Hammerhead.get('./sandboxes/event/simulator');
 var IFrameSandbox         = Hammerhead.get('./sandboxes/iframe');
-var JSProcessor           = Hammerhead.get('../shared/js-processor');
+var JSProcessor           = Hammerhead.get('../processing/js-processor');
 var NativeMethods         = Hammerhead.get('./sandboxes/native-methods');
-var SharedConst           = Hammerhead.get('../shared/const');
+var Const                 = Hammerhead.get('../const');
 var UrlUtil               = Hammerhead.get('./util/url');
 
 QUnit.testStart = function () {
@@ -229,7 +229,7 @@ test('script text', function () {
 test('iframe', function () {
     var iframe = document.createElement('iframe');
 
-    window[SharedConst.DOM_SANDBOX_OVERRIDE_DOM_METHOD_NAME](iframe);
+    window[Const.DOM_SANDBOX_OVERRIDE_DOM_METHOD_NAME](iframe);
 
     eval(processScript('iframe.sandbox="allow-forms"'));
     strictEqual(NativeMethods.getAttribute.call(iframe, 'sandbox'), 'allow-forms allow-scripts');

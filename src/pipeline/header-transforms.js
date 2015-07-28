@@ -1,5 +1,5 @@
 import { parse as parseUrl, resolve as resolveUrl } from 'url';
-import SHARED_CONST from '../const';
+import Const from '../const';
 import * as urlUtils from '../url-util';
 
 // Skipping transform
@@ -16,7 +16,7 @@ var requestTransforms = {
     'content-length': (src, ctx) => ctx.reqBody.length,
     'cookie':         skip,
 
-    [SHARED_CONST.XHR_REQUEST_MARKER_HEADER]: skip
+    [Const.XHR_REQUEST_MARKER_HEADER]: skip
 };
 
 var requestForced = {

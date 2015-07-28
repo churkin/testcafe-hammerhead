@@ -1,6 +1,6 @@
 var DOM           = Hammerhead.get('./util/dom');
 var IFrameSandbox = Hammerhead.get('./sandboxes/iframe');
-var SharedConst   = Hammerhead.get('../shared/const');
+var Const         = Hammerhead.get('../const');
 var UrlUtil       = Hammerhead.get('./util/url');
 
 QUnit.testStart = function () {
@@ -180,7 +180,7 @@ asyncTest('changed location 2', function () {
     var handler = function () {
         this.removeEventListener('load', handler);
         this.addEventListener('load', function () {
-            this[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
+            this[Const.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
             ok(!UrlUtil.isIframeWithoutSrc(this));
             ok(!DOM.isCrossDomainIframe(this));
             this.parentNode.removeChild(this);
@@ -204,7 +204,7 @@ asyncTest('crossdomain src', function () {
     iframe.id  = 'test8';
     iframe.src = 'http://' + location.hostname + ':1336/hammerhead/simple_page.html';
     iframe.addEventListener('load', function () {
-        this[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
+        this[Const.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
         ok(!UrlUtil.isIframeWithoutSrc(this));
         ok(DOM.isCrossDomainIframe(this));
         this.parentNode.removeChild(this);
@@ -220,7 +220,7 @@ asyncTest('samedomain src', function () {
     iframe.id  = 'test9';
     iframe.src = 'http://' + location.host + '/';
     iframe.addEventListener('load', function () {
-        this[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
+        this[Const.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
         ok(!UrlUtil.isIframeWithoutSrc(this));
         ok(!DOM.isCrossDomainIframe(this));
         this.parentNode.removeChild(this);
@@ -235,7 +235,7 @@ asyncTest('without src attribute', function () {
 
     iframe.id = 'test10';
     iframe.addEventListener('load', function () {
-        this[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
+        this[Const.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
         ok(UrlUtil.isIframeWithoutSrc(this));
         ok(!DOM.isCrossDomainIframe(this));
         this.parentNode.removeChild(this);
@@ -250,7 +250,7 @@ asyncTest('about:blank', function () {
     iframe.id  = 'test11';
     iframe.src = 'about:blank';
     iframe.addEventListener('load', function () {
-        this[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
+        this[Const.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
         ok(UrlUtil.isIframeWithoutSrc(this));
         ok(!DOM.isCrossDomainIframe(this));
         this.parentNode.removeChild(this);
@@ -293,7 +293,7 @@ asyncTest('empty src attribute', function () {
     iframe.id  = 'test13';
     iframe.src = '';
     iframe.addEventListener('load', function () {
-        this[SharedConst.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
+        this[Const.DOM_SANDBOX_PROCESSED_CONTEXT] = window;
         ok(UrlUtil.isIframeWithoutSrc(this));
         ok(!DOM.isCrossDomainIframe(this));
         this.parentNode.removeChild(this);

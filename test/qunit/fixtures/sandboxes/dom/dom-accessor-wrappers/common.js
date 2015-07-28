@@ -1,5 +1,5 @@
 var DomAccessorWrappers = Hammerhead.get('./sandboxes/dom-accessor-wrappers');
-var JSProcessor         = Hammerhead.get('../shared/js-processor');
+var JSProcessor         = Hammerhead.get('../processing/js-processor');
 
 test('wrapped properties equals with accessors properties', function () {
     var elementPropertyAccessorsKeys = Object.keys(DomAccessorWrappers.elementPropertyAccessors);
