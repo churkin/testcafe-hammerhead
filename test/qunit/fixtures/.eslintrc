@@ -19,9 +19,11 @@
     "expect": true,
     "start": true,
 
+    /* Utils */
     "async": true,
     "$": true,
 
+    /* Browser variables */
     "MouseEvent": true,
     "window": true,
     "location": true,
@@ -31,9 +33,6 @@
     "navigator": true,
     "XMLHttpRequest": true,
     "Blob": true,
-    //"isIFrameWithoutSrc": true,
-    //"XMLHttpRequest": true,
-    //"initHammerheadClient": true,
 
     /* For more details on global variables see custom-setup.js file */
     "callMethod": true,
