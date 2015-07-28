@@ -1,6 +1,6 @@
 import { isMozilla, isIE } from '../../util/browser';
 import IFrameSandbox from '../iframe';
-import JSProcessor from '../../../processing/js-processor';
+import JSProcessor from '../../../processing/js/index';
 import NativeMethods from '../native-methods';
 import * as Html from '../../util/html';
 import { EventEmitter } from '../../util/service';

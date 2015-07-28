@@ -10,7 +10,7 @@ import * as FocusBlur from './sandboxes/event/focus-blur';
 import * as IFrameSandbox from './sandboxes/iframe';
 import * as InfoManager from './sandboxes/upload/info-manager';
 import * as JSON from './json';
-import JSProcessor from '../processing/js-processor';
+import JSProcessor from '../processing/js/index';
 import * as Listeners from './sandboxes/event/listeners';
 import * as MessageSandbox from './sandboxes/message';
 import NativeMethods from './sandboxes/native-methods';

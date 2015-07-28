@@ -1,4 +1,4 @@
-import { parse, generate } from './js-parsing-tools';
+import { parse, generate } from './parsing-tools';
 
 var JSProcessor = {};
 

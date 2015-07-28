@@ -2,7 +2,7 @@ import * as CookieSandbox from './cookie';
 import * as DOM from '../util/dom';
 import * as Html from '../util/html';
 import * as ElementEditingWatcher from './event/element-editing-watcher';
-import JSProcessor from '../../processing/js-processor';
+import JSProcessor from '../../processing/js/index';
 import * as MessageSandbox from './message';
 import NativeMethods from './native-methods';
 import DomProcessor from '../dom-processor/dom-processor';

@@ -1,7 +1,7 @@
-import UrlUtil from '../utils/url';
-import JSProcessor from '../processing/js-processor';
-import Const from '../const';
-import { trim } from '../utils/util';
+import UrlUtil from '../../utils/url';
+import JSProcessor from '../js/index';
+import Const from '../../const';
+import { trim } from '../../utils/util';
 
 const CSS_URL_PROPERTY_VALUE_PATTERN = /(url\s*\(\s*)(?:(')([^\s']*)(')|(")([^\s"]*)(")|([^\s\)]*))(\s*\))|(@import\s+)(?:(')([^\s']*)(')|(")([^\s"]*)("))/g;
 

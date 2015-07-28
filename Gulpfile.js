@@ -82,7 +82,7 @@ gulp.task('lint', function () {
         .src([
             './src/**/*.js',
             '!./src/client/json.js',
-            '!./src/processing/js-parsing-tools.js',
+            '!./src/processing/js/parsing-tools.js',
             './test/mocha/fixtures/**/*.js',
             './test/qunit/fixtures/**/*.js',
             'Gulpfile.js'

@@ -7,8 +7,8 @@
     });
 
     var UrlUtil     = Hammerhead.get('./util/url');
-    var JSProcessor = Hammerhead.get('../processing/js-processor');
-    var Const = Hammerhead.get('../const');
+    var JSProcessor = Hammerhead.get('../processing/js/index');
+    var Const       = Hammerhead.get('../const');
 
     UrlUtil.OriginLocation.get = function () {
         return 'https://example.com';

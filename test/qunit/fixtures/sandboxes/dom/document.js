@@ -1,7 +1,7 @@
 var Browser       = Hammerhead.get('./util/browser');
 var DomProcessor  = Hammerhead.get('./dom-processor/dom-processor');
 var IFrameSandbox = Hammerhead.get('./sandboxes/iframe');
-var JSProcessor   = Hammerhead.get('../processing/js-processor');
+var JSProcessor   = Hammerhead.get('../processing/js/index');
 var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
 
 QUnit.testStart = function () {
