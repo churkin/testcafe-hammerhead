@@ -225,8 +225,11 @@ UrlUtil.formatUrl = function (parsedUrl) {
 };
 
 UrlUtil.prepareUrl = function (url) {
+    // TODO: fix it
+    /* eslint-disable no-undef */
     if (url === null && /iPad|iPhone/i.test(window.navigator.userAgent))
         return '';
+    /* eslint-enable no-undef */
 
     url = (url + '').replace(/\n|\t/g, '');
 

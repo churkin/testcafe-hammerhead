@@ -92,6 +92,8 @@ export default class ServerStrategy extends DomProcessorStrategyBase {
     getProxyUrl () {
         return urlUtils.getProxyUrl.apply(urlUtils, arguments);
     }
+
+    isTopParentIFrame () {
+        return false;
+    }
 }
-
-

@@ -5,6 +5,7 @@ import { EventEmitter } from '../util/service';
 import StrategyBase from '../../dom-processor/dom-processor-strategy-base';
 import Settings from '../settings';
 import UrlUtil from '../util/url';
+import Const from '../../const';
 
 export default class ClientStrategy extends StrategyBase {
     getAttr (el, attr) {
@@ -94,5 +95,11 @@ export default class ClientStrategy extends StrategyBase {
 
     getProxyUrl () {
         return UrlUtil.getProxyUrl.apply(UrlUtil, arguments);
+    }
+
+    isTopParentIFrame (el) {
+        var elWindow = el[Const.DOM_SANDBOX_PROCESSED_CONTEXT];
+
+        return elWindow && window.top === elWindow.parent;
     }
 }

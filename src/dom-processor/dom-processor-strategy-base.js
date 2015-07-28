@@ -73,6 +73,8 @@ export default class DomProcessorStrategy {
     getProxyUrl () {
         throw new Error('DomProcessorStrategy#getProxyUrl needs to be overridden.');
     }
+
+    isTopParentIFrame () {
+        throw new Error('DomProcessorStrategy#isTopParentIFrame needs to be overridden.');
+    }
 }
-
-

@@ -219,7 +219,7 @@ export default class DomProcessor {
         for (var i = 0; i < this.elementProcessorPatterns.length; i++) {
             var pattern = this.elementProcessorPatterns[i];
 
-            if (pattern.selector(elementForSelectorCheck) && !this._isTestCafeElement(el)) {
+            if (pattern.selector(elementForSelectorCheck) && !this._isShadowElement(el)) {
                 for (var j = 0; j < pattern.elementProcessors.length; j++)
                     pattern.elementProcessors[j].call(this, el, urlReplacer, pattern);
             }
@@ -325,7 +325,7 @@ export default class DomProcessor {
             var isNameTarget   = target ? target[0] !== '_' : false;
 
             if (target === '_parent')
-                return mustProcessTag && !this._isTopParentIFrame(el);
+                return mustProcessTag && !this.strategy.isTopParentIFrame(el);
 
             if (mustProcessTag && (this.strategy.hasIFrameParent(el) || isNameTarget))
                 return true;
@@ -334,13 +334,7 @@ export default class DomProcessor {
         return false;
     }
 
-    _isTopParentIFrame (el) {
-        var elWindow = el[Const.DOM_SANDBOX_PROCESSED_CONTEXT];
-
-        return elWindow && window.top === elWindow.parent;
-    }
-
-    _isTestCafeElement (el) {
+    _isShadowElement (el) {
         return typeof el.className === 'string' && el.className.indexOf(Const.SHADOW_UI_CLASSNAME_POSTFIX) > -1;
     }
 
