@@ -8,7 +8,7 @@ matrix:
    - node_js: "iojs"
      env: GULP_TASK="mocha"
    - node_js: "0.10"
-     env: GULP_TASK="qunit"
+     env: GULP_TASK="qunit-travis"
  fast_finish: true
 
 notifications:
