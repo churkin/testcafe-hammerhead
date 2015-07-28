@@ -19,6 +19,8 @@ var rename     = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
 //var uglify     = require('gulp-uglify');
 var webmake = require('gulp-webmake');
+var chalk   = require('chalk');
+var Promise = require('promise');
 
 function makePromise (fn) {
     return { then: fn };
@@ -120,142 +122,124 @@ gulp.task('playground', ['build'], function () {
     return HangPromise;
 });
 
-gulp.task('travis', [process.env.GULP_TASK]);
+gulp.task('travis', [process.env.GULP_TASK || '']);
 
 (function SAUCE_LABS_QUNIT_TESTING () {
     var SauceTunnel = require('sauce-tunnel');
     var QUnitRunner = require('./test/qunit/sauce-labs-runner');
-    var gulpConnect = require('gulp-connect');
 
     var SAUCE_LABS_USERNAME = process.env.SAUCE_LABS_USERNAME || '';
     var SAUCE_LABS_PASSWORD = process.env.SAUCE_LABS_PASSWORD || '';
-    var BROWSERS            = [
+
+    var RUN_TESTS_URL = '/run-dir?dir=fixtures/hammerhead_client';
+    var BROWSERS      = [
         {
-            browserName: "chrome",
-            platform:    "Windows 7"
+            browserName: 'chrome',
+            platform:    'Windows 7'
         }];
 
-    var tunnelIdentifier  = Math.floor((new Date()).getTime() / 1000 - 1230768000).toString();
-    var sauceTunnel       = null;
-    var sauceTunnelOpened = false;
-    var taskSucceed       = true;
-    var qUnitServerUrl    = null;
-
-    gulp.task('open-connect', function () {
-        gulpConnect.server({
-            root: '',
-            port: 1335
-        });
-    });
-
-    gulp.task('sauce-start', function () {
+    function openSauceTunnel (username, password, id, tunneled) {
         return new Promise(function (resolve, reject) {
-            sauceTunnel = new SauceTunnel(SAUCE_LABS_USERNAME, SAUCE_LABS_PASSWORD, tunnelIdentifier, true);
+            var tunnel = new SauceTunnel(username, password, id, tunneled);
 
-            sauceTunnel.start(function (isCreated) {
+            tunnel.start(function (isCreated) {
                 if (!isCreated)
                     reject('Failed to create Sauce tunnel');
-                else {
-                    sauceTunnelOpened = true;
-                    resolve('Connected to Sauce Labs');
-                }
+                else
+                    resolve(tunnel);
             });
         });
-    });
+    }
 
-    gulp.task('run-tests', ['Hammerhead-Build', 'run-qunit-server', 'sauce-start'], function (callback) {
-        var runner = new QUnitRunner({
-            username:         SAUCE_LABS_USERNAME,
-            key:              SAUCE_LABS_PASSWORD,
-            build:            process.env.TRAVIS_JOB_ID || '',
-            browsers:         BROWSERS,
-            tunnelIdentifier: tunnelIdentifier,
-            urls:             [qUnitServerUrl + '/run-dir?dir=fixtures/hammerhead_client'],
-            tags:             [process.env.TRAVIS_BRANCH || 'master']
+    function stopSauceTunnel (tunnel) {
+        return new Promise(function (resolve) {
+            tunnel.stop(resolve);
         });
+    }
 
-        runner.runTests(function (results) {
-            function bold (text) {
-                return '\033[1m' + text + '\033[22m';
-            }
+    function checkFailures (results) {
+        var errors = [];
 
-            function red (text) {
-                return '\033[31m' + text + '\033[39m';
-            }
+        results[0].forEach(function (platformResults) {
+            var msg      = [];
+            var platform = [platformResults.platform[0], platformResults.platform[1], platformResults.platform[2] ||
+                                                                                      ''].join(' ');
 
-            function green (text) {
-                return '\033[32m' + text + '\033[39m';
-            }
+            msg.push(chalk.bold(platformResults.result.failed ? chalk.red('FAILURES:') : chalk.green('OK:')));
+            msg.push(platform);
+            msg.push(chalk.bold('Total:'), platformResults.result.total);
+            msg.push(chalk.bold('Failed:'), platformResults.result.failed);
 
-            var errors = [];
+            console.log(msg.join(' '));
 
-            results[0].forEach(function (platformResults) {
-                var msg      = [];
-                var platform = [platformResults.platform[0], platformResults.platform[1], platformResults.platform[2] ||
-                                                                                          ''].join(' ');
-
-                msg.push(bold(platformResults.result.failed ? red('FAILURES:') : green('OK:')));
-                msg.push(platform);
-                msg.push(bold('Total:'), platformResults.result.total);
-                msg.push(bold('Failed:'), platformResults.result.failed);
-
-                console.log(msg.join(' '));
-
-                if (platformResults.result.errors) {
-                    platformResults.result.errors.forEach(function (error) {
-                        error.platform = platform;
-                        errors.push(error);
-                    });
-                }
-
-            });
-
-            taskSucceed = !errors.length;
-
-            if (!taskSucceed) {
-                console.log(bold(red('ERRORS:')));
-
-                errors.forEach(function (error) {
-                    console.log(bold(error.platform + ' - ' + error.testPath));
-                    console.log(bold('Test: ' + error.testName));
-
-                    if (error.customMessage)
-                        console.log('message: ' + error.customMessage);
-
-                    if (error.expected) {
-                        console.log('expected: ' + error.expected);
-                        console.log('actual: ' + error.actual);
-                    }
-
-                    console.log('-------------------------------------------');
-                    console.log();
+            if (platformResults.result.errors) {
+                platformResults.result.errors.forEach(function (error) {
+                    error.platform = platform;
+                    errors.push(error);
                 });
             }
-
-            callback();
         });
-    });
 
-    gulp.task('sauce-end', ['run-tests'], function (callback) {
-        sauceTunnelOpened = false;
-        sauceTunnel.stop(callback);
-    });
+        return errors;
+    }
 
-    gulp.task('close-connect', ['run-tests'], function () {
-        gulpConnect.serverClose();
-    });
+    function reportFailures (errors) {
+        console.log(chalk.bold.red('ERRORS:'));
 
-    gulp.task('run-qunit-server', function () {
-        qUnitServerUrl = require('./test/qunit/server.js').start(true);
-    });
+        errors.forEach(function (error) {
+            console.log(chalk.bold(error.platform + ' - ' + error.testPath));
+            console.log(chalk.bold('Test: ' + error.testName));
 
-    gulp.task('Qunit-Farm', ['Hammerhead-Build', 'run-tests', 'sauce-end'], function () {
-        if (!taskSucceed)
-            process.exit(1);
-    });
+            if (error.customMessage)
+                console.log('message: ' + error.customMessage);
 
-    gulp.on('err', function () {
-        if (sauceTunnelOpened)
-            sauceTunnel.stop(new Function());
+            if (error.expected) {
+                console.log('expected: ' + error.expected);
+                console.log('actual: ' + error.actual);
+            }
+
+            console.log('-------------------------------------------');
+            console.log();
+        });
+    }
+
+    gulp.task('qunit-travis', ['build'], function () {
+        var qUnitServerUrl = require('./test/qunit/server.js').start(true);
+        var sauceTunnelId  = Math.floor((new Date()).getTime() / 1000 - 1230768000).toString();
+        var sauceTunnel    = null;
+
+        return openSauceTunnel(SAUCE_LABS_USERNAME, SAUCE_LABS_PASSWORD, sauceTunnelId, true)
+            .then(function (tunnel) {
+                sauceTunnel = tunnel;
+
+                var runner = new QUnitRunner({
+                    username:         SAUCE_LABS_USERNAME,
+                    key:              SAUCE_LABS_PASSWORD,
+                    build:            process.env.TRAVIS_JOB_ID || '',
+                    browsers:         BROWSERS,
+                    tunnelIdentifier: sauceTunnelId,
+                    urls:             [qUnitServerUrl + RUN_TESTS_URL],
+                    tags:             [process.env.TRAVIS_BRANCH || 'master']
+                });
+
+                return runner.runTests();
+            })
+            .then(function (results) {
+                var errors = checkFailures(results);
+
+                if (errors.length) {
+                    reportFailures(errors);
+                    throw 'tests failed';
+                }
+            })
+            .then(function () {
+                return stopSauceTunnel();
+            })
+            .catch(function (err) {
+                stopSauceTunnel(sauceTunnel)
+                    .then(function () {
+                        throw err;
+                    });
+            });
     });
 })();
