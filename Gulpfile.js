@@ -203,7 +203,7 @@ gulp.task('travis', [process.env.GULP_TASK || '']);
         });
     }
 
-    gulp.task('qunit-travis', ['Hammerhead-Build', 'run-tests', 'sauce-end'], function () {
+    gulp.task('qunit-travis', ['build'], function () {
         var qUnitServerUrl = require('./test/qunit/server.js').start(true);
         var sauceTunnelId  = Math.floor((new Date()).getTime() / 1000 - 1230768000).toString();
         var sauceTunnel    = null;
