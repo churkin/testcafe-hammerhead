@@ -96,6 +96,7 @@ gulp.task('lint', function () {
         .pipe(eslint.failAfterError());
 });
 
+
 gulp.task('build', ['client-scripts', 'server-scripts', 'templates', 'lint']);
 
 gulp.task('mocha', ['build'], function () {
