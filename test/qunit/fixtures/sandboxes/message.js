@@ -40,9 +40,9 @@ asyncTest('onmessage event', function () {
     };
 
     $iframe.bind('load', function () {
-        eval(DomProcessor.processScript("window.onmessage = onMessageHandler;"));
-        window.addEventListener("message", onMessageHandler);
-        eval(DomProcessor.processScript("this.contentWindow.postMessage('', '*')"));
+        eval(DomProcessor.processScript('window.onmessage = onMessageHandler;'));
+        window.addEventListener('message', onMessageHandler);
+        eval(DomProcessor.processScript('this.contentWindow.postMessage(\'\', \'*\')'));
     });
 });
 
@@ -65,17 +65,18 @@ asyncTest('crossdomain post messages between diffferen windows', function () {
     };
 
     var onMessageHandler = function (e) {
-        if (parseInt(e.data))
+        if (parseInt(e.data, 10))
             result++;
 
         checkResult();
     };
 
-    eval(DomProcessor.processScript("window.onmessage = onMessageHandler;"));
+    eval(DomProcessor.processScript('window.onmessage = onMessageHandler;'));
 });
 
 asyncTest('message types', function () {
     var checkValue = function (value, callback, test) {
+        /* eslint-disable no-unused-vars*/
         var onMessageHandler = function (e) {
             if (test)
                 ok(test(e.data));
@@ -85,8 +86,10 @@ asyncTest('message types', function () {
             callback();
         };
 
-        eval(DomProcessor.processScript("window.onmessage = onMessageHandler;"));
-        eval(DomProcessor.processScript("window.postMessage(value, '*');"));
+        /* eslint-enable no-unused-vars*/
+
+        eval(DomProcessor.processScript('window.onmessage = onMessageHandler;'));
+        eval(DomProcessor.processScript('window.postMessage(value, "*");'));
     };
 
     if (Browser.isIE9) {
@@ -101,7 +104,7 @@ asyncTest('message types', function () {
                     checkValue([0], function () {
                         checkValue({ a: 0 }, function () {
                             checkValue(null, function () {
-                                checkValue(undefined, function () {
+                                checkValue(void 0, function () {
                                     checkValue('{a:0}', function () {
                                         start();
                                     });
@@ -124,7 +127,7 @@ module('service messages');
 asyncTest('cloning arguments', function () {
     var iframe = document.createElement('iframe');
 
-    iframe.id = "test006";
+    iframe.id = 'test006';
     iframe.addEventListener('load', function () {
         var sourceObj = { testObject: true };
 
@@ -200,8 +203,8 @@ asyncTest('service message handler should not call other handlers', function () 
 
     iframe.src = window.getCrossDomainPageUrl('service-message-with-handlers.html');
     iframe.addEventListener('load', function () {
-        eval(DomProcessor.processScript("window.onmessage = windowMessageHandler;"));
-        window.addEventListener("message", windowMessageHandler);
+        eval(DomProcessor.processScript('window.onmessage = windowMessageHandler;'));
+        window.addEventListener('message', windowMessageHandler);
         MessageSandbox.on(MessageSandbox.SERVICE_MSG_RECEIVED, serviceMsgHandler);
         MessageSandbox.sendServiceMsg('service_msg', this.contentWindow);
     });
@@ -218,13 +221,13 @@ asyncTest('iframe', function () {
         if (evt.data === 'ready') {
             ok(iFrameResponseReceived);
 
-            window.removeEventListener("message", onMessageHandler);
+            window.removeEventListener('message', onMessageHandler);
             iframe.parentNode.removeChild(iframe);
             start();
         }
     };
 
-    window.addEventListener("message", onMessageHandler);
+    window.addEventListener('message', onMessageHandler);
 
     MessageSandbox.pingIFrame(iframe, 'pingCmd', function () {
         iFrameResponseReceived = true;

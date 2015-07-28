@@ -17,6 +17,7 @@ QUnit.testDone = function () {
     IFrameSandbox.off(IFrameSandbox.IFRAME_READY_TO_INIT, initIFrameTestHandler);
 };
 
+/* eslint-disable no-implied-eval */
 test('script.textContent', function () {
     var script     = document.createElement('script');
     var scriptCode = 'var test = window.href;';
@@ -49,8 +50,10 @@ test('unsupported protocol', function () {
 });
 
 test('anchor', function () {
-    var anchor                               = document.createElement('a');
-    var emptyAnchor                          = document.createElement('a');
+    var anchor = document.createElement('a');
+    /* eslint-disable no-unused-vars */
+    var emptyAnchor = document.createElement('a');
+    /* eslint-enable no-unused-vars */
     var anchorWithNotSupportedProtocol       = document.createElement('a');
     var etalonAnchor                         = document.createElement('a');
     var etalonEmptyAnchor                    = document.createElement('a');
@@ -182,7 +185,7 @@ test('location as a local var', function () {
     strictEqual(location, null);
 
     eval(processScript('location = undefined'));
-    strictEqual(location, undefined);
+    strictEqual(location, void 0);
 
     eval(processScript('location = ""'));
     strictEqual(location, '');
@@ -193,7 +196,7 @@ if (!Browser.isIE) {
     asyncTest('iframe.contentWindow.location', function () {
         var iframe = document.createElement('iframe');
 
-        iframe.id = "testT260697";
+        iframe.id = 'testT260697';
 
         var loadHandler = function () {
             iframe.removeEventListener('load', loadHandler);
@@ -259,8 +262,7 @@ asyncTest('body.innerHTML in iframe', function () {
 
 //Q527555 - Can not click on button in DIV
 asyncTest('body.innerHtml in iframe (with a.href)', function () {
-    var $iframe   = $('<iframe id="test">').appendTo('body');
-    var innerHTML = 'text';
+    var $iframe = $('<iframe id="test">').appendTo('body');
 
     window.setTimeout(function () {
         var iframeBody = $iframe[0].contentWindow.document.body;
@@ -276,24 +278,28 @@ asyncTest('body.innerHtml in iframe (with a.href)', function () {
 
 //T198784: Javascript error on the http://automated-testing.info/ page
 test('object with properties equal "a" tag', function () {
+    /* eslint-disable no-unused-vars */
     var obj = {
         target:  'ok',
         tagName: -1
     };
 
     strictEqual(eval(processScript('obj.target')), 'ok');
+    /* eslint-enable no-unused-vars */
 });
 
 //T230802: TD15.1 - Page content is not loaded on the nest.com page after hammerhead processing
 test('object with properties equal "input" tag', function () {
+    /* eslint-disable no-unused-vars */
     var obj = {
         size:    null,
-        tagName: "input",
-        type:    "text",
-        value:   ""
+        tagName: 'input',
+        type:    'text',
+        value:   ''
     };
 
     strictEqual(eval(processScript('obj.value')), '');
+    /* eslint-enable no-unused-vars */
 });
 
 //T228218: Page script can\'t set the href attribute with \'malito\' to an element in an iFrame
@@ -349,11 +355,13 @@ if (!Browser.isIE) {
 
 //T232468: TD15.1 - Cannot record test for http://showcase.sproutcore.com/#demos/Transition%20Animation%20Plugins page
 test('event.which', function () {
+    /* eslint-disable no-unused-vars */
     var evtObj = {
         originalEvent: null
     };
 
-    strictEqual(eval(processScript('evtObj.which')), undefined);
+    strictEqual(eval(processScript('evtObj.which')), void 0);
+    /* eslint-enable no-unused-vars */
 });
 
 //T221375: Inconsistent behavior OnChange event in TestCafe and browsers(Chrome, IE)
@@ -392,4 +400,4 @@ asyncTest('input.value for special cases', function () {
         start();
     });
 });
-
+/* eslint-enable no-implied-eval */

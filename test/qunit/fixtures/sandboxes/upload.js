@@ -562,12 +562,14 @@ asyncTest('multi-select files', function () {
 asyncTest('get file info from iframe', function () {
     var fileInput = document.createElement('input');
 
-    fileInput.id   = "uploadTestIFrame";
-    fileInput.type = "file";
-    fileInput.name = "test";
+    fileInput.id   = 'uploadTestIFrame';
+    fileInput.type = 'file';
+    fileInput.name = 'test';
     document.body.appendChild(fileInput);
 
     UploadSandbox.upload(fileInput, './file.txt', function () {
+        var iframe = document.createElement('iframe');
+
         window.addEventListener('message', function (e) {
             var data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
 
@@ -588,9 +590,7 @@ asyncTest('get file info from iframe', function () {
             start();
         });
 
-        var iframe = document.createElement('iframe');
-
-        iframe.src = "/data/upload/iframe.html";
+        iframe.src = '/data/upload/iframe.html';
         document.body.appendChild(iframe);
     });
 });

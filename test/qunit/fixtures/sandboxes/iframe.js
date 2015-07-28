@@ -45,9 +45,9 @@ test('event should not raise if a cross-domain iframe is appended', function () 
 test('document.write', function () {
     var iframe = document.createElement('iframe');
 
-    iframe.id = "test10";
+    iframe.id = 'test10';
     document.body.appendChild(iframe);
-    iframe.contentDocument.write("<script>window.tempTestValue = !!__call$;<\/script>");
+    iframe.contentDocument.write('<script>window.tempTestValue = !!__call$;<\/script>');
 
     ok(iframe.contentWindow.tempTestValue);
 
@@ -67,8 +67,10 @@ asyncTest('ready to init event', function () {
     window.setTimeout(function () {
         IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, onIframeLoading);
 
+        /* eslint-disable no-unused-vars */
         var dummy = $container[0].innerHTML;
 
+        /* eslint-enable no-unused-vars */
         ok(!iframeLoadingEventRaised);
         $container.remove();
         start();
@@ -125,7 +127,8 @@ asyncTest('element.setAttribute', function () {
                 var element = iframeDocument.createElement(tag);
 
                 body.appendChild(element);
-                target && element.setAttribute('target', target);
+                if (target)
+                    element.setAttribute('target', target);
                 element.setAttribute(urlAttr, '/index.html');
 
                 strictEqual(UrlUtil.parseProxyUrl(element[urlAttr]).resourceType, resultFlag);
@@ -133,9 +136,8 @@ asyncTest('element.setAttribute', function () {
                 body.removeChild(element);
             };
 
-            testData.forEach(function (arguments) {
-                testIFrameFlag.apply(null, arguments);
-            });
+            for (var i = 0; i < testData.length; i++)
+                testIFrameFlag.apply(null, testData[i]);
 
             start();
             $(iFrame).remove();

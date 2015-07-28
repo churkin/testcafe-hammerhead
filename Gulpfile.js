@@ -86,7 +86,7 @@ gulp.task('lint', function () {
             './shared/**/*.js',
             './src/**/*.js',
             './test/mocha/fixtures/**/*.js',
-            //'./test/qunit/fixtures/**/*.js',
+            './test/qunit/fixtures/**/*.js',
             'Gulpfile.js'
         ])
         .pipe(eslint())

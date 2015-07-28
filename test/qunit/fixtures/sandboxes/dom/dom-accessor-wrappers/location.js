@@ -101,11 +101,11 @@ test('iframe', function () {
                 },
 
                 assign: function (value) {
-                    windowMock.location.assign_value = value;
+                    windowMock.location.assignValue = value;
                 },
 
                 replace: function (value) {
-                    windowMock.location.replace_value = value;
+                    windowMock.location.replaceValue = value;
                 }
             },
 
@@ -114,7 +114,7 @@ test('iframe', function () {
 
         DomAccessorWrappers.init(windowMock, {});
         windowMock[DomAccessorWrappers.LOCATION_WRAPPER][func](value);
-        strictEqual(UrlUtil.getProxyUrl(windowMock.location[func + '_value']).resourceType, UrlUtil.Iframe);
+        strictEqual(UrlUtil.getProxyUrl(windowMock.location[func + 'Value']).resourceType, UrlUtil.Iframe);
     };
 
     checkProp('port', 1333);
@@ -126,37 +126,6 @@ test('iframe', function () {
     checkProp('search', '?param=value');
     checkFunc('assign', 'http://google.com');
     checkFunc('replace', 'http://google.com');
-});
-
-asyncTest('cross-domain iframe', function () {
-    // Fix it;
-    ok(true);
-    start();
-    return;
-
-    var $iframe    = $('<iframe>');
-    var storedPort = Settings.get().CROSS_DOMAIN_PROXY_PORT;
-
-    Settings.get().CROSS_DOMAIN_PROXY_PORT = 1336;
-
-    $iframe[0].src = window.getCrossDomainPageUrl('hammerhead/execute-script.html');
-
-    var handler = function () {
-        $iframe.unbind('load', handler);
-
-        $iframe.bind('load', function () {
-            strictEqual($iframe[0].contentWindow.location.host, location.host);
-            Settings.get().CROSS_DOMAIN_PROXY_PORT = storedPort;
-            start();
-        });
-
-        var message = 'location.href = "' + location.host + '";';
-
-        eval(DomProcessor.processScript('$iframe[0].contentWindow.postMessage(message, "*");'));
-    };
-
-    $iframe.bind('load', handler);
-    $iframe.appendTo('body');
 });
 
 test('get location origin', function () {

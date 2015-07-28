@@ -17,6 +17,7 @@ asyncTest('cross domain messaging between windows', function () {
         }
     };
 
+    /* eslint-disable no-unused-vars*/
     var onMessageHandler = function (e) {
         if (e.origin.indexOf('target_url') === -1)
             return;
@@ -26,6 +27,8 @@ asyncTest('cross domain messaging between windows', function () {
 
         checkResult();
     };
+
+    /* eslint-enable no-unused-vars*/
 
     eval(DomProcessor.processScript('window.onmessage = onMessageHandler;'));
 });

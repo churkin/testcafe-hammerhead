@@ -23,7 +23,7 @@ QUnit.testDone = function () {
 test('add UI class and get UI element with selector', function () {
     var uiElem = document.createElement('div');
 
-    uiElem.id = "uiElem";
+    uiElem.id = 'uiElem';
     document.body.appendChild(uiElem);
 
     ShadowUI.addClass(uiElem, 'ui-elem-class');
@@ -162,17 +162,17 @@ test('head.children', function () {
     var found = false;
     var link1 = document.createElement('link');
 
-    link1.rel       = "stylesheet";
-    link1.href      = "/test.css";
-    link1.type      = "text/css";
+    link1.rel       = 'stylesheet';
+    link1.href      = '/test.css';
+    link1.type      = 'text/css';
     link1.className = SharedConst.SHADOW_UI_STYLESHEET_FULL_CLASSNAME;
     document.head.insertBefore(link1, document.head.firstChild);
 
     var link2 = document.createElement('link');
 
-    link2.rel       = "stylesheet";
-    link2.href      = "/test.css";
-    link2.type      = "text/css";
+    link2.rel       = 'stylesheet';
+    link2.href      = '/test.css';
+    link2.type      = 'text/css';
     link2.className = SharedConst.SHADOW_UI_STYLESHEET_FULL_CLASSNAME;
     document.head.insertBefore(link2, document.head.firstChild);
 
@@ -181,8 +181,8 @@ test('head.children', function () {
 
     strictEqual(childrenLength, children.length - 2 - shadowUIElementsCount);
 
-    for (var i = 0; i < childrenLength; i++) {
-        if (children[i] === link1 || children[i] === link2)
+    for (var j = 0; j < childrenLength; j++) {
+        if (children[j] === link1 || children[j] === link2)
             found = true;
     }
 
@@ -201,17 +201,17 @@ test('head.childNodes', function () {
     var found = false;
     var link1 = document.createElement('link');
 
-    link1.rel       = "stylesheet";
-    link1.href      = "/test.css";
-    link1.type      = "text/css";
+    link1.rel       = 'stylesheet';
+    link1.href      = '/test.css';
+    link1.type      = 'text/css';
     link1.className = SharedConst.SHADOW_UI_STYLESHEET_FULL_CLASSNAME;
     document.head.insertBefore(link1, document.head.firstChild);
 
     var link2 = document.createElement('link');
 
-    link2.rel       = "stylesheet";
-    link2.href      = "/test.css";
-    link2.type      = "text/css";
+    link2.rel       = 'stylesheet';
+    link2.href      = '/test.css';
+    link2.type      = 'text/css';
     link2.className = SharedConst.SHADOW_UI_STYLESHEET_FULL_CLASSNAME;
     document.head.insertBefore(link2, document.head.firstChild);
 
@@ -220,8 +220,8 @@ test('head.childNodes', function () {
 
     strictEqual(childNodesLength, childNodes.length - 2 - shadowUIElementsCount);
 
-    for (var i = 0; i < childNodesLength; i++) {
-        if (childNodes[i] === link1 || childNodes[i] === link2)
+    for (var j = 0; j < childNodesLength; j++) {
+        if (childNodes[j] === link1 || childNodes[j] === link2)
             found = true;
     }
 
@@ -233,7 +233,7 @@ test('head.childNodes', function () {
 
 test('isShadowContainerCollection', function () {
     var el         = document.body.insertBefore(document.createElement('div'), document.body.firstChild);
-    var collection = document.querySelectorAll("body *");
+    var collection = document.querySelectorAll('body *');
 
     strictEqual(collection[0], el);
     ok(!ShadowUI.isShadowContainerCollection(collection));
@@ -262,7 +262,7 @@ asyncTest('isShadowContainerCollection for iframe contentWindow', function () {
 test('HTMLCollection.item, HTMLCollection.namedItem methods emulation', function () {
     var input = document.createElement('input');
 
-    input.name = "testInput";
+    input.name = 'testInput';
     document.body.appendChild(input);
 
     var children        = NativeMethods.elementGetElementsByTagName.call(document.body, '*');
@@ -283,14 +283,14 @@ test('body.getElementsByClassName', function () {
     var root   = ShadowUI.getRoot();
     var uiElem = document.createElement('div');
 
-    uiElem.id        = "uiChild";
-    uiElem.className = "test-class";
+    uiElem.id        = 'uiChild';
+    uiElem.className = 'test-class';
     root.appendChild(uiElem);
 
     var pageElem = document.createElement('div');
 
-    pageElem.id        = "pageElem";
-    pageElem.className = "test-class";
+    pageElem.id        = 'pageElem';
+    pageElem.className = 'test-class';
     document.body.appendChild(pageElem);
 
     var elems = document.body.getElementsByClassName('test-class');
@@ -303,14 +303,14 @@ test('body.getElementsByTagName', function () {
     var root   = ShadowUI.getRoot();
     var uiElem = document.createElement('textarea');
 
-    uiElem.id        = "uiChild";
-    uiElem.className = "test-class";
+    uiElem.id        = 'uiChild';
+    uiElem.className = 'test-class';
     root.appendChild(uiElem);
 
     var pageElem = document.createElement('textarea');
 
-    pageElem.id        = "pageElem";
-    pageElem.className = "test-class";
+    pageElem.id        = 'pageElem';
+    pageElem.className = 'test-class';
     document.body.appendChild(pageElem);
 
     var elems = document.body.getElementsByTagName('TEXTAREA');
@@ -321,13 +321,13 @@ test('body.getElementsByTagName', function () {
 
 test('head.getElementsByTagName', function () {
     var found = false;
-    var link1 = document.createElement('link');
+    var link = document.createElement('link');
 
-    link1.rel       = "stylesheet";
-    link1.href      = "/test.css";
-    link1.type      = "text/css";
-    link1.className = SharedConst.SHADOW_UI_STYLESHEET_FULL_CLASSNAME;
-    document.head.appendChild(link1);
+    link.rel       = 'stylesheet';
+    link.href      = '/test.css';
+    link.type      = 'text/css';
+    link.className = SharedConst.SHADOW_UI_STYLESHEET_FULL_CLASSNAME;
+    document.head.appendChild(link);
 
     var children = document.head.getElementsByTagName('link');
 
@@ -336,7 +336,7 @@ test('head.getElementsByTagName', function () {
             found = true;
     }
 
-    link1.parentNode.removeChild(link1);
+    link.parentNode.removeChild(link);
     ok(!found, 'check that document.head.getElementsByTagName does not return TestCafe elements');
 });
 
@@ -344,18 +344,18 @@ test('body.querySelector', function () {
     var root   = ShadowUI.getRoot();
     var uiElem = document.createElement('div');
 
-    uiElem.id        = "uiChild";
-    uiElem.className = "test-class cli";
+    uiElem.id        = 'uiChild';
+    uiElem.className = 'test-class cli';
     root.appendChild(uiElem);
 
     var pageElem = document.createElement('div');
 
-    pageElem.id        = "pageElem";
-    pageElem.className = "test-class cli2";
+    pageElem.id        = 'pageElem';
+    pageElem.className = 'test-class cli2';
     document.body.appendChild(pageElem);
 
-    var uiElem   = document.body.querySelector('.cl1');
-    var pageElem = document.body.querySelector('.cli2');
+    uiElem   = document.body.querySelector('.cl1');
+    pageElem = document.body.querySelector('.cli2');
 
     ok(!uiElem);
     strictEqual(pageElem.id, 'pageElem');
@@ -365,14 +365,14 @@ test('body.querySelectorAll', function () {
     var root   = ShadowUI.getRoot();
     var uiElem = document.createElement('div');
 
-    uiElem.id        = "uiChild";
-    uiElem.className = "test-class cli";
+    uiElem.id        = 'uiChild';
+    uiElem.className = 'test-class cli';
     root.appendChild(uiElem);
 
     var pageElem = document.createElement('div');
 
-    pageElem.id        = "pageElem";
-    pageElem.className = "test-class cli2";
+    pageElem.id        = 'pageElem';
+    pageElem.className = 'test-class cli2';
     document.body.appendChild(pageElem);
 
     var elems = document.body.querySelectorAll('.test-class');
@@ -475,7 +475,3 @@ test('querySelectorAll', function () {
     strictEqual(elems.length, 1);
     strictEqual(elems[0].id, 'pageElem');
 });
-
-
-
-

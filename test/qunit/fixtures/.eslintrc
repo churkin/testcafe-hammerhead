@@ -30,6 +30,7 @@
     "Element": true,
     "navigator": true,
     "XMLHttpRequest": true,
+    "Blob": true,
     //"isIFrameWithoutSrc": true,
     //"XMLHttpRequest": true,
     //"initHammerheadClient": true,
