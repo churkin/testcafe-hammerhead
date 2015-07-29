@@ -6,26 +6,28 @@ var Process      = require('child_process');
 var Url          = require('url');
 var uuid         = require('node-uuid');
 var http         = require('http');
+var Promise      = require('promise');
 
 //Const
 var PORT              = 1335;
 var CROSS_DOMAIN_PORT = 1336;
 
-var BASE_PATH           = __dirname;
-var FIXTURES_PATH       = Path.join(BASE_PATH, '/fixtures');
-var VIEWS_PATH          = Path.join(BASE_PATH, '/views');
-var CUSTOM_SETUP_PATH   = Path.join(BASE_PATH, '/custom-setup.js');
-var COMPILED_PATH       = Path.join(BASE_PATH, '../../lib/client');
+var BASE_PATH         = __dirname;
+var FIXTURES_PATH     = Path.join(BASE_PATH, '/fixtures');
+var VIEWS_PATH        = Path.join(BASE_PATH, '/views');
+var CUSTOM_SETUP_PATH = Path.join(BASE_PATH, '/custom-setup.js');
+var COMPILED_PATH     = Path.join(BASE_PATH, '../../lib/client');
 
-var TEST_PAGE_VIEW    = './test-page-template.ejs';
-var DIR_LIST_VIEW     = './dir.ejs';
-var TASK_REPORT_VIEW  = './task-report.ejs';
+var TEST_PAGE_VIEW   = './test-page-template.ejs';
+var DIR_LIST_VIEW    = './dir.ejs';
+var TASK_REPORT_VIEW = './task-report.ejs';
 
-var TEST_SETUP_FILE    = Path.join(BASE_PATH, 'test-page-setup.js');
+var TEST_SETUP_FILE = Path.join(BASE_PATH, 'test-page-setup.js');
 
 //Globals
-var appServer   = null;
-var pageSetupJs = null;
+var appServer         = null;
+var crossDomainServer = null;
+var pageSetupJs       = null;
 
 //Utils
 function fileExists (path) {
@@ -373,13 +375,13 @@ var start = function () {
     console.log('Server listens on port ' + PORT);
     Process.exec('start http://localhost:' + PORT);
 
-    return appServer;
+    return 'http://localhost:' + PORT;
 };
 
 function runCrossDomainServer () {
     var app = Express();
 
-    appServer = http.createServer(app);
+    crossDomainServer = http.createServer(app);
 
     app.use(urlRewriteProxyRequest);
     app.use('/hammerhead', Express.static(COMPILED_PATH));
@@ -415,7 +417,12 @@ function runCrossDomainServer () {
         res.send(Fs.readFileSync(path, 'utf8'));
     });
 
-    appServer.listen(CROSS_DOMAIN_PORT);
+    crossDomainServer.listen(CROSS_DOMAIN_PORT);
 }
 
 exports.start = start;
+
+exports.stop = function () {
+    appServer.close();
+    crossDomainServer.close();
+};
