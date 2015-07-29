@@ -1,4 +1,4 @@
-import { process as processResource } from '../resource-processing';
+import { process as processResource } from '../processing';
 import * as ERR from '../errs';
 import DestinationRequest from './destination-request';
 import PipelineContext from './pipeline-context';

@@ -6,7 +6,7 @@ var Proxy        = require('../../lib/proxy');
 var Session      = require('../../lib/session');
 var expect       = require('chai').expect;
 var contentUtils = require('../../lib/utils/content');
-var process      = require('../../lib/resource-processing').process;
+var process      = require('../../lib/processing').process;
 var ERR          = require('../../lib/errs');
 
 

@@ -1,6 +1,6 @@
-import DomProcessorStrategyBase from '../dom-processor-strategy-base';
+import DomProcessorStrategyBase from './strategy-base';
 import events from 'events';
-import urlUtils from '../url-util.js';
+import urlUtils from '../../utils/url.js';
 
 export default class ServerStrategy extends DomProcessorStrategyBase {
     constructor (isIframe, crossDomainPort) {

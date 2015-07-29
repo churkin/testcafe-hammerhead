@@ -1,5 +1,5 @@
 import http from 'http';
-import urlUtils from './url-util';
+import urlUtils from './utils/url';
 import { respond404, respond500, respondWithJSON, fetchBody } from './utils/http';
 import { ie9FileReaderShim } from './upload';
 import { runPipeline } from './pipeline';

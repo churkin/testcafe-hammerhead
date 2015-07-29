@@ -1,6 +1,6 @@
 var expect          = require('chai').expect;
 var multiline       = require('multiline');
-var scriptProcessor = require('../../lib/js-processor');
+var scriptProcessor = require('../../lib/processing/js');
 
 var ACORN_PROPERTY_NODES_PATCH_WARNING = multiline(function () {/*
  ATTENTION! If this test fails seems like you have updated acorn.

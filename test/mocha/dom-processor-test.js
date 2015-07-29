@@ -1,9 +1,9 @@
 var expect         = require('chai').expect;
 var whacko         = require('whacko');
-var DomProcessor   = require('../../lib/dom-processor');
-var ServerStrategy = require('../../lib/resource-processing/dom-processor-strategy-server');
+var DomProcessor   = require('../../lib/processing/dom');
+var ServerStrategy = require('../../lib/processing/dom/strategy-server');
 var SHARED_CONST   = require('../../lib/const');
-var urlUtil        = require('../../lib/url-util');
+var urlUtil        = require('../../lib/utils/url');
 
 var domProcessor = new DomProcessor(new ServerStrategy());
 

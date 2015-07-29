@@ -3,7 +3,7 @@ import Mustache from 'mustache';
 import SERVICE_CMD from './service-msg-cmd';
 import Cookies from './cookies';
 import read from './utils/read-file-relative';
-import { parseProxyUrl } from './url-util';
+import { parseProxyUrl } from './utils/url';
 
 
 // Const

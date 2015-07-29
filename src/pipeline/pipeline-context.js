@@ -1,5 +1,5 @@
 import Const from '../const';
-import * as urlUtils from '../url-util';
+import * as urlUtils from '../utils/url';
 import * as contentUtils from '../utils/content';
 
 //TODO rewrite parseProxyUrl instead

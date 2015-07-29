@@ -20,7 +20,7 @@ export async function assign (credentials) {
         cached = {
             domain:      await queryOSForCredential('echo %userdomain%'),
             workstation: await queryOSForCredential('hostname')
-        };
+        };      
     }
 
     credentials.domain      = credentials.domain || cached.domain;

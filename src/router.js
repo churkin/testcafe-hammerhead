@@ -1,4 +1,4 @@
-import { getPathname } from './url-util';
+import { getPathname } from './utils/url';
 import hash from './utils/hash';
 import { respondStatic } from './utils/http';
 

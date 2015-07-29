@@ -1,6 +1,6 @@
 import { parse as parseUrl, resolve as resolveUrl } from 'url';
 import Const from '../const';
-import * as urlUtils from '../url-util';
+import * as urlUtils from '../utils/url';
 
 // Skipping transform
 function skip () {

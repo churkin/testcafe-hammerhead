@@ -1,4 +1,4 @@
-import DomProcessor from '../dom/index';
+import DomProcessor from './dom';
 import DomProcStrategy from './dom/strategy-server';
 import * as Const from '../const';
 import * as contentUtils from '../utils/content';
