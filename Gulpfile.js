@@ -129,8 +129,8 @@ gulp.task('travis', [process.env.GULP_TASK || '']);
     var QUnitRunner = require('./test/qunit/sauce-labs-runner');
     var qunitServer = require('./test/qunit/server.js');
 
-    var SAUCE_LABS_USERNAME = process.env.SAUCE_LABS_USERNAME || '';
-    var SAUCE_LABS_PASSWORD = process.env.SAUCE_LABS_PASSWORD || '';
+    var SAUCE_USERNAME = process.env.SAUCE_USERNAME || '';
+    var SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY || '';
 
     var RUN_TESTS_URL = '/run-dir?dir=fixtures';
     var BROWSERS      = [
@@ -213,13 +213,13 @@ gulp.task('travis', [process.env.GULP_TASK || '']);
         var sauceTunnelId = Math.floor((new Date()).getTime() / 1000 - 1230768000).toString();
         var sauceTunnel   = null;
 
-        openSauceTunnel(SAUCE_LABS_USERNAME, SAUCE_LABS_PASSWORD, sauceTunnelId, true)
+        openSauceTunnel(SAUCE_USERNAME, SAUCE_ACCESS_KEY, sauceTunnelId, true)
             .then(function (tunnel) {
                 sauceTunnel = tunnel;
 
                 var runner = new QUnitRunner({
-                    username:         SAUCE_LABS_USERNAME,
-                    key:              SAUCE_LABS_PASSWORD,
+                    username:         SAUCE_USERNAME,
+                    key:              SAUCE_ACCESS_KEY,
                     build:            process.env.TRAVIS_JOB_ID || '',
                     browsers:         BROWSERS,
                     tunnelIdentifier: sauceTunnelId,
