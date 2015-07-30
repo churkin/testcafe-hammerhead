@@ -1,5 +1,5 @@
 import DomProcessor from './dom';
-import DomProcStrategy from './dom/strategy-server';
+import DomAdapter from './dom/adapter-server';
 import * as Const from '../const';
 import * as contentUtils from '../utils/content';
 import whacko from 'whacko';
@@ -13,7 +13,7 @@ const BODY_CREATED_EVENT_SCRIPT = [
     </script>`
 ].join('\n');
 
-var domProcessor = new DomProcessor(new DomProcStrategy());
+var domProcessor = new DomProcessor(new DomAdapter());
 
 function getPageProcessingOptions (ctx, urlReplacer) {
     return {
@@ -134,7 +134,7 @@ export function process (html, ctx, actualCharset, urlReplacer, processingOpts) 
             callback(result);
         };
 
-        var pageProcessor = new DomProcessor(new DomProcStrategy(processingOpts.isIFrame, processingOpts.crossDomainProxyPort));
+        var pageProcessor = new DomProcessor(new DomAdapter(processingOpts.isIFrame, processingOpts.crossDomainProxyPort));
 
         pageProcessor.on(pageProcessor.HTML_PROCESSING_REQUIRED, iframeHtmlProcessor);
         pageProcessor.processPage($, processingOpts.urlReplacer);

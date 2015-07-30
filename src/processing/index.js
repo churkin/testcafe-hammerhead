@@ -2,7 +2,7 @@ import url from 'url';
 import urlUtil from '../utils/url';
 import * as ERR from '../errs';
 import DomProcessor from './dom/index';
-import DomProcStrategy from './dom/strategy-server';
+import DomAdapter from './dom/adapter-server';
 import * as contentUtils from '../utils/content';
 import { process as processPage } from './page';
 import Lru from 'lru-cache';
@@ -17,7 +17,7 @@ var jsCache = new Lru({
     }
 });
 
-var domProcessor = new DomProcessor(new DomProcStrategy());
+var domProcessor = new DomProcessor(new DomAdapter());
 
 var processors = {
     page: processPage,
