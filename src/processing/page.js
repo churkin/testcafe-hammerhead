@@ -4,14 +4,13 @@ import * as Const from '../const';
 import * as contentUtils from '../utils/content';
 import whacko from 'whacko';
 
-const BODY_CREATED_EVENT_SCRIPT = [
+const BODY_CREATED_EVENT_SCRIPT =
     `<script type="text/javascript" class="${Const.SHADOW_UI_SCRIPT_CLASSNAME}">
         if (window.Hammerhead)
            window.Hammerhead._raiseBodyCreatedEvent();
         var script = document.currentScript || document.scripts[document.scripts.length - 1];
         script.parentNode.removeChild(script);
-    </script>`
-].join('\n');
+    </script>`;
 
 var domProcessor = new DomProcessor(new DomAdapter());
 
