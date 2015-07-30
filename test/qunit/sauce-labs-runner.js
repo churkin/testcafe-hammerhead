@@ -47,7 +47,7 @@ QUnitTestRunner.prototype._sendRequest = function (params) {
     );
 };
 
-QUnitTestRunner.prototype.runTests = function (callback) {
+QUnitTestRunner.prototype.runTests = function () {
     var runner = this;
 
     var runTaskPromises = this.options.urls.map(function (url) {
@@ -64,12 +64,12 @@ QUnitTestRunner.prototype.runTests = function (callback) {
             });
     });
 
-    Promise.all(runTaskPromises)
+    return Promise.all(runTaskPromises)
         .then(function (results) {
-            callback(results);
+            return results;
         })
         .catch(function (err) {
-            console.log('RUN TESTS ERROR: ', err);
+            throw 'RUN TESTS ERROR: ' + err;
         });
 };
 
