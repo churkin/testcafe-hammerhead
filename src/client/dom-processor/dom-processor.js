@@ -1,4 +1,4 @@
-import ClientStrategy from './strategy-client';
+import DomAdapter from './adapter-client';
 import DomProcessor from '../../processing/dom/index';
 
-export default new DomProcessor(new ClientStrategy());
+export default new DomProcessor(new DomAdapter());

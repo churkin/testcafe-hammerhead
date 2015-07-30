@@ -15,66 +15,66 @@ export default class DomProcessorStrategy {
     }
 
     getAttr () {
-        throw new Error('DomProcessorStrategy#getAttr needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     hasAttr () {
-        throw new Error('DomProcessorStrategy#hasAttr needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     hasEventHandler () {
-        throw new Error('DomProcessorStrategy#hasEventHandler needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     getTagName () {
-        throw new Error('DomProcessorStrategy#getTagName needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     setAttr () {
-        throw new Error('DomProcessorStrategy#setAttr needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     setScriptContent () {
-        throw new Error('DomProcessorStrategy#setScriptContent needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     getScriptContent () {
-        throw new Error('DomProcessorStrategy#getScriptContent needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     getStyleContent () {
-        throw new Error('DomProcessorStrategy#getStyleContent needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     setStyleContent () {
-        throw new Error('DomProcessorStrategy#setStyleContent needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     getElementForSelectorCheck () {
-        throw new Error('DomProcessorStrategy#getElementForSelectorCheck needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     needToProcessUrl () {
-        throw new Error('DomProcessorStrategy#needToProcessUrl needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     attachEventEmitter () {
-        throw new Error('DomProcessorStrategy#attachEventEmitter needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     hasIFrameParent () {
-        throw new Error('DomProcessorStrategy#elementInIFrame needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     getCrossDomainPort () {
-        throw new Error('DomProcessorStrategy#getCrossDomainPort needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     getProxyUrl () {
-        throw new Error('DomProcessorStrategy#getProxyUrl needs to be overridden.');
+        throw new Error('Not implemented');
     }
 
     isTopParentIFrame () {
-        throw new Error('DomProcessorStrategy#isTopParentIFrame needs to be overridden.');
+        throw new Error('Not implemented');
     }
 }

@@ -202,6 +202,13 @@ test('remove unnecessary slashes form the begin of the url', function () {
     strictEqual(proxy, 'http://localhost:5555/t!u/https://example.com/');
 });
 
+test('convert origin host and protocol to lower case', function () {
+    // BUG: https://github.com/superroma/testcafe-hammerhead/issues/1
+    var proxy = UrlUtil.getProxyUrl('hTtp://eXamPle.Com:123/paTh/Image?Name=Value&#Hash');
+
+    ok(proxy.indexOf('http://example.com:123/paTh/Image?Name=Value&#Hash') !== -1);
+});
+
 module('parse proxy url');
 
 test('http', function () {

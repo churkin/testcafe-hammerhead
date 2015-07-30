@@ -1,8 +1,8 @@
-import DomProcessorStrategyBase from './strategy-base';
+import DomAdapterBase from './adapter-base';
 import events from 'events';
 import urlUtils from '../../utils/url.js';
 
-export default class ServerStrategy extends DomProcessorStrategyBase {
+export default class ServerAdapter extends DomAdapterBase {
     constructor (isIframe, crossDomainPort) {
         super();
 

@@ -18,15 +18,15 @@
         return 'http://target_url';
     };
 
-    var domProcessor = Hammerhead.get('./dom-processor/dom-processor');
+    var scriptProcessor = Hammerhead.get('../processing/script');
 
     Hammerhead.init();
 
-    eval(domProcessor.processScript("top.postMessage('1', 'https://example.com');"));
-    eval(domProcessor.processScript("top.postMessage('1');"));
-    eval(domProcessor.processScript("top.postMessage('0', 'http://example.com');"));
-    eval(domProcessor.processScript("top.postMessage('1', 'https://sub.example.com');"));
-    eval(domProcessor.processScript("top.postMessage('1', '*');"));
+    eval(scriptProcessor.process("top.postMessage('1', 'https://example.com');"));
+    eval(scriptProcessor.process("top.postMessage('1');"));
+    eval(scriptProcessor.process("top.postMessage('0', 'http://example.com');"));
+    eval(scriptProcessor.process("top.postMessage('1', 'https://sub.example.com');"));
+    eval(scriptProcessor.process("top.postMessage('1', '*');"));
 </script>
 </body>
 </html>

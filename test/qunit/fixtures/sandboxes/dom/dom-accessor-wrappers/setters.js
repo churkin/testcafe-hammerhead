@@ -1,5 +1,6 @@
 var Browser               = Hammerhead.get('./util/browser');
 var DomProcessor          = Hammerhead.get('./dom-processor/dom-processor');
+var ScriptProcessor       = Hammerhead.get('../processing/script');
 var ElementEditingWatcher = Hammerhead.get('./sandboxes/event/element-editing-watcher');
 var EventSimulator        = Hammerhead.get('./sandboxes/event/simulator');
 var IFrameSandbox         = Hammerhead.get('./sandboxes/iframe');
@@ -25,7 +26,7 @@ test('script.textContent', function () {
     eval(processScript('script.textContent="' + scriptCode + '"'));
 
     notEqual(script.textContent, scriptCode);
-    strictEqual(script.textContent.replace(/\s/g, ''), DomProcessor.processScript(scriptCode).replace(/\s/g, ''));
+    strictEqual(script.textContent.replace(/\s/g, ''), ScriptProcessor.process(scriptCode).replace(/\s/g, ''));
 });
 
 //B237015 - Some tests fail in IE9 with unexpected alert message

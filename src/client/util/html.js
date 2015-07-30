@@ -1,6 +1,7 @@
 import NativeMethods from '../sandboxes/native-methods';
 import * as DOM from './dom';
 import DomProcessor from '../dom-processor/dom-processor';
+import ScriptProcessor from '../../processing/script';
 import * as Const from '../../const';
 import UrlUtil from '../util/url';
 
@@ -172,8 +173,8 @@ export function cleanUpHtml (html, parentTag) {
         DOM.find(container, 'script', function (el) {
             var innerHTML = el.innerHTML;
 
-            if (DomProcessor.SCRIPT_HEADER_REG_EX.test(innerHTML)) {
-                el.innerHTML = innerHTML.replace(DomProcessor.SCRIPT_HEADER_REG_EX, '');
+            if (ScriptProcessor.SCRIPT_HEADER_REG_EX.test(innerHTML)) {
+                el.innerHTML = innerHTML.replace(ScriptProcessor.SCRIPT_HEADER_REG_EX, '');
 
                 changed = true;
             }

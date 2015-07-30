@@ -1,6 +1,6 @@
-var expect          = require('chai').expect;
-var multiline       = require('multiline');
-var scriptProcessor = require('../../lib/processing/js');
+var expect      = require('chai').expect;
+var multiline   = require('multiline');
+var jsProcessor = require('../../lib/processing/js');
 
 var ACORN_PROPERTY_NODES_PATCH_WARNING = multiline(function () {/*
  ATTENTION! If this test fails seems like you have updated acorn.
@@ -112,7 +112,7 @@ function testProcessing (testCases) {
     testCases = Array.isArray(testCases) ? testCases : [testCases];
 
     testCases.forEach(function (testCase) {
-        var processed = scriptProcessor.process(testCase.src);
+        var processed = jsProcessor.process(testCase.src);
         var actual    = normalizeCode(processed);
         var expected  = normalizeCode(testCase.expected);
         var msg       = 'Source: ' + testCase.src + '\n' +
@@ -127,7 +127,7 @@ function testProcessing (testCases) {
 }
 
 function testPropertyProcessing (templates) {
-    Object.keys(scriptProcessor.wrappedProperties).forEach(function (propName) {
+    Object.keys(jsProcessor.wrappedProperties).forEach(function (propName) {
         var testCases = templates.map(function (template) {
             return {
                 src:      template.src.replace(/\{0\}/g, propName),
@@ -142,10 +142,10 @@ function testPropertyProcessing (templates) {
 describe('Script processor', function () {
     it('Should determine if script was processed', function () {
         var src       = '//comment\n var temp = 0; \n var host = location.host; \n temp = 1; \n // comment';
-        var processed = scriptProcessor.process(src);
+        var processed = jsProcessor.process(src);
 
-        expect(scriptProcessor.isScriptProcessed(src)).to.be.false;
-        expect(scriptProcessor.isScriptProcessed(processed)).to.be.true;
+        expect(jsProcessor.isScriptProcessed(src)).to.be.false;
+        expect(jsProcessor.isScriptProcessed(processed)).to.be.true;
     });
 
     it('Should process location getters and setters', function () {

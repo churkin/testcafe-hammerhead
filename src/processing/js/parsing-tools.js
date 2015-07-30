@@ -2037,6 +2037,8 @@ var codeGetExports = {};
         YieldExpression:          'YieldExpression'
     };
 
+    exports.Syntax = Syntax;
+
     var Precedence = {
         Sequence:       0,
         Yield:          1,
@@ -4378,6 +4380,7 @@ var codeGetExports = {};
 })(codeGetExports);
 
 JSParsingTools.generate = codeGetExports.generate;
+JSParsingTools.Syntax = codeGetExports.Syntax;
 // ------------------------------------------
 
 export default JSParsingTools;

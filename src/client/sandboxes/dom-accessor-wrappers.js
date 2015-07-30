@@ -6,6 +6,8 @@ import JSProcessor from '../../processing/js/index';
 import * as MessageSandbox from './message';
 import NativeMethods from './native-methods';
 import DomProcessor from '../dom-processor/dom-processor';
+import StyleProcessor from '../../processing/style';
+import ScriptProcessor from '../../processing/script';
 import * as Service from '../util/service';
 import * as ShadowUI from './shadow-ui';
 import Const from '../../const';
@@ -40,10 +42,14 @@ function isStyleInstance (instance) {
     if (instance instanceof NativeMethods.styleClass)
         return true;
 
-    return instance && typeof instance === 'object' && typeof instance.border !== 'undefined' &&
-           (instance.toString() === '[object CSSStyleDeclaration]' ||
-            instance.toString() === '[object CSS2Properties]' ||
-            instance.toString() === '[object MSStyleCSSProperties]');
+    if (instance && typeof instance === 'object' && typeof instance.border !== 'undefined') {
+        instance = instance.toString();
+
+        return instance === '[object CSSStyleDeclaration]' || instance === '[object CSS2Properties]' ||
+               instance === '[object MSStyleCSSProperties]';
+    }
+
+    return false;
 }
 
 function isLocationInstance (instance) {
@@ -58,7 +64,7 @@ function getAnchorProperty (el, prop) {
     if (el.href) {
         var parsedProxyUrl = UrlUtil.parseProxyUrl(el.href);
 
-        anchor.href = parsedProxyUrl ? UrlUtil.formatUrl(parsedProxyUrl.originResourceInfo) : el.href;
+        anchor.href = parsedProxyUrl ? parsedProxyUrl.originUrl : el.href;
 
         return anchor[prop];
     }
@@ -68,7 +74,7 @@ function getAnchorProperty (el, prop) {
 
 function setAnchorProperty (el, prop, value) {
     if (el.href) {
-        anchor.href  = UrlUtil.formatUrl(UrlUtil.parseProxyUrl(el.href).originResourceInfo);
+        anchor.href  = UrlUtil.parseProxyUrl(el.href).originUrl;
         anchor[prop] = value;
         el.setAttribute('href', anchor.href);
 
@@ -462,7 +468,7 @@ export function init (window, document) {
 
             set: function (el, value) {
                 if (el.tagName && el.tagName.toLowerCase() === 'style')
-                    value = DomProcessor.processStylesheet('' + value, UrlUtil.getProxyUrl, true);
+                    value = StyleProcessor.process('' + value, UrlUtil.getProxyUrl, true);
                 else if (value !== null)
                     value = Html.processHtml('' + value, el.tagName);
 
@@ -680,7 +686,7 @@ export function init (window, document) {
 
             get: function (doc) {
                 var proxyUrl = UrlUtil.parseProxyUrl(doc.referrer);
-                var result   = proxyUrl ? UrlUtil.formatUrl(proxyUrl.originResourceInfo) : '';
+                var result   = proxyUrl ? proxyUrl.originResourceInfo.originUrl : '';
 
                 return result;
             },
@@ -770,7 +776,7 @@ export function init (window, document) {
             },
 
             set: function (el, script) {
-                el.text = script ? DomProcessor.processScript(script) : script;
+                el.text = script ? ScriptProcessor.process(script) : script;
 
                 return script;
             }
@@ -789,7 +795,7 @@ export function init (window, document) {
             },
 
             set: function (el, script) {
-                el.textContent = script ? DomProcessor.processScript(script) : script;
+                el.textContent = script ? ScriptProcessor.process(script) : script;
 
                 return script;
             }
@@ -886,12 +892,12 @@ export function init (window, document) {
             },
 
             get: function (style) {
-                return DomProcessor.cleanUpStylesheet(style.background, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
+                return StyleProcessor.cleanUp(style.background, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
             },
 
             set: function (style, value) {
                 if (typeof value === 'string')
-                    style.background = DomProcessor.processStylesheet(value, UrlUtil.getProxyUrl);
+                    style.background = StyleProcessor.process(value, UrlUtil.getProxyUrl);
 
                 return style.background;
             }
@@ -903,12 +909,12 @@ export function init (window, document) {
             },
 
             get: function (style) {
-                return DomProcessor.cleanUpStylesheet(style.backgroundImage, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
+                return StyleProcessor.cleanUp(style.backgroundImage, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
             },
 
             set: function (style, value) {
                 if (typeof value === 'string')
-                    style.backgroundImage = DomProcessor.processStylesheet(value, UrlUtil.getProxyUrl);
+                    style.backgroundImage = StyleProcessor.process(value, UrlUtil.getProxyUrl);
 
                 return style.backgroundImage;
             }
@@ -920,12 +926,12 @@ export function init (window, document) {
             },
 
             get: function (style) {
-                return DomProcessor.cleanUpStylesheet(style.borderImage, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
+                return StyleProcessor.cleanUp(style.borderImage, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
             },
 
             set: function (style, value) {
                 if (typeof value === 'string')
-                    style.borderImage = DomProcessor.processStylesheet(value, UrlUtil.getProxyUrl);
+                    style.borderImage = StyleProcessor.process(value, UrlUtil.getProxyUrl);
 
                 return style.borderImage;
             }
@@ -937,12 +943,12 @@ export function init (window, document) {
             },
 
             get: function (style) {
-                return DomProcessor.cleanUpStylesheet(style.cssText, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
+                return StyleProcessor.cleanUp(style.cssText, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
             },
 
             set: function (style, value) {
                 if (typeof value === 'string')
-                    style.cssText = DomProcessor.processStylesheet(value, UrlUtil.getProxyUrl);
+                    style.cssText = StyleProcessor.process(value, UrlUtil.getProxyUrl);
 
                 return style.cssText;
             }
@@ -954,12 +960,12 @@ export function init (window, document) {
             },
 
             get: function (style) {
-                return DomProcessor.cleanUpStylesheet(style.cursor, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
+                return StyleProcessor.cleanUp(style.cursor, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
             },
 
             set: function (style, value) {
                 if (typeof value === 'string')
-                    style.cursor = DomProcessor.processStylesheet(value, UrlUtil.getProxyUrl);
+                    style.cursor = StyleProcessor.process(value, UrlUtil.getProxyUrl);
 
                 return style.cursor;
             }
@@ -971,12 +977,12 @@ export function init (window, document) {
             },
 
             get: function (style) {
-                return DomProcessor.cleanUpStylesheet(style.listStyle, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
+                return StyleProcessor.cleanUp(style.listStyle, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
             },
 
             set: function (style, value) {
                 if (typeof value === 'string')
-                    style.listStyle = DomProcessor.processStylesheet(value, UrlUtil.getProxyUrl);
+                    style.listStyle = StyleProcessor.process(value, UrlUtil.getProxyUrl);
 
                 return style.listStyle;
             }
@@ -988,12 +994,12 @@ export function init (window, document) {
             },
 
             get: function (style) {
-                return DomProcessor.cleanUpStylesheet(style.listStyleImage, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
+                return StyleProcessor.cleanUp(style.listStyleImage, UrlUtil.parseProxyUrl, UrlUtil.formatUrl);
             },
 
             set: function (style, value) {
                 if (typeof value === 'string')
-                    style.listStyleImage = DomProcessor.processStylesheet(value, UrlUtil.getProxyUrl);
+                    style.listStyleImage = StyleProcessor.process(value, UrlUtil.getProxyUrl);
 
                 return style.listStyleImage;
             }

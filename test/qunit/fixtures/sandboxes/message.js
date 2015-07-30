@@ -1,8 +1,8 @@
-var Browser        = Hammerhead.get('./util/browser');
-var DomProcessor   = Hammerhead.get('./dom-processor/dom-processor');
-var IFrameSandbox  = Hammerhead.get('./sandboxes/iframe');
-var MessageSandbox = Hammerhead.get('./sandboxes/message');
-var Settings       = Hammerhead.get('./settings');
+var Browser         = Hammerhead.get('./util/browser');
+var ScriptProcessor = Hammerhead.get('../processing/script');
+var IFrameSandbox   = Hammerhead.get('./sandboxes/iframe');
+var MessageSandbox  = Hammerhead.get('./sandboxes/message');
+var Settings        = Hammerhead.get('./settings');
 
 QUnit.testStart = function () {
     IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, initIFrameTestHandler);
@@ -40,9 +40,9 @@ asyncTest('onmessage event', function () {
     };
 
     $iframe.bind('load', function () {
-        eval(DomProcessor.processScript('window.onmessage = onMessageHandler;'));
+        eval(ScriptProcessor.process('window.onmessage = onMessageHandler;'));
         window.addEventListener('message', onMessageHandler);
-        eval(DomProcessor.processScript('this.contentWindow.postMessage(\'\', \'*\')'));
+        eval(ScriptProcessor.process('this.contentWindow.postMessage(\'\', \'*\')'));
     });
 });
 
@@ -71,7 +71,7 @@ asyncTest('crossdomain post messages between diffferen windows', function () {
         checkResult();
     };
 
-    eval(DomProcessor.processScript('window.onmessage = onMessageHandler;'));
+    eval(ScriptProcessor.process('window.onmessage = onMessageHandler;'));
 });
 
 asyncTest('message types', function () {
@@ -88,8 +88,8 @@ asyncTest('message types', function () {
 
         /* eslint-enable no-unused-vars*/
 
-        eval(DomProcessor.processScript('window.onmessage = onMessageHandler;'));
-        eval(DomProcessor.processScript('window.postMessage(value, "*");'));
+        eval(ScriptProcessor.process('window.onmessage = onMessageHandler;'));
+        eval(ScriptProcessor.process('window.postMessage(value, "*");'));
     };
 
     if (Browser.isIE9) {
@@ -203,7 +203,7 @@ asyncTest('service message handler should not call other handlers', function () 
 
     iframe.src = window.getCrossDomainPageUrl('service-message-with-handlers.html');
     iframe.addEventListener('load', function () {
-        eval(DomProcessor.processScript('window.onmessage = windowMessageHandler;'));
+        eval(ScriptProcessor.process('window.onmessage = windowMessageHandler;'));
         window.addEventListener('message', windowMessageHandler);
         MessageSandbox.on(MessageSandbox.SERVICE_MSG_RECEIVED, serviceMsgHandler);
         MessageSandbox.sendServiceMsg('service_msg', this.contentWindow);

@@ -1,8 +1,8 @@
-var Browser       = Hammerhead.get('./util/browser');
-var DomProcessor  = Hammerhead.get('./dom-processor/dom-processor');
-var IFrameSandbox = Hammerhead.get('./sandboxes/iframe');
-var JSProcessor   = Hammerhead.get('../processing/js/index');
-var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
+var Browser         = Hammerhead.get('./util/browser');
+var ScriptProcessor = Hammerhead.get('../processing/script');
+var IFrameSandbox   = Hammerhead.get('./sandboxes/iframe');
+var JSProcessor     = Hammerhead.get('../processing/js/index');
+var NativeMethods   = Hammerhead.get('./sandboxes/native-methods');
 
 QUnit.testStart = function () {
     // 'window.open' method uses in the QUnit
@@ -62,7 +62,7 @@ test('document.write for page html', function () {
     var $div            = $('<div>').appendTo('body');
     var $iframe         = $('<iframe id="test5">');
     var script          = 'var a = [1,2], b = 0; window.test = a[b];';
-    var processedScript = DomProcessor.processScript(script).replace(/\s*/g, '');
+    var processedScript = ScriptProcessor.process(script).replace(/\s*/g, '');
 
     overrideDomMeth($div[0]);
     $div[0].appendChild($iframe[0]);
