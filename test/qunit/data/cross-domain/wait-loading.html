@@ -17,7 +17,7 @@
         return 'http://origin_iframe_host';
     };
 
-    var domProcessor = Hammerhead.get('./dom-processor/dom-processor');
+    var scriptProcessor = Hammerhead.get('../processing/script');
     var MessageSandbox = Hammerhead.MessageSandbox;
 
     Hammerhead.init();
@@ -33,7 +33,7 @@
         });
 
         window.setTimeout(function () {
-            eval(domProcessor.processScript("top.postMessage('ready');"));
+            eval(scriptProcessor.process("top.postMessage('ready');"));
         }, 300);
     });
 </script>

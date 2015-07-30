@@ -5,6 +5,7 @@ import IFrameSandbox from '../iframe';
 import * as InfoManager from '../upload/info-manager';
 import NativeMethods from '../native-methods';
 import DomProcessor from '../../dom-processor/dom-processor';
+import ScriptProcessor from '../../../processing/script';
 import { isPageHtml, processHtml } from '../../util/html';
 import { EventEmitter } from '../../util/service';
 import { onBodyElementMutation } from '../shadow-ui';
@@ -67,7 +68,7 @@ function overridedInsertBefore (newNode, refNode) {
 function overridedAppendChild (child) {
     //NOTE: we should process a TextNode as a script if it is appended to a script element (B254284)
     if (child.nodeType === 3 && this.tagName && this.tagName.toLowerCase() === 'script')
-        child.data = DomProcessor.processScript(child.data);
+        child.data = ScriptProcessor.process(child.data);
 
     overrideElementContent(child);
 
@@ -182,7 +183,7 @@ function overridedSetAttributeCore (el, attr, value, ns) {
             else
             /*eslint-disable no-script-url */
                 processedValue = (isJsProtocol ? 'javascript:' : '') +
-                                 DomProcessor.processScript(valueWithoutProtocol, true);
+                                 ScriptProcessor.process(valueWithoutProtocol, true);
             /*eslint-enable no-script-url */
 
             if (processedValue !== value) {

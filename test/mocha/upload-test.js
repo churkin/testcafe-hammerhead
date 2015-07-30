@@ -23,14 +23,17 @@ var dataFiles = [
 ];
 
 var data = dataFiles.reduce(function (data, filename) {
-    var content = fs.readFileSync('test/mocha/data/form-data/' + filename + '.formdata').toString();
+    var content = fs.readFileSync('test/mocha/data/form-data/' + filename + '.formdata');
 
     // NOTE: force \r\n new lines
-    content        = content.replace(/\r\n|\n/gm, '\r\n');
-    data[filename] = new Buffer(content);
+    data[filename] = newLineReplacer(content);
 
     return data;
 }, {});
+
+function newLineReplacer (content) {
+    return new Buffer(content.toString().replace(/\r\n|\n/gm, '\r\n'));
+}
 
 function initFormData (name) {
     var formData = new FormData();
@@ -246,8 +249,8 @@ describe('Upload', function () {
     });
 
     it('Should inject uploads', function () {
-        var src      = fs.readFileSync('test/mocha/data/upload/src.formdata');
-        var expected = fs.readFileSync('test/mocha/data/upload/expected.formdata');
+        var src      = newLineReplacer(fs.readFileSync('test/mocha/data/upload/src.formdata'));
+        var expected = newLineReplacer(fs.readFileSync('test/mocha/data/upload/expected.formdata'));
         var actual   = upload.inject(CONTENT_TYPE, src);
 
         expect(actual.toString()).eql(expected.toString());

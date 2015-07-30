@@ -1,11 +1,11 @@
 var expect         = require('chai').expect;
 var whacko         = require('whacko');
 var DomProcessor   = require('../../lib/processing/dom');
-var ServerStrategy = require('../../lib/processing/dom/strategy-server');
+var DomAdapter = require('../../lib/processing/dom/adapter-server');
 var SHARED_CONST   = require('../../lib/const');
 var urlUtil        = require('../../lib/utils/url');
 
-var domProcessor = new DomProcessor(new ServerStrategy());
+var domProcessor = new DomProcessor(new DomAdapter());
 
 var testCrossDomainPort = 1338;
 var testProxyHostName   = "localhost";
@@ -17,7 +17,7 @@ function replacerMock () {
 
 function process (html, isIFrame) {
     var $            = whacko.load(html);
-    var domProcessor = new DomProcessor(new ServerStrategy(isIFrame, testCrossDomainPort));
+    var domProcessor = new DomProcessor(new DomAdapter(isIFrame, testCrossDomainPort));
 
     domProcessor.processPage($, function (url, resourceType) {
         url = url.indexOf('/') === 0 ? 'http://example.com' + url : url;

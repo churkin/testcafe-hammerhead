@@ -20,15 +20,15 @@
         return 'http://origin_iframe_host';
     };
 
-    var domProcessor = Hammerhead.get('./dom-processor/dom-processor');
+    var scriptProcessor = Hammerhead.get('../processing/script');
 
     Hammerhead.init();
 
     var onMessageHandler = function (evt) {
-        eval(domProcessor.processScript("top.postMessage({ msg: evt.origin + (evt.data ? ' failed' : '') }, '*');"));
+        eval(scriptProcessor.process("top.postMessage({ msg: evt.origin + (evt.data ? ' failed' : '') }, '*');"));
     };
 
-    eval(domProcessor.processScript("window.onmessage = onMessageHandler;"));
+    eval(scriptProcessor.process("window.onmessage = onMessageHandler;"));
 </script>
 </body>
 </html>

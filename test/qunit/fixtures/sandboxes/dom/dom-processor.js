@@ -1,10 +1,12 @@
-var Html          = Hammerhead.get('./util/html');
-var DomProcessor  = Hammerhead.get('./dom-processor/dom-processor');
-var Settings      = Hammerhead.get('./settings');
-var Const         = Hammerhead.get('../const');
-var IFrameSandbox = Hammerhead.get('./sandboxes/iframe');
-var UrlUtil       = Hammerhead.get('./util/url');
-var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
+var Html            = Hammerhead.get('./util/html');
+var DomProcessor    = Hammerhead.get('./dom-processor/dom-processor');
+var ScriptProcessor = Hammerhead.get('../processing/script');
+var StyleProcessor  = Hammerhead.get('../processing/style');
+var Settings        = Hammerhead.get('./settings');
+var Const           = Hammerhead.get('../const');
+var IFrameSandbox   = Hammerhead.get('./sandboxes/iframe');
+var UrlUtil         = Hammerhead.get('./util/url');
+var NativeMethods   = Hammerhead.get('./sandboxes/native-methods');
 
 
 QUnit.testStart = function () {
@@ -74,7 +76,7 @@ asyncTest('a.href in iframe', function () {
 test('script text', function () {
     var $div            = $('<div>').appendTo($('body'));
     var script          = 'var host = location.host';
-    var processedScript = DomProcessor.processScript(script);
+    var processedScript = ScriptProcessor.process(script);
 
     $div[0].innerHTML = '\<script\>' + script + '\</script\>';
 
@@ -285,7 +287,7 @@ test('stylesheet', function () {
     };
 
     var check = function (css, expected) {
-        strictEqual(DomProcessor.processStylesheet(css, urlReplacer), expected);
+        strictEqual(StyleProcessor.process(css, urlReplacer), expected);
     };
 
     check('a:hover {}', 'a[' + Const.HOVER_PSEUDO_CLASS_ATTR + '] {}');
@@ -306,7 +308,7 @@ test('clean up stylesheet', function () {
     var proxyUrl = UrlUtil.getProxyUrl(url);
 
     var check = function (css, expected) {
-        strictEqual(DomProcessor.cleanUpStylesheet(css, UrlUtil.parseProxyUrl, UrlUtil.formatUrl), expected);
+        strictEqual(StyleProcessor.cleanUp(css, UrlUtil.parseProxyUrl, UrlUtil.formatUrl), expected);
     };
 
     check('a[' + Const.HOVER_PSEUDO_CLASS_ATTR + '] {}', 'a:hover {}');

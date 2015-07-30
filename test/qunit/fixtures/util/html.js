@@ -1,11 +1,13 @@
-﻿var DomProcessor  = Hammerhead.get('./dom-processor/dom-processor');
-var Html          = Hammerhead.get('./util/html');
-var IFrameSandbox = Hammerhead.get('./sandboxes/iframe');
-var NativeMethods = Hammerhead.get('./sandboxes/native-methods');
-var ShadowUI      = Hammerhead.get('./sandboxes/shadow-ui');
-var Const         = Hammerhead.get('../const');
-var SharedUrlUtil = Hammerhead.get('../utils/url');
-var UrlUtil       = Hammerhead.get('./util/url');
+﻿var DomProcessor    = Hammerhead.get('./dom-processor/dom-processor');
+var ScriptProcessor = Hammerhead.get('../processing/script');
+var Html            = Hammerhead.get('./util/html');
+var IFrameSandbox   = Hammerhead.get('./sandboxes/iframe');
+var NativeMethods   = Hammerhead.get('./sandboxes/native-methods');
+var ScriptProcessor = Hammerhead.get('../processing/script');
+var ShadowUI        = Hammerhead.get('./sandboxes/shadow-ui');
+var Const           = Hammerhead.get('../const');
+var SharedUrlUtil   = Hammerhead.get('../utils/url');
+var UrlUtil         = Hammerhead.get('./util/url');
 
 QUnit.testStart = function () {
     IFrameSandbox.on(IFrameSandbox.IFRAME_READY_TO_INIT, initIFrameTestHandler);
@@ -171,7 +173,7 @@ test('text node', function () {
 test('script inner html', function () {
     var html = Html.processHtml('var v = a && b;', 'script');
 
-    strictEqual(html.replace(/\s/g, ''), (DomProcessor.SCRIPT_HEADER + 'var v = a && b;').replace(/\s/g, ''));
+    strictEqual(html.replace(/\s/g, ''), (ScriptProcessor.SCRIPT_HEADER + 'var v = a && b;').replace(/\s/g, ''));
 });
 
 test('html fragment', function () {
@@ -278,7 +280,7 @@ test('init script for iframe template', function () {
 //T226655: 15.1 Testing - Hammerhead DomSandboxUtil.processHtml function does not process body/head/html attributes
 test('body attributes', function () {
     var attrValue         = 'var js = document.createElement(\'script\');js.src = \'http://google.com\'; document.body.appendChild(js);';
-    var expectedAttrValue = DomProcessor.processScript(attrValue, true).replace(/\s/g, '');
+    var expectedAttrValue = ScriptProcessor.process(attrValue, true).replace(/\s/g, '');
     var html              = '<body onload="' + attrValue + '">';
 
     ok(Html.processHtml(html).replace(/\s/g, '').replace(/&quot;/ig, '"').indexOf(expectedAttrValue) !== -1);

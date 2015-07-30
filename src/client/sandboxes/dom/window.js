@@ -4,7 +4,7 @@ import { isCrossDomainWindows } from '../../util/dom';
 import { ORIGINAL_WINDOW_ON_ERROR_HANDLER_KEY } from '../dom-accessor-wrappers';
 import * as MessageSandbox from '../message';
 import NativeMethods from '../native-methods';
-import DomProcessor from '../../dom-processor/dom-processor';
+import ScriptProcessor from '../../../processing/script';
 import { EventEmitter } from '../../util/service';
 import { isShadowUIMutation } from '../shadow-ui';
 import UrlUtil from '../../util/url';
@@ -117,7 +117,7 @@ export function override (window, overrideNewElement) {
 
             if (type === 'text/javascript' || type === 'application/javascript' ||
                 type === 'application/x-javascript') {
-                parts = [DomProcessor.processScript(parts.join(''))];
+                parts = [ScriptProcessor.process(parts.join(''))];
             }
 
             return new NativeMethods.Blob(parts, opts);

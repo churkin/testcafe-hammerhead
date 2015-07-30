@@ -2,12 +2,12 @@ import { isIE9 } from '../util/browser';
 import { findDocument } from '../util/dom';
 import NativeMethods from '../sandboxes/native-methods';
 import { EventEmitter } from '../util/service';
-import StrategyBase from '../../processing/dom/strategy-base';
+import DomAdapterBase from '../../processing/dom/adapter-base';
 import Settings from '../settings';
 import UrlUtil from '../util/url';
 import Const from '../../const';
 
-export default class ClientStrategy extends StrategyBase {
+export default class ClientAdapter extends DomAdapterBase {
     getAttr (el, attr) {
         return NativeMethods.getAttribute.call(el, attr);
     }

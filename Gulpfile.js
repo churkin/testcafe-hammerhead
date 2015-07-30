@@ -133,8 +133,27 @@ gulp.task('travis', [process.env.GULP_TASK || '']);
     var RUN_TESTS_URL = '/run-dir?dir=fixtures';
     var BROWSERS      = [
         {
-            browserName: 'chrome',
-            platform:    'Windows 7'
+            platform:    'Windows 10',
+            browserName: 'chrome'
+        },
+        {
+            platform:    'Windows 10',
+            browserName: 'firefox'
+        },
+        {
+            platform:    'Windows 10',
+            browserName: 'internet explorer',
+            version:     '11.0'
+        },
+        {
+            platform:    'Windows 8',
+            browserName: 'internet explorer',
+            version:     '10.0'
+        },
+        {
+            platform:    'Windows 7',
+            browserName: 'internet explorer',
+            version:     '9.0'
         }
     ];
 

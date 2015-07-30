@@ -1,4 +1,4 @@
-var DomProcessor = Hammerhead.get('./dom-processor/dom-processor');
+var ScriptProcessor = Hammerhead.get('../processing/script');
 
 asyncTest('cross domain messaging between windows', function () {
     expect(0);
@@ -12,7 +12,7 @@ asyncTest('cross domain messaging between windows', function () {
     var checkResult = function () {
         if (result === 4) {
             iframe.parentNode.removeChild(iframe);
-            eval(DomProcessor.processScript('window.onmessage = null;'));
+            eval(ScriptProcessor.process('window.onmessage = null;'));
             start();
         }
     };
@@ -30,6 +30,6 @@ asyncTest('cross domain messaging between windows', function () {
 
     /* eslint-enable no-unused-vars*/
 
-    eval(DomProcessor.processScript('window.onmessage = onMessageHandler;'));
+    eval(ScriptProcessor.process('window.onmessage = onMessageHandler;'));
 });
 

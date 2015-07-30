@@ -71,6 +71,14 @@ UrlUtil.sameOriginCheck = function (location, checkedUrl) {
     return false;
 };
 
+// NOTE: Convert origin protocol and hostname to lower case
+// (https://github.com/superroma/testcafe-hammerhead/issues/1)
+UrlUtil.convertHostToLowerCase = function (url) {
+    var parsedUrl = UrlUtil.parseUrl(url);
+
+    return (parsedUrl.protocol + '//' + parsedUrl.host).toLowerCase() + parsedUrl.partAfterHost;
+};
+
 UrlUtil.getProxyUrl = function (url, proxyHostname, proxyPort, jobUid, jobOwnerToken, resourceType) {
     validateOriginUrl(url);
 
@@ -81,7 +89,7 @@ UrlUtil.getProxyUrl = function (url, proxyHostname, proxyPort, jobUid, jobOwnerT
 
     params = params.join(REQUEST_DESCRIPTOR_VALUES_SEPARATOR);
 
-    return 'http://' + proxyHostname + ':' + proxyPort + '/' + params + '/' + url;
+    return 'http://' + proxyHostname + ':' + proxyPort + '/' + params + '/' + UrlUtil.convertHostToLowerCase(url);
 };
 
 UrlUtil.getDomain = function (parsed) {

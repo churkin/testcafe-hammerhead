@@ -19,7 +19,7 @@
         return 'http://origin_iframe_host';
     };
 
-    var domProcessor = Hammerhead.get('./dom-processor/dom-processor');
+    var scriptProcessor = Hammerhead.get('../processing/script');
     var MessageSandbox = Hammerhead.get('./sandboxes/message');
 
     Hammerhead.init();
@@ -36,7 +36,7 @@
         }, 100);
     };
 
-    eval(domProcessor.processScript("window.onmessage = windowMessageHandler;"));
+    eval(scriptProcessor.process("window.onmessage = windowMessageHandler;"));
     window.addEventListener("message", windowMessageHandler);
     MessageSandbox.on(MessageSandbox.SERVICE_MSG_RECEIVED, serviceMsgHandler);
 </script>
