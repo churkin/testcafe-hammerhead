@@ -1,24 +1,33 @@
 import url from 'url';
 import urlUtil from '../utils/url';
 import * as ERR from '../errs';
-import ProcessedJsCache from './js/cache';
 import DomProcessor from './dom/index';
 import DomProcStrategy from './dom/strategy-server';
 import * as contentUtils from '../utils/content';
 import { process as processPage } from './page';
+import Lru from 'lru-cache';
 
-var jsCache = new ProcessedJsCache();
+var jsCache = new Lru({
+    //NOTE: Max cache size is 50 MBytes
+    max: 50 * 1024 * 1024,
+
+    length: function (n) {
+        // 1 char ~ 1 byte
+        return n.length;
+    }
+});
+
 var domProcessor = new DomProcessor(new DomProcStrategy());
 
 var processors = {
     page: processPage,
 
     script: function (script) {
-        var processedJs = jsCache.pick(script);
+        var processedJs = jsCache.get(script);
 
         if (!processedJs) {
             processedJs = domProcessor.processScript(script);
-            jsCache.add(script, processedJs);
+            jsCache.set(script, processedJs);
         }
 
         return processedJs;
