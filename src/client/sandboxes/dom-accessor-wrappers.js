@@ -40,10 +40,14 @@ function isStyleInstance (instance) {
     if (instance instanceof NativeMethods.styleClass)
         return true;
 
-    return instance && typeof instance === 'object' && typeof instance.border !== 'undefined' &&
-           (instance.toString() === '[object CSSStyleDeclaration]' ||
-            instance.toString() === '[object CSS2Properties]' ||
-            instance.toString() === '[object MSStyleCSSProperties]');
+    if (instance && typeof instance === 'object' && typeof instance.border !== 'undefined') {
+        instance = instance.toString();
+
+        return instance === '[object CSSStyleDeclaration]' || instance === '[object CSS2Properties]' ||
+               instance === '[object MSStyleCSSProperties]';
+    }
+
+    return false;
 }
 
 function isLocationInstance (instance) {
@@ -58,7 +62,7 @@ function getAnchorProperty (el, prop) {
     if (el.href) {
         var parsedProxyUrl = UrlUtil.parseProxyUrl(el.href);
 
-        anchor.href = parsedProxyUrl ? UrlUtil.formatUrl(parsedProxyUrl.originResourceInfo) : el.href;
+        anchor.href = parsedProxyUrl ? parsedProxyUrl.originUrl : el.href;
 
         return anchor[prop];
     }
@@ -68,7 +72,7 @@ function getAnchorProperty (el, prop) {
 
 function setAnchorProperty (el, prop, value) {
     if (el.href) {
-        anchor.href  = UrlUtil.formatUrl(UrlUtil.parseProxyUrl(el.href).originResourceInfo);
+        anchor.href  = UrlUtil.parseProxyUrl(el.href).originUrl;
         anchor[prop] = value;
         el.setAttribute('href', anchor.href);
 
@@ -680,7 +684,7 @@ export function init (window, document) {
 
             get: function (doc) {
                 var proxyUrl = UrlUtil.parseProxyUrl(doc.referrer);
-                var result   = proxyUrl ? UrlUtil.formatUrl(proxyUrl.originResourceInfo) : '';
+                var result   = proxyUrl ? proxyUrl.originResourceInfo.originUrl : '';
 
                 return result;
             },

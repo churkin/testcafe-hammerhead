@@ -251,6 +251,13 @@ describe('Proxy', function () {
                 })
                 .catch(done);
         });
+
+        it('Should convert origin host and protocol to lower case', function () {
+            // BUG: https://github.com/superroma/testcafe-hammerhead/issues/1
+            var proxiedUrl = proxy.openSession('hTtp://ExaMple.Com:123/paTh/Image?Name=Value&#Hash', session);
+
+            expect(proxiedUrl).to.have.string('http://example.com:123/paTh/Image?Name=Value&#Hash');
+        });
     });
 
 
