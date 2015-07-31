@@ -1,3 +1,4 @@
+var Browser       = Hammerhead.get('./util/browser');
 var Settings      = Hammerhead.get('./settings');
 var SharedUrlUtil = Hammerhead.get('../utils/url');
 var UrlUtil       = Hammerhead.get('./util/url');
@@ -185,15 +186,20 @@ test('origin with port', function () {
 });
 
 test('undefined or null', function () {
-    var a        = document.createElement('a');
-    var proxyUrl = UrlUtil.getProxyUrl(null, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken');
+    var a                  = document.createElement('a');
+    var proxyUrl           = UrlUtil.getProxyUrl(null, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken');
+    var calculatedProxyUrl = null;
 
-    a.href = null;
-    strictEqual(proxyUrl, UrlUtil.getProxyUrl(a.href, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken'), 'null');
+    if (!Browser.isSafari) {
+        a.href             = null;
+        calculatedProxyUrl = UrlUtil.getProxyUrl(a.href, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken');
+        strictEqual(proxyUrl, calculatedProxyUrl, 'null');
+    }
 
-    proxyUrl = UrlUtil.getProxyUrl(void 0, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken');
-    a.href   = void 0;
-    strictEqual(proxyUrl, UrlUtil.getProxyUrl(a.href, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken'), 'undefined');
+    proxyUrl           = UrlUtil.getProxyUrl(void 0, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken');
+    a.href             = void 0;
+    calculatedProxyUrl = UrlUtil.getProxyUrl(a.href, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken');
+    strictEqual(proxyUrl, calculatedProxyUrl, 'undefined');
 });
 
 test('remove unnecessary slashes form the begin of the url', function () {

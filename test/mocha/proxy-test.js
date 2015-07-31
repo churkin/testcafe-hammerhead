@@ -418,8 +418,8 @@ describe('Proxy', function () {
             request(options, function (err, res, body) {
                 var expected = fs.readFileSync('test/mocha/data/page/src.html').toString();
                 compareCode(body, expected);
+                done();
             });
-            done();
         });
 
 
