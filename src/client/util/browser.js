@@ -55,6 +55,7 @@ export function init (win) {
     exports.isTouchDevice = exports.hasTouchEvents ||
                             exports.isIE && (win.navigator.maxTouchPoints > 0 || win.navigator.msMaxTouchPoints > 0);
 
+    exports.isMacPlatform = /^Mac/.test(win.navigator.platform);
 }
 
 init();

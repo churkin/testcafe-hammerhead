@@ -105,8 +105,17 @@ function XMLHttpRequestWrapper (xhr) {
 
 //Barrier
 function proxyXhrMethods (xhr) {
-    var open = xhr.open;
-    var send = xhr.send;
+    var open  = xhr.open;
+    var send  = xhr.send;
+    var abort = xhr.abort;
+
+    xhr.abort = function () {
+        abort.call(xhr);
+        eventEmitter.emit(XHR_ERROR, {
+            err: new Error('XHR aborted'),
+            xhr: xhr
+        });
+    };
 
     //NOTE: redirect all requests to TestCafe proxy and ensure that request don't violate Same Origin Policy
     xhr.open = function (method, url, async, user, password) {
