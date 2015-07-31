@@ -3,7 +3,7 @@ import DomAdapter from './dom/adapter-server';
 import * as Const from '../const';
 import * as contentUtils from '../utils/content';
 import whacko from 'whacko';
-import ProcessorBase from './base';
+import ResourceProcessor from './resource-processor';
 
 const BODY_CREATED_EVENT_SCRIPT =
           `<script type="text/javascript" class="${Const.SHADOW_UI_SCRIPT_CLASSNAME}">
@@ -13,7 +13,7 @@ const BODY_CREATED_EVENT_SCRIPT =
         script.parentNode.removeChild(script);
     </script>`;
 
-class PageProcessor extends ProcessorBase {
+class PageProcessor extends ResourceProcessor {
     constructor () {
         super();
 

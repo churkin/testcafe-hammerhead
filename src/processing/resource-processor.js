@@ -1,4 +1,4 @@
-export default class ProcessorBase {
+export default class ResourceProcessor {
     processResource (/* ctx, content, charset, urlReplacer */) {
         throw new Error('Not implemented');
     }
