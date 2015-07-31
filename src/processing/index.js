@@ -4,7 +4,7 @@ import * as ERR from '../errs';
 import DomProcessor from './dom/index';
 import DomAdapter from './dom/adapter-server';
 import * as contentUtils from '../utils/content';
-import { process as processPage } from './page';
+import pageProcessor from './page';
 import Lru from 'lru-cache';
 
 var jsCache = new Lru({
@@ -20,7 +20,7 @@ var jsCache = new Lru({
 var domProcessor = new DomProcessor(new DomAdapter());
 
 var processors = {
-    page: processPage,
+    page: pageProcessor.processResource.bind(pageProcessor),
 
     script: function (script) {
         var processedJs = jsCache.get(script);
@@ -53,7 +53,7 @@ var processors = {
 function getProcessor (ctx) {
     var contentInfo = ctx.contentInfo;
 
-    if (ctx.isPage || ctx.contentInfo.isIFrameWithImageSrc)
+    if (pageProcessor.shouldProcessResource(ctx))
         return processors.page;
 
     else if (contentInfo.isCSS)
