@@ -1,7 +1,6 @@
 import UrlUtil from '../../utils/url';
 import JSProcessor from '../js/index';
 import Const from '../../const';
-import { trim } from '../../utils/util';
 
 const CSS_URL_PROPERTY_VALUE_PATTERN = /(url\s*\(\s*)(?:(')([^\s']*)(')|(")([^\s"]*)(")|([^\s\)]*))(\s*\))|(@import\s+)(?:(')([^\s']*)(')|(")([^\s"]*)("))/g;
 
@@ -252,32 +251,6 @@ export default class DomProcessor {
             text = SCRIPT_HEADER + text;
 
         return bom ? bom + text : text;
-    }
-
-    processManifest (manifest, urlReplacer) {
-        var lines = manifest.split('\n');
-
-        for (var i = 0; i < lines.length; i++) {
-            var line = trim(lines[i]);
-
-            if (line && line !== 'CACHE MANIFEST' && line !== 'NETWORK:' && line !== 'FALLBACK:' &&
-                line !== 'CACHE:' && line[0] !== '#' && line !== '*') {
-
-                var isFallbackItem = line.indexOf(' ') !== -1;
-
-                /*eslint-disable indent*/
-                if (isFallbackItem) {
-                    var urls = line.split(' ');
-
-                    lines[i] = urlReplacer(urls[0]) + ' ' + urlReplacer(urls[1]);
-                }
-                else
-                    lines[i] = urlReplacer(line);
-                /*eslint-enable indent*/
-            }
-        }
-
-        return lines.join('\n');
     }
 
     cleanUpStylesheet (css, parseProxyUrl, formatUrl) {

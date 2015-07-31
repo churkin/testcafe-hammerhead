@@ -5,6 +5,7 @@ import DomProcessor from './dom/index';
 import DomAdapter from './dom/adapter-server';
 import * as contentUtils from '../utils/content';
 import pageProcessor from './page';
+import manifestProcessor from './manifest';
 import Lru from 'lru-cache';
 
 var jsCache = new Lru({
@@ -21,6 +22,8 @@ var domProcessor = new DomProcessor(new DomAdapter());
 
 var processors = {
     page: pageProcessor.processResource.bind(pageProcessor),
+
+    manifest: manifestProcessor.processResource.bind(manifestProcessor),
 
     script: function (script) {
         var processedJs = jsCache.get(script);
@@ -39,12 +42,6 @@ var processors = {
         return domProcessor.processStylesheet(style, urlReplacer);
     },
 
-    manifest: function (manifest, ctx) {
-        var urlReplacer = getResourceUrlReplacer(ctx);
-
-        return domProcessor.processManifest(manifest, urlReplacer);
-    },
-
     json: function (json) {
         return domProcessor.processScript(json, true);
     }
@@ -56,14 +53,14 @@ function getProcessor (ctx) {
     if (pageProcessor.shouldProcessResource(ctx))
         return processors.page;
 
+    else if (manifestProcessor.shouldProcessResource(ctx))
+        return processors.manifest;
+
     else if (contentInfo.isCSS)
         return processors.stylesheet;
 
     else if (contentInfo.isScript && !ctx.isXhr)
         return processors.script;
-
-    else if (contentInfo.isManifest)
-        return processors.manifest;
 
     else if (contentInfo.isJSON)
         return processors.json;
