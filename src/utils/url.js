@@ -1,4 +1,5 @@
 import { trim } from './util';
+import * as Browser from '../client/util/browser';
 
 var UrlUtil = {};
 
@@ -235,7 +236,7 @@ UrlUtil.formatUrl = function (parsedUrl) {
 UrlUtil.prepareUrl = function (url) {
     // TODO: fix it
     /* eslint-disable no-undef */
-    if (url === null && /iPad|iPhone/i.test(window.navigator.userAgent))
+    if (url === null && Browser.isIOS)
         return '';
     /* eslint-enable no-undef */
 
