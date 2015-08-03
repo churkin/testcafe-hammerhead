@@ -1,5 +1,6 @@
-var Settings      = Hammerhead.get('./settings');
+var Browser       = Hammerhead.get('./util/browser');
 var SharedUrlUtil = Hammerhead.get('../utils/url');
+var Settings      = Hammerhead.get('./settings');
 var UrlUtil       = Hammerhead.get('./util/url');
 
 var PROXY_PORT     = 1337;
@@ -188,8 +189,11 @@ test('undefined or null', function () {
     var a        = document.createElement('a');
     var proxyUrl = UrlUtil.getProxyUrl(null, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken');
 
-    a.href = null;
-    strictEqual(proxyUrl, UrlUtil.getProxyUrl(a.href, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken'), 'null');
+    //In Safari a.href = null will equal the current url instead <current_url>/null
+    if (!Browser.isSafari) {
+        a.href = null;
+        strictEqual(proxyUrl, UrlUtil.getProxyUrl(a.href, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken'), 'null');
+    }
 
     proxyUrl = UrlUtil.getProxyUrl(void 0, PROXY_HOSTNAME, PROXY_PORT, 'MyUID', 'ownerToken');
     a.href   = void 0;
