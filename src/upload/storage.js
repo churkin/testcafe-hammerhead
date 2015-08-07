@@ -3,18 +3,18 @@ import mime from 'mime';
 import path from 'path';
 import Promise from 'promise';
 
+var readFile  = Promise.denodeify(fs.readFile);
+var stat      = Promise.denodeify(fs.stat);
+var writeFile = Promise.denodeify(fs.writeFile);
+
 export default class UploadStorage {
     constructor (storagePath) {
         this.storageFolder = storagePath;
-
-        this.readFile  = Promise.denodeify(fs.readFile);
-        this.stat      = Promise.denodeify(fs.stat);
-        this.writeFile = Promise.denodeify(fs.writeFile);
     }
 
     async _loadFile (filePath) {
-        var fileContent = await this.readFile(filePath);
-        var stats       = await this.stat(filePath);
+        var fileContent = await readFile(filePath);
+        var stats       = await stat(filePath);
 
         return {
             data: fileContent.toString('base64'),
@@ -26,36 +26,37 @@ export default class UploadStorage {
         };
     }
 
+    _createProcessTask (fileName, processor) {
+        return (async () => {
+            var resolvedPath = path.resolve(this.storageFolder, fileName);
+
+            try {
+                return await processor(resolvedPath, fileName);
+            }
+            catch (e) {
+                return {
+                    err:  e.toString(),
+                    path: resolvedPath
+                };
+            }
+        })();
+    }
+
     async _processFiles (fileNames, processor) {
-        var processTasks = fileNames.map(fileName => {
-            return (async () => {
-                var resolvedPath = path.resolve(this.storageFolder, fileName);
+        var processTasks = fileNames.map(fileName => this._createProcessTask(fileName, processor));
 
-                try {
-                    return await processor(resolvedPath, fileName);
-                }
-                catch (e) {
-                    return {
-                        err:  e.toString(),
-                        path: resolvedPath
-                    };
-                }
-            })();
-        });
+        var result = await Promise.all(processTasks);
 
-        return await Promise.all(processTasks)
-            .then(result => {
-                result = result.filter(value => !!value);
+        result = result.filter(value => !!value);
 
-                return result.length ? result : null;
-            });
+        return result.length ? result : null;
     }
 
     async store (fileNames, data) {
         return await this._processFiles(fileNames, async (resolvedPath, fileName) => {
             var content = new Buffer(data[fileNames.indexOf(fileName)], 'base64');
 
-            await this.writeFile(resolvedPath, content);
+            await writeFile(resolvedPath, content);
         });
     }
 

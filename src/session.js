@@ -16,10 +16,10 @@ var instanceCount = 0;
 
 // Session
 export default class Session extends EventEmitter {
-    constructor (uploadPath) {
+    constructor (uploadsPath) {
         super();
 
-        this.uploadStorage = new UploadStorage(uploadPath);
+        this.uploadStorage = new UploadStorage(uploadsPath);
 
         this.id         = ++instanceCount;
         this.cookies    = new Cookies();
