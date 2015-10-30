@@ -94,6 +94,8 @@ export default class DomProcessor {
 
             ALL: () => true,
 
+            IS_LINK: el => adapter.getTagName(el).toLowerCase() === 'link',
+
             IS_SCRIPT: el => adapter.getTagName(el).toLowerCase() === 'script',
 
             IS_INPUT: el => adapter.getTagName(el).toLowerCase() === 'input',
@@ -137,8 +139,14 @@ export default class DomProcessor {
                 urlAttr:           'content',
                 elementProcessors: [this._processMetaElement]
             },
+
+            {
+                selector:          selectors.IS_SCRIPT,
+                elementProcessors: [this._processScriptElement, this._processIntegrityAttr]
+            },
+
             { selector: selectors.ALL, elementProcessors: [this._processStyleAttr] },
-            { selector: selectors.IS_SCRIPT, elementProcessors: [this._processScriptElement] },
+            { selector: selectors.IS_LINK, elementProcessors: [this._processIntegrityAttr] },
             { selector: selectors.IS_STYLE, elementProcessors: [this._processStylesheetElement] },
             { selector: selectors.IS_INPUT, elementProcessors: [this._processAutoComplete] },
             { selector: selectors.HAS_EVENT_HANDLER, elementProcessors: [this._processEvtAttr] },
@@ -334,6 +342,13 @@ export default class DomProcessor {
 
             this.adapter.setScriptContent(script, result);
         }
+    }
+
+    // NOTE: We just remove the 'integrity' attribute, because its value is not relevant after the script content
+    // is changed (http://www.w3.org/TR/SRI/). If this causes problems in the future, we will need to generate
+    // the correct SHA for the changed script.
+    _processIntegrityAttr (el) {
+        this.adapter.removeAttr(el, 'integrity');
     }
 
     _processStyleAttr (el, urlReplacer) {
