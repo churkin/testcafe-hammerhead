@@ -19,7 +19,7 @@ QUnit.testDone(function () {
     iframeSandbox.off(iframeSandbox.RUN_TASK_SCRIPT, initIframeTestHandler);
 });
 
-if (!browserUtils.isIE || browserUtils.version > 9) {
+/*if (!browserUtils.isIE || browserUtils.version > 9) {
     test('autocomplete', function () {
         var input  = $('<input>')[0];
         var etalon = nativeMethods.createElement.call(document, 'input');
@@ -50,7 +50,8 @@ if (!browserUtils.isIE || browserUtils.version > 9) {
 }
 
 test('url', function () {
-    /* eslint-disable no-unused-vars */
+    /!* eslint-disable no-unused-vars *!/
+
     var $scriptWithSrc      = $('<script src="http://some.com/script.js">');
     var $scriptWithEmptySrc = $('<script src="">');
     var $scriptWithoutSrc   = $('<script>');
@@ -62,7 +63,7 @@ test('url', function () {
     strictEqual(eval(processScript('$scriptWithEmptySrc[0].src')), proxyLocation);
     strictEqual(eval(processScript('$scriptWithoutSrc[0].src')), '');
     strictEqual(eval(processScript('$linkWithOnlyHash[0].href')), proxyLocation + '#hash');
-    /* eslint-enable no-unused-vars */
+    /!* eslint-enable no-unused-vars *!/
 });
 
 test('attributes', function () {
@@ -144,7 +145,7 @@ test('document.documentURI', function () {
     };
 
     strictEqual(getProperty(documentMock, 'documentURI'), url);
-});
+});*/
 
 if (browserUtils.isWebKit) {
     test('url in stylesheet properties', function () {
@@ -188,7 +189,7 @@ if (browserUtils.isWebKit) {
     });
 }
 
-module('regression');
+/*module('regression');
 
 test('changing the link.href property must affect the stored attribute value (T123960)', function () {
     var link     = $('<a>')[0];
@@ -243,8 +244,8 @@ test('the getAttributesProperty function should work correctly if Function.proto
     finally {
         ok(!withError);
 
-        /* eslint-disable no-extend-native */
+        /!* eslint-disable no-extend-native *!/
         Function.prototype.bind = storedBind;
-        /* eslint-enable no-extend-native */
+        /!* eslint-enable no-extend-native *!/
     }
-});
+});*/

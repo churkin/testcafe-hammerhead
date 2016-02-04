@@ -15,7 +15,7 @@ import { cleanUpHtml, processHtml } from '../../../utils/html';
 import { getAnchorProperty, setAnchorProperty } from './anchor';
 import { getAttributesProperty } from './attributes';
 import { URL_ATTR_TAGS, TARGET_ATTR_TAGS } from '../../../dom-processor';
-import { process as processStyle, cleanUp as cleanUpStyle } from '../../../../processing/style';
+import  styleProcessor from '../../../../processing/style';
 import { processScript } from '../../../../processing/script';
 import { remove as removeProcessingHeader } from '../../../../processing/script/header';
 import INSTRUCTION from '../../../../processing/script/instruction';
@@ -185,7 +185,7 @@ export default class PropertyAccessorsInstrumentation extends SandboxBase {
 
                 set: (el, value) => {
                     if (el.tagName && el.tagName.toLowerCase() === 'style')
-                        value = processStyle('' + value, urlUtils.getProxyUrl, true);
+                        value = styleProcessor.process('' + value, urlUtils.getProxyUrl, true);
                     else if (value !== null)
                         value = processHtml('' + value, el.tagName);
 
@@ -498,11 +498,11 @@ export default class PropertyAccessorsInstrumentation extends SandboxBase {
             // Style
             background: {
                 condition: style => isStyle(style),
-                get:       style => cleanUpStyle(style.background, urlUtils.parseProxyUrl, urlUtils.formatUrl),
+                get:       style => styleProcessor.cleanUp(style.background, urlUtils.parseProxyUrl, urlUtils.formatUrl),
 
                 set: (style, value) => {
                     if (typeof value === 'string')
-                        style.background = processStyle(value, urlUtils.getProxyUrl);
+                        style.background = styleProcessor.process(value, urlUtils.getProxyUrl);
 
                     return style.background;
                 }
@@ -510,11 +510,11 @@ export default class PropertyAccessorsInstrumentation extends SandboxBase {
 
             backgroundImage: {
                 condition: style => isStyle(style),
-                get:       style => cleanUpStyle(style.backgroundImage, urlUtils.parseProxyUrl, urlUtils.formatUrl),
+                get:       style => styleProcessor.cleanUp(style.backgroundImage, urlUtils.parseProxyUrl, urlUtils.formatUrl),
 
                 set: (style, value) => {
                     if (typeof value === 'string')
-                        style.backgroundImage = processStyle(value, urlUtils.getProxyUrl);
+                        style.backgroundImage = styleProcessor.process(value, urlUtils.getProxyUrl);
 
                     return style.backgroundImage;
                 }
@@ -522,11 +522,11 @@ export default class PropertyAccessorsInstrumentation extends SandboxBase {
 
             borderImage: {
                 condition: style => isStyle(style),
-                get:       style => cleanUpStyle(style.borderImage, urlUtils.parseProxyUrl, urlUtils.formatUrl),
+                get:       style => styleProcessor.cleanUp(style.borderImage, urlUtils.parseProxyUrl, urlUtils.formatUrl),
 
                 set: (style, value) => {
                     if (typeof value === 'string')
-                        style.borderImage = processStyle(value, urlUtils.getProxyUrl);
+                        style.borderImage = styleProcessor.process(value, urlUtils.getProxyUrl);
 
                     return style.borderImage;
                 }
@@ -534,11 +534,11 @@ export default class PropertyAccessorsInstrumentation extends SandboxBase {
 
             cssText: {
                 condition: style => isStyle(style),
-                get:       style => cleanUpStyle(style.cssText, urlUtils.parseProxyUrl, urlUtils.formatUrl),
+                get:       style => styleProcessor.cleanUp(style.cssText, urlUtils.parseProxyUrl, urlUtils.formatUrl),
 
                 set: (style, value) => {
                     if (typeof value === 'string')
-                        style.cssText = processStyle(value, urlUtils.getProxyUrl);
+                        style.cssText = styleProcessor.process(value, urlUtils.getProxyUrl);
 
                     return style.cssText;
                 }
@@ -546,11 +546,11 @@ export default class PropertyAccessorsInstrumentation extends SandboxBase {
 
             cursor: {
                 condition: style => isStyle(style),
-                get:       style => cleanUpStyle(style.cursor, urlUtils.parseProxyUrl, urlUtils.formatUrl),
+                get:       style => styleProcessor.cleanUp(style.cursor, urlUtils.parseProxyUrl, urlUtils.formatUrl),
 
                 set: (style, value) => {
                     if (typeof value === 'string')
-                        style.cursor = processStyle(value, urlUtils.getProxyUrl);
+                        style.cursor = styleProcessor.process(value, urlUtils.getProxyUrl);
 
                     return style.cursor;
                 }
@@ -558,11 +558,11 @@ export default class PropertyAccessorsInstrumentation extends SandboxBase {
 
             listStyle: {
                 condition: style => isStyle(style),
-                get:       style => cleanUpStyle(style.listStyle, urlUtils.parseProxyUrl, urlUtils.formatUrl),
+                get:       style => styleProcessor.cleanUp(style.listStyle, urlUtils.parseProxyUrl, urlUtils.formatUrl),
 
                 set: (style, value) => {
                     if (typeof value === 'string')
-                        style.listStyle = processStyle(value, urlUtils.getProxyUrl);
+                        style.listStyle = styleProcessor.process(value, urlUtils.getProxyUrl);
 
                     return style.listStyle;
                 }
@@ -570,11 +570,11 @@ export default class PropertyAccessorsInstrumentation extends SandboxBase {
 
             listStyleImage: {
                 condition: style => isStyle(style),
-                get:       style => cleanUpStyle(style.listStyleImage, urlUtils.parseProxyUrl, urlUtils.formatUrl),
+                get:       style => styleProcessor.cleanUp(style.listStyleImage, urlUtils.parseProxyUrl, urlUtils.formatUrl),
 
                 set: (style, value) => {
                     if (typeof value === 'string')
-                        style.listStyleImage = processStyle(value, urlUtils.getProxyUrl);
+                        style.listStyleImage = styleProcessor.process(value, urlUtils.getProxyUrl);
 
                     return style.listStyleImage;
                 }

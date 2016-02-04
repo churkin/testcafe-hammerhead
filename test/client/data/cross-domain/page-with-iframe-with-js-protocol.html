@@ -31,7 +31,8 @@
     var iframe = document.createElement('iframe');
     var domUtils = hammerhead.utils.dom;
     var browserUtils = hammerhead.utils.browser;
-    var postMessage = hammerhead.sandbox.event.message.postMessage;
+    var messageSandbox = hammerhead.sandbox.event.message;
+
     var test = function () {
         var winWithSrc;
 
@@ -40,7 +41,7 @@
         } catch (e) {
         }
 
-        postMessage(window.parent, [winWithSrc === window ? 'ok' : 'notOk', '*']);
+        messageSandbox.postMessage(window.parent, [winWithSrc === window ? 'ok' : 'notOk', '*']);
     };
 
     iframe.src = 'javascript: void(0);';

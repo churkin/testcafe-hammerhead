@@ -13,9 +13,9 @@
     hammerhead.start({ crossDomainProxyPort: 2000 });
 </script>
 <script>
-    var postMessage = hammerhead.sandbox.event.message.postMessage;
+    var messageSandbox = hammerhead.sandbox.event.message;
 
-    postMessage(window.top, [!hammerhead.nativeMethods.registerServiceWorker ? 'success' : 'fail', '*']);
+    messageSandbox.postMessage(window.top, [!hammerhead.nativeMethods.registerServiceWorker ? 'success' : 'fail', '*']);
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-var babel        = require('babel');
+var babel        = require('babel-core');
 var gulpBabel    = require('gulp-babel');
 var del          = require('del');
 var eslint       = require('gulp-eslint');
@@ -15,6 +15,7 @@ var gulpif       = require('gulp-if');
 var util         = require('gulp-util');
 var ll           = require('gulp-ll');
 var publish      = require('publish-please');
+var path         = require('path');
 
 ll
     .tasks('lint')
@@ -140,7 +141,11 @@ gulp.task('client-scripts-bundle', ['clean'], function () {
                 var transformed = babel.transform(code, {
                     sourceMap: false,
                     filename:  filename,
-                    blacklist: ['runtime', 'useStrict']
+                    ast:       false,
+                    // NOTE: force usage of client .babelrc for all
+                    // files, regardless of their location
+                    babelrc:   false,
+                    extends:   path.join(__dirname, './src/client/.babelrc')
                 });
 
                 return { code: transformed.code };
@@ -159,9 +164,9 @@ gulp.task('server-scripts', ['clean'], function () {
 gulp.task('lint', function () {
     return gulp
         .src([
-            './src/**/*.js',
-            './test/server/*.js',
-            './test/client/fixtures/**/*.js',
+            './src/!**!/!*.js',
+            './test/server/!*.js',
+            './test/client/fixtures/!**!/!*.js',
             'Gulpfile.js'
         ])
         .pipe(eslint())
