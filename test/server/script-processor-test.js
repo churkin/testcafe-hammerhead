@@ -256,6 +256,7 @@ describe('Script processor', function () {
 
     it('Should process properties', function () {
         testPropertyProcessing([
+            { src: 'new obj.{0}.ctor()', expected: 'new (__get$(obj, "{0}")).ctor()' },
             { src: 'obj.{0}', expected: '__get$(obj, "{0}")' },
             { src: 'obj.{0} = value', expected: '__set$(obj, "{0}", value)' },
             { src: 'obj.{0}.subProp', expected: '__get$(obj, "{0}").subProp' },
