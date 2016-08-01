@@ -9,16 +9,14 @@ import * as domUtils from '../../utils/dom';
 import * as hiddenInfo from '../upload/hidden-info';
 import * as urlResolver from '../../utils/url-resolver';
 import { sameOriginCheck, get as getDestLocation } from '../../utils/destination-location';
-import { stopPropagation, preventDefault } from '../../utils/event';
+import { stopPropagation } from '../../utils/event';
 import { isPageHtml, processHtml } from '../../utils/html';
 import transport from '../../transport';
 import getNativeQuerySelectorAll from '../../utils/get-native-query-selector-all';
 import { HASH_RE } from '../../../utils/url';
 import * as windowsStorage from '../windows-storage';
 
-const KEYWORD_TARGETS                = ['_blank', '_self', '_parent', '_top'];
-const ORIGIN_ONSUBMIT_PROPERTY_VALUE = 'hammerhead|origin-onsubmit-property-value';
-const WAITING_FOR_RESUBMIT           = 'hammerhead|waiting-for-resubmit';
+const KEYWORD_TARGETS = ['_blank', '_self', '_parent', '_top'];
 
 export default class ElementSandbox extends SandboxBase {
     constructor (nodeSandbox, uploadSandbox, iframeSandbox, shadowUI) {
@@ -204,6 +202,7 @@ export default class ElementSandbox extends SandboxBase {
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         if (attr === 'onsubmit' && value)
         /*eslint-disable no-new-func */
@@ -211,6 +210,8 @@ export default class ElementSandbox extends SandboxBase {
         /*eslint-enable no-new-func */
 
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
+=======
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
         return setAttrMeth.apply(el, args);
     }
 
@@ -236,6 +237,7 @@ export default class ElementSandbox extends SandboxBase {
 
         if (attr !== 'autocomplete')
             return removeAttrFunc.apply(el, args);
+<<<<<<< HEAD
 
 <<<<<<< HEAD
         return void 0;
@@ -245,6 +247,10 @@ export default class ElementSandbox extends SandboxBase {
 
         return result;
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
+=======
+
+        return void 0;
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
     }
 
     _prepareNodeForInsertion (node, parentNode) {
@@ -565,6 +571,7 @@ export default class ElementSandbox extends SandboxBase {
         }, false);
     }
 
+<<<<<<< HEAD
     _refreshOnsubmitWrapper (form) {
         var handler                 = null;
         var storedOnsubmitAttrValue = nativeMethods.getAttribute.call(form, domProcessor.getStoredAttrName('onsubmit'));
@@ -652,6 +659,8 @@ export default class ElementSandbox extends SandboxBase {
     }
 
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
+=======
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
     processElement (el) {
         if (domUtils.isImgElement(el))
             this._setProxiedSrcUrlOnError(el);
@@ -660,9 +669,12 @@ export default class ElementSandbox extends SandboxBase {
         else if (domUtils.isBaseElement(el))
             urlResolver.updateBase(nativeMethods.getAttribute.call(el, domProcessor.getStoredAttrName('href')), this.document);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         else if (domUtils.isFormElement(el))
             this._processForm(el);
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
+=======
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
     }
 }

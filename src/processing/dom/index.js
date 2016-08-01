@@ -92,10 +92,13 @@ export default class DomProcessor {
             HAS_EVENT_HANDLER: el => adapter.hasEventHandler(el),
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             HAS_ONSUBMIT_HANDLER: el => adapter.hasAttr(el, 'onsubmit'),
 
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
+=======
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
             IS_SANDBOXED_IFRAME: el => adapter.getTagName(el) === 'iframe' && adapter.hasAttr(el, 'sandbox'),
 
             IS_SVG_ELEMENT_WITH_XLINK_HREF_ATTR: el => {
@@ -110,12 +113,15 @@ export default class DomProcessor {
         return [
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 selector:          selectors.HAS_ONSUBMIT_HANDLER,
                 elementProcessors: [this._processOnsubmitAttr]
             },
             {
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
+=======
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
                 selector:          selectors.HAS_HREF_ATTR,
                 urlAttr:           'href',
                 elementProcessors: [this._processTargetBlank, this._processUrlAttrs, this._processUrlJsAttr]
@@ -245,6 +251,7 @@ export default class DomProcessor {
 
     // Element processors
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     _processOnsubmitAttr (form) {
         var storedAttr = this.getStoredAttrName('onsubmit');
@@ -258,6 +265,8 @@ export default class DomProcessor {
     }
 
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
+=======
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
     _processAutoComplete (el) {
         var storedUrlAttr = this.getStoredAttrName('autocomplete');
         var processed     = this.adapter.hasAttr(el, storedUrlAttr);

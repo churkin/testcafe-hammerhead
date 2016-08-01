@@ -24,6 +24,7 @@ QUnit.testDone(function () {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 // NOTE: IE11 has a strange bug that does not allow test
 if (!browserUtils.isIE || browserUtils.version !== 11) {
@@ -67,6 +68,8 @@ if (!browserUtils.isIE || browserUtils.version !== 11) {
 }
 
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
+=======
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
 test('url', function () {
     var testUrlAttr = function (tagName, attr) {
         var el         = nativeMethods.createElement.call(document, tagName);

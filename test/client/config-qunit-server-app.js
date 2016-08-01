@@ -27,6 +27,13 @@ function urlRewriteProxyRequest (req, res, next) {
 module.exports = function (app) {
     app.use(urlRewriteProxyRequest);
 
+<<<<<<< HEAD
+=======
+    app.get('/' + unchangeableUrlSession + '!i/*', function (req, res) {
+        res.send(fs.readFileSync('./test/client/data/redirect-watch/location-subject.html').toString());
+    });
+
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
     app.get('/xhr-large-response', function (req, res) {
         var data = new Array(1000);
 

@@ -23,8 +23,14 @@ import extend from './utils/extend';
 
 class Hammerhead {
     constructor () {
+<<<<<<< HEAD
         this.win     = null;
         this.sandbox = new Sandbox();
+=======
+        this.win           = null;
+        this.sandbox       = new Sandbox();
+        this.redirectWatch = new RedirectWatch(this.sandbox.codeInstrumentation, this.sandbox.event);
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
 
         this.EVENTS = {
             beforeFormSubmit:   this.sandbox.node.element.BEFORE_FORM_SUBMIT,
@@ -40,7 +46,12 @@ class Hammerhead {
             xhrCompleted:       this.sandbox.xhr.XHR_COMPLETED_EVENT,
             xhrError:           this.sandbox.xhr.XHR_ERROR_EVENT,
             xhrSend:            this.sandbox.xhr.XHR_SEND_EVENT,
+<<<<<<< HEAD
             fetchSend:          this.sandbox.fetch.FETCH_REQUEST_SEND_EVENT
+=======
+            fetchSend:          this.sandbox.fetch.FETCH_REQUEST_SEND_EVENT,
+            redirectDetected:   this.redirectWatch.DETECTED_EVENT
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
         };
 
         this.PROCESSING_COMMENTS = {
@@ -184,6 +195,7 @@ class Hammerhead {
         }
 
         this.sandbox.attach(this.win);
+        this.redirectWatch.init();
     }
 }
 

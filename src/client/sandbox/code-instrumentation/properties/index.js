@@ -326,6 +326,7 @@ export default class PropertyAccessorsInstrumentation extends SandboxBase {
             },
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             onsubmit: {
                 condition: domUtils.isFormElement,
@@ -334,6 +335,8 @@ export default class PropertyAccessorsInstrumentation extends SandboxBase {
             },
 
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
+=======
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
             lastChild: {
                 condition: ShadowUI.isShadowContainer,
                 get:       el => this.shadowUI.getLastChild(el),
