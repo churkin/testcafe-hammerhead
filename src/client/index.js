@@ -29,8 +29,12 @@ class Hammerhead {
 =======
         this.win           = null;
         this.sandbox       = new Sandbox();
+<<<<<<< HEAD
         this.redirectWatch = new RedirectWatch(this.sandbox.codeInstrumentation, this.sandbox.event);
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
+=======
+        this.redirectWatch = new RedirectWatch(this.sandbox.codeInstrumentation);
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 2 - links. (#680)"
 
         this.EVENTS = {
             beforeFormSubmit:   this.sandbox.node.element.BEFORE_FORM_SUBMIT,
@@ -195,7 +199,6 @@ class Hammerhead {
         }
 
         this.sandbox.attach(this.win);
-        this.redirectWatch.init();
     }
 }
 
