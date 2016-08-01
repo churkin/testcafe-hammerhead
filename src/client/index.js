@@ -24,6 +24,7 @@ import extend from './utils/extend';
 class Hammerhead {
     constructor () {
 <<<<<<< HEAD
+<<<<<<< HEAD
         this.win     = null;
         this.sandbox = new Sandbox();
 =======
@@ -35,6 +36,10 @@ class Hammerhead {
 =======
         this.redirectWatch = new RedirectWatch(this.sandbox.codeInstrumentation);
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 2 - links. (#680)"
+=======
+        this.win     = null;
+        this.sandbox = new Sandbox();
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 1 (#677)"
 
         this.EVENTS = {
             beforeFormSubmit:   this.sandbox.node.element.BEFORE_FORM_SUBMIT,
@@ -51,11 +56,15 @@ class Hammerhead {
             xhrError:           this.sandbox.xhr.XHR_ERROR_EVENT,
             xhrSend:            this.sandbox.xhr.XHR_SEND_EVENT,
 <<<<<<< HEAD
+<<<<<<< HEAD
             fetchSend:          this.sandbox.fetch.FETCH_REQUEST_SEND_EVENT
 =======
             fetchSend:          this.sandbox.fetch.FETCH_REQUEST_SEND_EVENT,
             redirectDetected:   this.redirectWatch.DETECTED_EVENT
 >>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 3 - forms. (#694)"
+=======
+            fetchSend:          this.sandbox.fetch.FETCH_REQUEST_SEND_EVENT
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 1 (#677)"
         };
 
         this.PROCESSING_COMMENTS = {

@@ -3,6 +3,7 @@ import { get as getDestLocation, getParsed as getParsedDestLocation } from '../.
 import { getProxyUrl, changeDestUrlPart, parseProxyUrl, parseResourceType, isChangedOnlyHash } from '../../../utils/url';
 import { getDomain, getResourceTypeString } from '../../../../utils/url';
 
+<<<<<<< HEAD
 function getLocationUrl (window) {
     try {
         return window.location.toString();
@@ -11,6 +12,16 @@ function getLocationUrl (window) {
         return void 0;
     }
 }
+=======
+export default class LocationWrapper {
+    constructor (window) {
+        var isIframe = window !== window.top;
+        var isForm   = false;
+
+        // NOTE: cross-domain window
+        try {
+            var parsedLocation = parseProxyUrl(window.location.toString());
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 1 (#677)"
 
 export default class LocationWrapper {
     constructor (window) {
@@ -19,7 +30,18 @@ export default class LocationWrapper {
         var locationResourceType = parsedLocation ? parsedLocation.resourceType : '';
         var { isIframe, isForm } = parseResourceType(locationResourceType);
 
+<<<<<<< HEAD
         isIframe |= window !== window.top;
+=======
+                isIframe |= locationResType.isIframe;
+                isForm |= locationResType.isForm;
+            }
+        }
+        /*eslint-disable no-empty */
+        catch (e) {
+        }
+        /*eslint-enable no-empty */
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 1 (#677)"
 
         var resourceType   = getResourceTypeString({ isIframe, isForm });
         var getHref        = () => {
