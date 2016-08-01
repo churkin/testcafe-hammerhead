@@ -91,6 +91,11 @@ export default class DomProcessor {
 
             HAS_EVENT_HANDLER: el => adapter.hasEventHandler(el),
 
+<<<<<<< HEAD
+=======
+            HAS_ONSUBMIT_HANDLER: el => adapter.hasAttr(el, 'onsubmit'),
+
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
             IS_SANDBOXED_IFRAME: el => adapter.getTagName(el) === 'iframe' && adapter.hasAttr(el, 'sandbox'),
 
             IS_SVG_ELEMENT_WITH_XLINK_HREF_ATTR: el => {
@@ -104,6 +109,13 @@ export default class DomProcessor {
 
         return [
             {
+<<<<<<< HEAD
+=======
+                selector:          selectors.HAS_ONSUBMIT_HANDLER,
+                elementProcessors: [this._processOnsubmitAttr]
+            },
+            {
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
                 selector:          selectors.HAS_HREF_ATTR,
                 urlAttr:           'href',
                 elementProcessors: [this._processTargetBlank, this._processUrlAttrs, this._processUrlJsAttr]
@@ -232,6 +244,20 @@ export default class DomProcessor {
     }
 
     // Element processors
+<<<<<<< HEAD
+=======
+    _processOnsubmitAttr (form) {
+        var storedAttr = this.getStoredAttrName('onsubmit');
+        var processed  = this.adapter.hasAttr(form, storedAttr);
+        var attrValue  = this.adapter.getAttr(form, processed ? storedAttr : 'onsubmit');
+
+        if (!processed)
+            this.adapter.setAttr(form, storedAttr, attrValue);
+
+        this.adapter.setAttr(form, 'onsubmit', '');
+    }
+
+>>>>>>> Revert "Raise an event when the page is really going to be unloaded (#667). Part 4 - event preventing. (#700)"
     _processAutoComplete (el) {
         var storedUrlAttr = this.getStoredAttrName('autocomplete');
         var processed     = this.adapter.hasAttr(el, storedUrlAttr);
