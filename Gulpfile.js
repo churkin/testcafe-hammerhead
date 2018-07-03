@@ -167,10 +167,7 @@ gulp.task('lint', () => {
             './test/server/*.js',
             './test/client/fixtures/**/*.js',
             'Gulpfile.js'
-        ])
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+        ]);
 });
 
 gulp.task('build',

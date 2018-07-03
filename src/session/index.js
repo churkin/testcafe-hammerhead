@@ -7,6 +7,11 @@ import UploadStorage from '../upload/storage';
 import COMMAND from './command';
 import { parseProxyUrl } from '../utils/url';
 import generateUniqueId from '../utils/generate-unique-id';
+import istanbul from 'istanbul';
+
+var Collector = istanbul.Collector;
+var Reporter = istanbul.Reporter;
+var Report = istanbul.Report;
 
 // Const
 const TASK_TEMPLATE = read('../client/task.js.mustache');
@@ -219,3 +224,28 @@ ServiceMessages[COMMAND.uploadFiles] = async function (msg) {
 ServiceMessages[COMMAND.getUploadedFiles] = async function (msg) {
     return await this.uploadStorage.get(msg.filePaths);
 };
+
+ServiceMessages['coverage'] = async function (msg) {
+    try {
+        console.log(1);
+        var data = msg.data;
+        var collector = new Collector();
+        
+        for (var i = 0; i < data.length; i++){
+            var t = {};
+            t['file' + i] = data[i];
+            t['file' + i].path = 'file' + i;
+            collector.add(t);
+        }
+    
+        var report = Report.create('html');
+        
+        report.writeReport(collector);
+
+        return {};
+    } catch(e) {
+        console.log(e);
+    }
+};
+
+

@@ -21,6 +21,7 @@
     "css": "2.2.3",
     "gulp-run-command": "0.0.9",
     "iconv-lite": "0.4.11",
+    "istanbul": "^0.4.5",
     "lodash": "4.17.10",
     "lru-cache": "2.6.3",
     "match-url-wildcard": "0.0.2",
