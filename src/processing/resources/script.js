@@ -5,6 +5,8 @@ import istanbul from 'istanbul';
 
 const instrumenter = new istanbul.Instrumenter();
 
+let filen = 0;
+
 class ScriptResourceProcessor extends ResourceProcessorBase {
     constructor () {
         super();
@@ -29,11 +31,11 @@ class ScriptResourceProcessor extends ResourceProcessorBase {
         if (!processedScript) {
             try {
                 console.log(processedScript);
-                script = instrumenter.instrumentSync(script, ctx.reqOpts.url);
+                script = instrumenter.instrumentSync(script, 'file' + filen++ + '.js');
 
-                const tracker = instrumenter.currentState.trackerVar;
+                //const tracker = instrumenter.currentState.trackerVar;
 
-                script = 'window.toptop = window.toptop || []; window.toptop.push("' + tracker + '")' + script;
+                //script = 'window.toptop = window.toptop || []; window.toptop.push("' + tracker + '")' + script;
             } catch (e) {
                 console.log(e);
             }

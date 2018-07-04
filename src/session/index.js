@@ -231,14 +231,11 @@ ServiceMessages['coverage'] = async function (msg) {
         var data = msg.data;
         var collector = new Collector();
         
-        for (var i = 0; i < data.length; i++){
-            var t = {};
-            t['file' + i] = data[i];
-            t['file' + i].path = 'file' + i;
-            collector.add(t);
-        }
+        collector.add(data);
     
-        var report = Report.create('html');
+        var report = Report.create('text');
+
+        report.file = '1.json';
         
         report.writeReport(collector);
 

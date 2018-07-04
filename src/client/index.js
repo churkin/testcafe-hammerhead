@@ -223,14 +223,11 @@ class Hammerhead {
         var hh = this;
 
         window.sendCoverage = function () {
-            var data = [];
-
-            for (var i = 0; i < window.toptop.length; i++)
-                data.push(window[window.toptop[i]]);
+            
 
             hh.transport.asyncServiceMsg({
                 cmd: 'coverage',
-                data: data
+                data: window.__coverage__
             });
         };
     }
